@@ -1,0 +1,284 @@
+html {
+	overflow-y: scroll;
+	/* Important for the code that disables scrolling */
+	height: 100%;
+	width: 100%;
+}
+.popup_overlay {
+	background: rgba(232,232,232,.8);
+}
+.popup_wrapper .popup {
+	overflow: hidden;
+	background: #fff;
+	width: 400px;
+	border-radius: 3px;
+	border: 0;
+	box-shadow: 0 5px 20px rgba(0,0,0,.1);
+	outline: 1px solid rgba(0,0,0,.03);
+	font-family: 'Roboto', sans-serif;
+}
+.popup_wrapper .popup .popup_title {
+	color: #444;
+	line-height: 64px;
+	padding: 0 20px;
+	margin-bottom: 10px;
+	background: #fff;
+}
+.popup_wrapper .popup .popup_title h1,
+.popup_wrapper .popup .popup_title h2,
+.popup_wrapper .popup .popup_title h3,
+.popup_wrapper .popup .popup_title h4,
+.popup_wrapper .popup .popup_title h5,
+.popup_wrapper .popup .popup_title h6 {
+	margin: 0;
+}
+.popup_wrapper .popup .popup_title h1 {
+	font-size: 22px;
+}
+.popup_wrapper .popup .popup_title h2 {
+	font-size: 18px;
+}
+.popup_wrapper .popup .popup_title h3 {
+	font-size: 16px;
+}
+.popup_wrapper .popup .popup_title h4 {
+	font-size: 14px;
+}
+.popup_wrapper .popup .popup_title h5 {
+	font-size: 12px;
+}
+.popup_wrapper .popup .popup_title h6 {
+	font-size: 12px;
+}
+.popup_wrapper .popup_close {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	width: 24px;
+	height: 24px;
+	border-radius: 3px;
+	cursor: pointer;
+}
+.popup_wrapper .popup_close svg {
+	fill: #444;
+}
+.popup_wrapper .popup p {
+	font-size: 16px;
+	color: #777;
+	line-height: 32px;
+	padding: 0 20px;
+	margin: 0;
+}
+.popup_wrapper .popup p + p {
+	font-size: 16px;
+	color: #777;
+	line-height: 32px;
+	padding: 0 20px;
+	margin: 16px 0 0 0;
+}
+.popup_wrapper .popup .textarea_wrapper {
+	margin: 0 20px;
+}
+.popup_wrapper .popup textarea {
+	width: 100%;
+	box-sizing: border-box;
+	border: 0;
+	background: none;
+	outline: 0;
+	border-bottom: 2px solid #ddd;
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+	resize: none;
+	line-height: 24px;
+	padding: 2px 0;
+	height: 54px;
+	color: #444;
+	box-shadow: none;
+}
+.popup_wrapper .popup textarea:focus {
+	border-bottom: 2px solid #aaa;
+}
+.popup_wrapper .popup .popup_buttons {
+	padding: 0 10px 0 0;
+	min-height: 20px;
+	background: #fff;
+}
+.popup_wrapper .popup .popup_buttons button {
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+	font-weight: 700;
+	color: #777;
+	line-height: 36px;
+	padding: 0 10px;
+	margin: 20px 10px 20px 0;
+	border: 0;
+	border-radius: 3px;
+	background: none;
+	float: right;
+	cursor: pointer;
+	outline: 0;
+}
+.popup_wrapper .popup .popup_close:hover,
+.popup_wrapper .popup .popup_buttons button:hover {
+	background: #eee;
+}
+.popup_wrapper .popup .popup_close:active,
+.popup_wrapper .popup .popup_buttons button:active {
+	background: #ddd;
+}
+.popup_wrapper .popup .popup_buttons button.ok {
+	color: #176299;
+}
+.popup_wrapper .popup .popup_buttons button.no {
+	color: #ff0000;
+}
+/* Top */
+.popup_wrapper.top {
+	width: 100% !important;
+	left: 0 !important;
+}
+.popup_wrapper.top .popup {
+	width: 100%;
+	left: 0 !important;
+	border-radius: 0;
+}
+/* Bottom */
+.popup_wrapper.bottom {
+	width: 100% !important;
+	left: 0 !important;
+}
+.popup_wrapper.bottom .popup {
+	width: 100%;
+	top: auto !important;
+	left: 0 !important;
+	border-radius: 0;
+}
+/* Left & Right */
+.popup_wrapper.left,
+.popup_wrapper.right {
+	height: 100% !important;
+	top: 0 !important;
+}
+.popup_wrapper.left .popup,
+.popup_wrapper.right .popup {
+	height: 100%;
+	top: 0 !important;
+	border-radius: 0;
+}
+.popup_wrapper.left .popup  .popup_title,
+.popup_wrapper.right .popup .popup_title {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+.popup_wrapper.left .popup  .popup_buttons,
+.popup_wrapper.right .popup .popup_buttons {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+.popup_wrapper.left .popup .popup_content,
+.popup_wrapper.right .popup .popup_content {
+	position: absolute;
+	top: 74px;
+	left: 0;
+	right: 0;
+	bottom: 76px;
+	overflow: auto;
+}
+/* Overflow */
+.popup_wrapper.popup_overflow_y,
+.popup_wrapper.popup_overflow_y .popup {
+	height: 100% !important;
+	top: 0 !important;
+}
+.popup_wrapper.popup_overflow_x:not(.top):not(.bottom),
+.popup_wrapper.popup_overflow_x:not(.top):not(.bottom) .popup {
+	width: 100% !important;
+	height: 100% !important;
+	top: 0 !important;
+	left: 0 !important;
+	border: 0;
+	border-radius: 0;
+}
+.popup_wrapper.popup_overflow_y .popup .popup_title,
+.popup_wrapper.popup_overflow_x:not(.top):not(.bottom) .popup .popup_title {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+.popup_wrapper.popup_overflow_x:not(.top):not(.bottom) .popup .popup_title {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	cursor: inherit !important;
+}
+.popup_wrapper.popup_overflow_y .popup .popup_buttons,
+.popup_wrapper.popup_overflow_x:not(.top):not(.bottom) .popup .popup_buttons {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+.popup_wrapper.popup_overflow_y .popup .popup_content,
+.popup_wrapper.popup_overflow_x:not(.top):not(.bottom) .popup .popup_content {
+	position: absolute;
+	top: 74px;
+	left: 0;
+	right: 0;
+	bottom: 76px;
+	overflow: auto;
+}
+.popup_wrapper.popup_overflow_x .popup .popup_title:after,
+.popup_wrapper.popup_overflow_x .popup .popup_buttons:before,
+.popup_wrapper.popup_overflow_y .popup .popup_title:after,
+.popup_wrapper.popup_overflow_y .popup .popup_buttons:before {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	height: 10px;
+	pointer-events: none;
+	opacity: .1;
+	transition: margin-top .3s,
+				margin-bottom .3s,
+				height .3s;
+}
+.popup_wrapper.popup_overflow_x .popup .popup_title:after,
+.popup_wrapper.popup_overflow_y .popup .popup_title:after {
+	margin-bottom: -20px;
+	bottom: 0;
+	background: -webkit-linear-gradient(rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+	background: -moz-linear-gradient(rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+	background: -o-linear-gradient(rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+	background: linear-gradient(rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+	z-index: 1;
+}
+.popup_wrapper.popup_overflow_x .popup .popup_buttons:before,
+.popup_wrapper.popup_overflow_y .popup .popup_buttons:before {
+	margin-top: -10px;
+	top: 0;
+	background: -webkit-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
+	background: -moz-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
+	background: -o-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
+	background: linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
+}
+.popup_wrapper.popup_overflow_x.popup_scroll_top .popup .popup_title:after,
+.popup_wrapper.popup_overflow_x.popup_scroll_bottom .popup .popup_buttons:before,
+.popup_wrapper.popup_overflow_y.popup_scroll_top .popup .popup_title:after,
+.popup_wrapper.popup_overflow_y.popup_scroll_bottom .popup .popup_buttons:before {
+	height: 0;
+	opacity: 0;
+}
+.popup_wrapper.popup_overflow_x.popup_scroll_top .popup .popup_title:after,
+.popup_wrapper.popup_overflow_y.popup_scroll_top .popup .popup_title:after {
+	margin-bottom: -10px;
+}
+.popup_wrapper.popup_overflow_x.popup_scroll_bottom .popup .popup_buttons:before,
+.popup_wrapper.popup_overflow_y.popup_scroll_bottom .popup .popup_buttons:before {
+	margin-top: 0;
+}
