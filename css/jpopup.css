@@ -8,7 +8,7 @@ html {
 	background: rgba(232,232,232,.8);
 }
 .popup_wrapper .popup {
-	overflow: hidden;
+	float: left;
 	background: #fff;
 	width: 400px;
 	border-radius: 3px;
