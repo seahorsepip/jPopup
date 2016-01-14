@@ -6,7 +6,7 @@ function jPopup(config) {
 		title: "",
 		content: "",
 		buttons: [],
-		class: classBase,
+		popupClass: classBase,
 		wrapperClass: classBase+"_wrapper",
 		overlayClass: classBase+"_overlay",
 		titleClass: classBase+"_title",
@@ -17,7 +17,7 @@ function jPopup(config) {
 		scrollTopClass: classBase+"_scroll_top",
 		scrollBottomClass: classBase+"_scroll_bottom",
 		closeButtonClass: classBase+"_close",
-		closeButtonContent: "<svg fill=\"#000000\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z\"/></svg>",
+		closeButtonContent: "×<svg fill=\"#000000\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z\"/></svg>",
 		closeButton: false,
 		overlay: true,
 		overlayClose: false,
@@ -34,7 +34,7 @@ function jPopup(config) {
 	
 	config = $.extend(defaults, config);
 	
-	var popupBase = $("<div><div class=\""+config["overlayClass"]+"\" style=\"position: fixed; top: 0; left: 0; bottom: 0; right: 0;\"></div><div class=\""+config["wrapperClass"]+"\" style=\"opacity: 0; width: 0; height: 0;\" data-popup><form class=\""+config["class"]+"\" style=\"position: relative;\"><div class=\""+config["titleClass"]+"\">"+config["title"]+"</div><div class=\""+config["contentClass"]+"\">"+config["content"]+"</div><div class=\""+config["buttonsClass"]+"\">"+getButtons()+"</div><div class=\""+config["closeButtonClass"]+"\">"+config["closeButtonContent"]+"</div></form></div></div>");
+	var popupBase = $("<div><div class=\""+config["overlayClass"]+"\" style=\"position: fixed; top: 0; left: 0; bottom: 0; right: 0;\"></div><div class=\""+config["wrapperClass"]+"\" style=\"opacity: 0; width: 0; height: 0;\" data-popup><form class=\""+config["popupClass"]+"\" style=\"position: relative;\"><div class=\""+config["titleClass"]+"\">"+config["title"]+"</div><div class=\""+config["contentClass"]+"\">"+config["content"]+"</div><div class=\""+config["buttonsClass"]+"\">"+getButtons()+"</div><div class=\""+config["closeButtonClass"]+"\">"+config["closeButtonContent"]+"</div></form></div></div>");
 	var popupWrapper = popupBase.children("div:last-child");
 	var popup =  popupWrapper.children("form");
 	var popupOverlay = popupBase.children("div:first-child");
@@ -266,6 +266,9 @@ function jPopup(config) {
 		}
 		return buttons;
 	}
+	function hasFormValidation() {
+		return (typeof document.createElement( 'input' ).checkValidity == 'function');
+	}
 	this.open = function(f) {
 		var r = $.Deferred();
 		open();
@@ -275,8 +278,11 @@ function jPopup(config) {
 			var value = $(this).data("value");
 			var checkForm = $(this).data("checkform");
 			var autoClose = $(this).data("close");
-			if(!popup[0].checkValidity() && checkForm) {
-				$('<input type="submit">').hide().appendTo(popup).click().remove();
+			if(hasFormValidation() && checkForm) {
+				console.log("checking");
+				if(!popup[0].checkValidity()) {
+					$('<input type="submit">').hide().appendTo(popup).click().remove();
+				}
 			} else {
 				if(!closed) {
 					r.notify(value, popup);
@@ -311,7 +317,7 @@ function jPopup(config) {
 				popup.css("user-select", "none");
 			}
 		});
-		$(window).on("mousemove touchmove", function(e) {
+		$(document).on("mousemove touchmove", function(e) {
 			if(dragging && config["draggable"] && state) {
 				mY = e.pageY == undefined ? e.originalEvent.touches[0].pageY:e.pageY;
 				mX = e.pageX == undefined ? e.originalEvent.touches[0].pageX:e.pageX;
@@ -411,12 +417,12 @@ function jPopup(config) {
 			return this;
 		}
 	}
-	this.class = function(fClass) {
+	this.popupClass = function(fClass) {
 		if(fClass == undefined) {
-			return config["class"];
+			return config["popupClass"];
 		} else {
-			popup.removeClass(config["class"]).addClass(fClass);
-			config["class"] = fClass;
+			popup.removeClass(config["popupClass"]).addClass(fClass);
+			config["popupClass"] = fClass;
 			return this;
 		}
 	};
