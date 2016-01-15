@@ -34,7 +34,7 @@ function jPopup(config) {
 	
 	config = $.extend(defaults, config);
 	
-	var popupBase = $("<div><div class=\""+config["overlayClass"]+"\" style=\"position: fixed; top: 0; left: 0; bottom: 0; right: 0;\"></div><div class=\""+config["wrapperClass"]+"\" style=\"opacity: 0; width: 0; height: 0;\" data-popup><form class=\""+config["popupClass"]+"\" style=\"position: relative;\"><div class=\""+config["titleClass"]+"\">"+config["title"]+"</div><div class=\""+config["contentClass"]+"\">"+config["content"]+"</div><div class=\""+config["buttonsClass"]+"\">"+getButtons()+"</div><div class=\""+config["closeButtonClass"]+"\">"+config["closeButtonContent"]+"</div></form></div></div>");
+	var popupBase = $("<div><div class=\""+config["overlayClass"]+"\" style=\"position: fixed; top: 0; left: 0; bottom: 0; right: 0;\"></div><div class=\""+config["wrapperClass"]+"\" style=\"opacity: 0;\" data-popup><form class=\""+config["popupClass"]+"\" style=\"position: relative; float: left;\"><div class=\""+config["titleClass"]+"\">"+config["title"]+"</div><div class=\""+config["contentClass"]+"\">"+config["content"]+"</div><div class=\""+config["buttonsClass"]+"\">"+getButtons()+"</div><div class=\""+config["closeButtonClass"]+"\">"+config["closeButtonContent"]+"</div></form></div></div>");
 	var popupWrapper = popupBase.children("div:last-child");
 	var popup =  popupWrapper.children("form");
 	var popupOverlay = popupBase.children("div:first-child");
@@ -49,19 +49,21 @@ function jPopup(config) {
 		fX,
 		y,
 		x,
-		dragging = false;
+		dragging = false,
+		onResize,
+		onMouseMove;
 
 	function freeze() {
 		top = $("html").scrollTop();
 		if($("html").css("position") != "fixed" && config["overlay"]) {
-			$("html").css({"position": "fixed", "top": -top});
+			$("html").css({"width": "100%", "height": "100%", "position": "fixed", "top": -top});
 		}
 	}
 	function unfreeze() {
 		if($("html").css("position") == "fixed" && !$("[data-popup][data-overlay]").length) {
 			$("html").css("position", "static");
 			$("html").scrollTop(-parseInt($("html").css("top")));
-			$("html").css("top", 0);
+			$("html").css({"width": "", "height": "", "top": 0});
 		}
 	}
 	function open() {
@@ -74,13 +76,15 @@ function jPopup(config) {
 		setOffset();
 		overflow();
 		scrollTop();
-		popupWrapper.fadeTo(config["speed"], 1);
+		popupWrapper.attr("data-position", config["position"]).fadeTo(config["speed"], 1);
 		state = true;
 	}
 	function close() {
 		popupTitle.off("mousedown touchstart");
 		popupContent.off("scroll");
 		popupWrapper.off("click mousedown touchstart mmouseup touchend");
+		$(window).off("resize", onResize);
+		$(document).off("mousemove touchmove", onMouseMove);
 		popupWrapper.fadeOut(config["speed"], function() {
 			popupWrapper.remove();
 			unfreeze();
@@ -104,7 +108,7 @@ function jPopup(config) {
 	function setDraggable() {
 		if(config["draggable"]) {
 			popupTitle.css("cursor", "move");
-			if(config["position"] == "bottom" && config["stickToBottom"]) {
+			if((config["position"] == "bottom" || config["position"] == "bottomLeft" || config["position"] == "bottomRight" || config["position"] == "stretchBottom") && config["stickToBottom"]) {
 				stickToBottom = false;
 				setPosition();
 			}
@@ -122,28 +126,73 @@ function jPopup(config) {
 	function setPosition() {
 		switch(config["position"]) {
 			case "center":
-				popupWrapper.css({"position": "fixed", "top": "50%", "left": "50%", "bottom": "auto", "right": "auto"});
-				popup.css({"position": "relative", "top": -popup.outerHeight() / 2, "left": -popup.outerWidth() / 2, "bottom": "auto"});
+				popupWrapper.css({"width": 0, "height": 0, "position": "fixed", "top": "50%", "left": "50%", "bottom": "", "right": ""});
+				popup.css({"width": "", "height": "", "position": "relative", "top": -popup.outerHeight() / 2, "left": -popup.outerWidth() / 2, "bottom": ""});
 				break;
 			case "top":
-				popupWrapper.css({"position": "fixed", "top": 0, "left": "50%", "bottom": "auto", "right": "auto"});
-				popup.css({"position": "relative", "top": 0, "left": -popup.outerWidth() / 2, "bottom": "auto"});
+				popupWrapper.css({"width": 0, "height": 0, "position": "fixed", "top": 0, "left": "50%", "bottom": "", "right": ""});
+				popup.css({"width": "", "height": "", "position": "relative", "top": 0, "left": -popup.outerWidth() / 2, "bottom": ""});
 				break;
 			case "left":
-				popupWrapper.css({"position": "fixed", "top": "50%", "left": "0", "bottom": "auto", "right": "auto"});
-				popup.css({"position": "relative", "top": -popup.outerHeight() / 2, "left": 0, "bottom": "auto"});
+				popupWrapper.css({"width": 0, "height": 0, "position": "fixed", "top": "50%", "left": 0, "bottom": "", "right": ""});
+				popup.css({"width": "", "height": "", "position": "relative", "top": -popup.outerHeight() / 2, "left": 0, "bottom": ""});
 				break;
 			case "bottom":
-				popupWrapper.css({"position": "fixed", "top": "auto", "left": "50%", "bottom": 0, "right": "auto"});
-				if(config["stickToBottom"] && !config["draggable"]) {
-					popup.css({"position": "absolute", "top": "auto", "left": -popup.outerWidth() / 2, "bottom": 0});
+				popupWrapper.css({"width": 0, "height": 0, "position": "fixed", "top": "", "left": "50%", "bottom": 0, "right": ""});
+				if((config["position"] == "bottom" || config["position"] == "bottomLeft" || config["position"] == "bottomRight" || config["position"] == "stretchBottom") && !config["draggable"]) {
+					popup.css({"position": "absolute", "top": "", "left": -popup.outerWidth() / 2, "bottom": 0});
 				} else {
-					popup.css({"position": "relative", "top": -popup.outerHeight(), "left": -popup.outerWidth() / 2, "bottom": "auto"});
+					popup.css({"width": "", "height": "", "position": "relative", "top": -popup.outerHeight(), "left": -popup.outerWidth() / 2, "bottom": ""});
 				}
 				break;
 			case "right":
-				popupWrapper.css({"position": "fixed", "top": "50%", "left": "auto", "bottom": 0, "right": 0});
-				popup.css({"position": "relative", "top": -popup.outerHeight() / 2, "left": -popup.outerWidth(), "bottom": "auto"});
+				popupWrapper.css({"width": 0, "height": 0, "position": "fixed", "top": "50%", "left": "", "bottom": 0, "right": 0});
+				popup.css({"width": "", "height": "", "position": "relative", "top": -popup.outerHeight() / 2, "left": -popup.outerWidth(), "bottom": ""});
+				break;
+			case "topLeft":
+				popupWrapper.css({"width": 0, "height": 0, "position": "fixed", "top": 0, "left": 0, "bottom": "", "right": ""});
+				popup.css({"width": "", "height": "", "position": "relative", "top": 0, "left": 0, "bottom": ""});
+				break;
+			case "topRight":
+				popupWrapper.css({"width": 0, "height": 0, "position": "fixed", "top": 0, "left": "", "bottom": "", "right": 0});
+				popup.css({"width": "", "height": "", "position": "relative", "top": 0, "left": -popup.outerWidth(), "bottom": ""});
+				break;
+			case "bottomLeft":
+				popupWrapper.css({"width": 0, "height": 0, "position": "fixed", "top": "", "left": "0", "bottom": 0, "right": ""});
+				if((config["position"] == "bottom" || config["position"] == "bottomLeft" || config["position"] == "bottomRight" || config["position"] == "stretchBottom") && !config["draggable"]) {
+					popup.css({"position": "absolute", "top": "", "left": 0, "bottom": 0});
+				} else {
+					popup.css({"width": "", "height": "", "position": "relative", "top": -popup.outerHeight(), "left": 0, "bottom": ""});
+				}
+				break;
+			case "bottomRight":
+				popupWrapper.css({"width": 0, "height": 0, "position": "fixed", "top": "", "left": "", "bottom": 0, "right": 0});
+				if((config["position"] == "bottom" || config["position"] == "bottomLeft" || config["position"] == "bottomRight" || config["position"] == "stretchBottom") && !config["draggable"]) {
+					popup.css({"position": "absolute", "top": "", "left": -popup.outerWidth(), "bottom": 0});
+				} else {
+					popup.css({"width": "", "height": "", "position": "relative", "top": -popup.outerHeight(), "left": -popup.outerWidth(), "bottom": ""});
+				}
+				break;
+			case "stretchTop":
+				popupWrapper.css({"width": "100%", "height": 0, "position": "fixed", "top": 0, "left": 0, "bottom": "", "right": ""});
+				popup.css({"width": "100%", "height": "", "position": "relative", "top": 0, "left": 0, "bottom": ""});
+				break;
+			case "stretchLeft":
+				popupWrapper.css({"width": 0, "height": "100%", "position": "fixed", "top": 0, "left": 0, "bottom": "", "right": ""});
+				popup.css({"width": "", "height": "100%", "position": "relative", "top": 0, "left": 0, "bottom": ""});
+				break;
+			case "stretchBottom":
+				popupWrapper.css({"width": "100%", "height": 0, "position": "fixed", "top": "", "left": 0, "bottom": 0, "right": ""});
+				if((config["position"] == "bottom" || config["position"] == "bottomLeft" || config["position"] == "bottomRight" || config["position"] == "stretchBottom") && !config["draggable"]) {
+					popup.css({"width": "100%", "height": "", "position": "absolute", "top": "", "left": 0, "bottom": 0});
+				} else {
+					popup.css({"width": "100%", "height": "", "position": "relative", "top": -popup.outerHeight(), "left": 0, "bottom": ""});
+				}
+				break;
+			case "stretchRight":
+				popupWrapper.css({"width": 0, "height": "100%", "position": "fixed", "top": 0, "left": "", "bottom": "", "right": 0});
+				popup.css({"width": "", "height": "100%", "position": "relative", "top": 0, "left": -popup.outerWidth(), "bottom": ""});
+				break;
 		}
 	}
 	function boundary() {
@@ -233,10 +282,19 @@ function jPopup(config) {
 				getOffset["y"] = popupWrapper.offset().top - popup.offset().top - popup.outerHeight() / 2;
 				break;
 			case "top":
+			case "topLeft":
+			case "topRight":
+			case "stretchTop":
+			case "stretchLeft":
+			case "stretchRight":
 				getOffset["y"] = popupWrapper.offset().top - popup.offset().top;
 				break;
 			case "bottom":
+			case "bottomLeft":
+			case "bottomRight":
+			case "stretchBottom":
 				getOffset["y"] = popupWrapper.offset().top - popup.offset().top - popup.outerHeight();
+				break;
 		}
 		switch(config["position"]) {
 			case "center":
@@ -245,9 +303,17 @@ function jPopup(config) {
 				getOffset["x"] = popup.offset().left - popupWrapper.offset().left + popup.outerWidth() / 2;
 				break;
 			case "left":
+			case "topLeft":
+			case "bottomLeft":
+			case "stretchTop":
+			case "stretchLeft":
+			case "stretchBottom":
 				getOffset["x"] = popup.offset().left - popupWrapper.offset().left;
 				break;
 			case "right":
+			case "topRight":
+			case "bottomRight":
+			case "stretchRight":
 				getOffset["x"] = popup.offset().left - popupWrapper.offset().left + popup.outerWidth();
 		}
 		getOffset["y"] = Math.round(getOffset["y"]);
@@ -279,15 +345,23 @@ function jPopup(config) {
 			var checkForm = $(this).data("checkform");
 			var autoClose = $(this).data("close");
 			if(hasFormValidation() && checkForm) {
-				console.log("checking");
+				console.log(popup[0].checkValidity());
 				if(!popup[0].checkValidity()) {
 					$('<input type="submit">').hide().appendTo(popup).click().remove();
+				} else {
+					if(!closed) {
+						r.notify(value, popup);
+					}
+					if(autoClose != false) {
+						close();
+						closed = true;
+					}
 				}
 			} else {
 				if(!closed) {
 					r.notify(value, popup);
 				}
-				if(autoClose !== false) {
+				if(autoClose != false) {
 					close();
 					closed = true;
 				}
@@ -300,13 +374,12 @@ function jPopup(config) {
 		popupContent.on("scroll", function() {
 			scrollTop();
 		});
-		$(window).on("resize", function() {
-			if(state) {
-				boundary();
-				overflow();
-				scrollTop();
-			}
-		});
+		onResize = function() {
+			boundary();
+			overflow();
+			scrollTop();
+		}
+		$(window).on("resize", onResize);
 		popupTitle.on("mousedown touchstart", function(e) {
 			if(config["draggable"]) {
 				dragging = true;
@@ -316,9 +389,9 @@ function jPopup(config) {
 				x = e.pageX || e.originalEvent.touches[0].pageX;
 				popup.css("user-select", "none");
 			}
-		});
-		$(document).on("mousemove touchmove", function(e) {
-			if(dragging && config["draggable"] && state) {
+		});		
+		onMouseMove = function(e) {
+			if(dragging && config["draggable"]) {
 				mY = e.pageY == undefined ? e.originalEvent.touches[0].pageY:e.pageY;
 				mX = e.pageX == undefined ? e.originalEvent.touches[0].pageX:e.pageX;
 				popup.offset({
@@ -327,7 +400,8 @@ function jPopup(config) {
 				});
 				boundary();
 			}
-		});
+		};
+		$(document).on("mousemove touchmove", onMouseMove);
 		popupWrapper.on("mouseup touchend", function(e) {
 			if(config["draggable"]) {
 				dragging = false;
@@ -537,10 +611,12 @@ function jPopup(config) {
 		if(fPosition == undefined) {
 			return config["position"];
 		} else {
+			popupWrapper.removeAttr("data-position").attr("data-position", fPosition);
 			config["position"] = fPosition;
-			setPosition();
 			config["offset"]["y"] = 0;
 			config["offset"]["x"] = 0;
+			setPosition();
+			setPosition();
 			return this;
 		}
 	};
@@ -559,7 +635,6 @@ function jPopup(config) {
 			return config["overlayClose"];
 		} else {
 			config["overlayClose"] = fOverlayClose ? true:false;
-			setPosition();
 			return this;
 		}
 	};
@@ -570,7 +645,6 @@ function jPopup(config) {
 			config["stickToBottom"] = fStickToBottom ? true:false;
 			config["offset"]["y"] = 0;
 			config["offset"]["x"] = 0;
-			//Twice, first to undo sticking to bottom and second to move it to original position
 			setPosition();
 			setPosition();
 		}
@@ -581,5 +655,26 @@ function jPopup(config) {
 		} else {
 			config["keyClose"] = fKeyClose ? fKeyClose:false;
 		}
+	}
+	this.popupWrapper = function() {
+		return popupWrapper;
+	}
+	this.popupOverlay = function() {
+		return popupOverlay;
+	}
+	this.popup = function() {
+		return popup;
+	}
+	this.popupTitle = function() {
+		return popupTitle;
+	}
+	this.popupContent = function() {
+		return popupContent;
+	}
+	this.popupButtons = function() {
+		return popupButtons;
+	}
+	this.popupClose = function() {
+		return popupClose;
 	}
 }
