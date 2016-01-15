@@ -10,7 +10,7 @@
 	box-shadow: 0 5px 20px rgba(0,0,0,.1);
 	outline: 1px solid #ddd;
 	outline: 1px solid rgba(0,0,0,.03);
-	font-family: 'Roboto', sans-serif;
+	font-family: "Roboto", sans-serif;
 }
 .popup_wrapper .popup .popup_title {
 	color: #444;
@@ -53,7 +53,7 @@
 	height: 24px;
 	border-radius: 3px;
 	cursor: pointer;
-	font-family: 'Roboto', sans-serif;
+	font-family: "Roboto", sans-serif;
 	font-size: 24px;
 	text-align: center;
 	line-height: 23px;
@@ -86,7 +86,7 @@
 	background: none;
 	outline: 0;
 	border-bottom: 2px solid #ddd;
-	font-family: 'Roboto', sans-serif;
+	font-family: "Roboto", sans-serif;
 	font-size: 14px;
 	resize: none;
 	line-height: 24px;
@@ -112,7 +112,7 @@
 	min-height: 20px;
 }
 .popup_wrapper .popup .popup_buttons button {
-	font-family: 'Roboto', sans-serif;
+	font-family: "Roboto", sans-serif;
 	font-size: 14px;
 	font-weight: 700;
 	color: #777;
