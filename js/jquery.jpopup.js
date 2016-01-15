@@ -594,7 +594,7 @@ function jPopup(config) {
 		if(fCloseButtonHTML == undefined) {
 			return config["closeButtonContent"];
 		} else {
-			popupClose.html(fCloseButtonHTML);
+			popupClose.html(closeButtonContent);
 			config["closeButtonContent"] = fCloseButtonContent;
 			return this;
 		}
