@@ -1,14 +1,8 @@
-html {
-	/* Important for the code that disables scrolling */
-	height: 100%;
-	width: 100%;
-}
 .popup_overlay {
 	background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AEOFQs3Rovy/gAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAADUlEQVQI12N48eLFGQAI+QOFL6ImxwAAAABJRU5ErkJggg==");
 	background: rgba(232,232,232,.8);
 }
 .popup_wrapper .popup {
-	float: left;
 	background: #fff;
 	width: 400px;
 	border-radius: 3px;
@@ -23,7 +17,7 @@ html {
 	line-height: 64px;
 	padding: 0 20px;
 	margin-bottom: 10px;
-	background: #fff;
+	min-height: 20px;
 }
 .popup_wrapper .popup .popup_title h1,
 .popup_wrapper .popup .popup_title h2,
@@ -73,23 +67,18 @@ html {
 	fill: #444;
 	border-radius: 3px;
 }
+.popup_wrapper .popup_content {
+	padding: 0 20px;
+}
 .popup_wrapper .popup p {
 	font-size: 16px;
 	color: #777;
 	line-height: 32px;
-	padding: 0 20px;
-	margin: 0;
 }
 .popup_wrapper .popup p + p {
-	font-size: 16px;
-	color: #777;
-	line-height: 32px;
-	padding: 0 20px;
 	margin: 16px 0 0 0;
 }
-.popup_wrapper .popup .textarea_wrapper {
-	margin: 0 20px;
-}
+.popup_wrapper .popup input,
 .popup_wrapper .popup textarea {
 	width: 100%;
 	box-sizing: border-box;
@@ -102,17 +91,25 @@ html {
 	resize: none;
 	line-height: 24px;
 	padding: 2px 0;
-	height: 54px;
 	color: #444;
 	box-shadow: none;
 }
+.popup_wrapper .popup input:focus,
 .popup_wrapper .popup textarea:focus {
-	border-bottom: 2px solid #aaa;
+	border-bottom: 2px solid #1565C0;
+}
+.popup_wrapper .popup p + textarea,
+.popup_wrapper .popup p + input,
+.popup_wrapper .popup input + textarea,
+.popup_wrapper .popup textarea + input {
+	margin: 16px 0 0 0;
 }
 .popup_wrapper .popup .popup_buttons {
+	float: left;
+	width: 100%;
+	box-sizing: border-box;
 	padding: 0 10px 0 0;
 	min-height: 20px;
-	background: #fff;
 }
 .popup_wrapper .popup .popup_buttons button {
 	font-family: 'Roboto', sans-serif;
@@ -140,60 +137,37 @@ html {
 	background: #ddd;
 }
 .popup_wrapper .popup .popup_buttons button.ok {
-	color: #176299;
+	color: #1565C0;
 }
 .popup_wrapper .popup .popup_buttons button.no {
-	color: #ff0000;
+	color: #F44336;
 }
-/* Top */
-.popup_wrapper.top {
-	width: 100% !important;
-	left: 0 !important;
-}
-.popup_wrapper.top .popup {
-	width: 100%;
-	left: 0 !important;
+/* stretchTop & stretchBottom */
+.popup_wrapper[data-position="stretchTop"] .popup,
+.popup_wrapper[data-position="stretchBottom"] .popup {
 	border-radius: 0;
 }
-/* Bottom */
-.popup_wrapper.bottom {
-	width: 100% !important;
-	left: 0 !important;
-}
-.popup_wrapper.bottom .popup {
-	width: 100%;
-	top: auto !important;
-	left: 0 !important;
+/* stretchLeft & stretchRight */
+.popup_wrapper[data-position="stretchLeft"] .popup,
+.popup_wrapper[data-position="stretchRight"] .popup {
 	border-radius: 0;
 }
-/* Left & Right */
-.popup_wrapper.left,
-.popup_wrapper.right {
-	height: 100% !important;
-	top: 0 !important;
-}
-.popup_wrapper.left .popup,
-.popup_wrapper.right .popup {
-	height: 100%;
-	top: 0 !important;
-	border-radius: 0;
-}
-.popup_wrapper.left .popup  .popup_title,
-.popup_wrapper.right .popup .popup_title {
+.popup_wrapper[data-position="stretchLeft"] .popup  .popup_title,
+.popup_wrapper[data-position="stretchRight"] .popup .popup_title {
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
 }
-.popup_wrapper.left .popup  .popup_buttons,
-.popup_wrapper.right .popup .popup_buttons {
+.popup_wrapper[data-position="stretchLeft"] .popup  .popup_buttons,
+.popup_wrapper[data-position="stretchRight"] .popup .popup_buttons {
 	position: absolute;
 	bottom: 0;
 	left: 0;
 	right: 0;
 }
-.popup_wrapper.left .popup .popup_content,
-.popup_wrapper.right .popup .popup_content {
+.popup_wrapper[data-position="stretchLeft"] .popup .popup_content,
+.popup_wrapper[data-position="stretchRight"] .popup .popup_content {
 	position: absolute;
 	top: 74px;
 	left: 0;
@@ -207,8 +181,8 @@ html {
 	height: 100% !important;
 	top: 0 !important;
 }
-.popup_wrapper.popup_overflow_x:not(.top):not(.bottom),
-.popup_wrapper.popup_overflow_x:not(.top):not(.bottom) .popup {
+.popup_wrapper.popup_overflow_x:not([data-position="stretchTop"]):not([data-position="stretchBottom"]),
+.popup_wrapper.popup_overflow_x:not([data-position="stretchTop"]):not([data-position="stretchBottom"]) .popup {
 	width: 100% !important;
 	height: 100% !important;
 	top: 0 !important;
@@ -217,13 +191,13 @@ html {
 	border-radius: 0;
 }
 .popup_wrapper.popup_overflow_y .popup .popup_title,
-.popup_wrapper.popup_overflow_x:not(.top):not(.bottom) .popup .popup_title {
+.popup_wrapper.popup_overflow_x:not([data-position="stretchTop"]):not([data-position="stretchBottom"]) .popup .popup_title {
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
 }
-.popup_wrapper.popup_overflow_x:not(.top):not(.bottom) .popup .popup_title {
+.popup_wrapper.popup_overflow_x:not([data-position="stretchTop"]):not([data-position="stretchBottom"]) .popup .popup_title {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -231,14 +205,14 @@ html {
 	cursor: inherit !important;
 }
 .popup_wrapper.popup_overflow_y .popup .popup_buttons,
-.popup_wrapper.popup_overflow_x:not(.top):not(.bottom) .popup .popup_buttons {
+.popup_wrapper.popup_overflow_x:not([data-position="stretchTop"]):not([data-position="stretchBottom"]) .popup .popup_buttons {
 	position: absolute;
 	bottom: 0;
 	left: 0;
 	right: 0;
 }
 .popup_wrapper.popup_overflow_y .popup .popup_content,
-.popup_wrapper.popup_overflow_x:not(.top):not(.bottom) .popup .popup_content {
+.popup_wrapper.popup_overflow_x:not([data-position="stretchTop"]):not([data-position="stretchBottom"]) .popup .popup_content {
 	position: absolute;
 	top: 74px;
 	left: 0;
@@ -246,10 +220,11 @@ html {
 	bottom: 76px;
 	overflow: auto;
 }
-.popup_wrapper.popup_overflow_x .popup .popup_title:after,
-.popup_wrapper.popup_overflow_x .popup .popup_buttons:before,
-.popup_wrapper.popup_overflow_y .popup .popup_title:after,
-.popup_wrapper.popup_overflow_y .popup .popup_buttons:before {
+/* ScrollTop */
+.popup_wrapper .popup .popup_title:after,
+.popup_wrapper .popup .popup_buttons:before,
+.popup_wrapper .popup .popup_title:after,
+.popup_wrapper .popup .popup_buttons:before {
 	content: "";
 	position: absolute;
 	left: 0;
@@ -261,8 +236,8 @@ html {
 				margin-bottom .3s,
 				height .3s;
 }
-.popup_wrapper.popup_overflow_x .popup .popup_title:after,
-.popup_wrapper.popup_overflow_y .popup .popup_title:after {
+.popup_wrapper .popup .popup_title:after,
+.popup_wrapper .popup .popup_title:after {
 	margin-bottom: -20px;
 	bottom: 0;
 	background: -webkit-linear-gradient(rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
@@ -271,8 +246,8 @@ html {
 	background: linear-gradient(rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
 	z-index: 1;
 }
-.popup_wrapper.popup_overflow_x .popup .popup_buttons:before,
-.popup_wrapper.popup_overflow_y .popup .popup_buttons:before {
+.popup_wrapper .popup .popup_buttons:before,
+.popup_wrapper .popup .popup_buttons:before {
 	margin-top: -10px;
 	top: 0;
 	background: -webkit-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
@@ -280,18 +255,18 @@ html {
 	background: -o-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
 	background: linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
 }
-.popup_wrapper.popup_overflow_x.popup_scroll_top .popup .popup_title:after,
-.popup_wrapper.popup_overflow_x.popup_scroll_bottom .popup .popup_buttons:before,
-.popup_wrapper.popup_overflow_y.popup_scroll_top .popup .popup_title:after,
-.popup_wrapper.popup_overflow_y.popup_scroll_bottom .popup .popup_buttons:before {
+.popup_wrapper.popup_scroll_top .popup .popup_title:after,
+.popup_wrapper.popup_scroll_bottom .popup .popup_buttons:before,
+.popup_wrapper.popup_scroll_top .popup .popup_title:after,
+.popup_wrapper.popup_scroll_bottom .popup .popup_buttons:before {
 	height: 0;
 	opacity: 0;
 }
-.popup_wrapper.popup_overflow_x.popup_scroll_top .popup .popup_title:after,
-.popup_wrapper.popup_overflow_y.popup_scroll_top .popup .popup_title:after {
+.popup_wrapper.popup_scroll_top .popup .popup_title:after,
+.popup_wrapper.popup_scroll_top .popup .popup_title:after {
 	margin-bottom: -10px;
 }
-.popup_wrapper.popup_overflow_x.popup_scroll_bottom .popup .popup_buttons:before,
-.popup_wrapper.popup_overflow_y.popup_scroll_bottom .popup .popup_buttons:before {
+.popup_wrapper.popup_scroll_bottom .popup .popup_buttons:before,
+.popup_wrapper.popup_scroll_bottom .popup .popup_buttons:before {
 	margin-top: 0;
 }
