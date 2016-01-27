@@ -389,7 +389,7 @@ function jPopup(config) {
 				x = e.pageX || e.originalEvent.touches[0].pageX;
 				popup.css("user-select", "none");
 			}
-		});		
+		});
 		onMouseMove = function(e) {
 			if(dragging && config["draggable"]) {
 				mY = e.pageY == undefined ? e.originalEvent.touches[0].pageY:e.pageY;
@@ -441,7 +441,7 @@ function jPopup(config) {
 		if(fTitle == undefined) {
 			return config["title"];
 		} else {
-			popupTitle.html(config["fTitle"]);
+			popupTitle.html(fTitle);
 			config["title"] = fTitle;
 			return this;
 		}
@@ -450,7 +450,7 @@ function jPopup(config) {
 		if(fContent == undefined) {
 			return config["content"];
 		} else {
-			popupContent.html(config["fContent"]);
+			popupContent.html(fContent);
 			config["content"] = fContent;
 			return this;
 		}
@@ -594,7 +594,7 @@ function jPopup(config) {
 		if(fCloseButtonHTML == undefined) {
 			return config["closeButtonContent"];
 		} else {
-			popupClose.html(closeButtonContent);
+			popupClose.html(fCloseButtonContent);
 			config["closeButtonContent"] = fCloseButtonContent;
 			return this;
 		}
@@ -648,33 +648,33 @@ function jPopup(config) {
 			setPosition();
 			setPosition();
 		}
-	}
+	};
 	this.keyClose = function(fKeyClose) {
 		if(fKeyClose == undefined) {
 			return config["keyClose"];
 		} else {
 			config["keyClose"] = fKeyClose ? fKeyClose:false;
 		}
-	}
+	};
 	this.popupWrapper = function() {
 		return popupWrapper;
-	}
+	};
 	this.popupOverlay = function() {
 		return popupOverlay;
-	}
+	};
 	this.popup = function() {
 		return popup;
-	}
+	};
 	this.popupTitle = function() {
 		return popupTitle;
-	}
+	};
 	this.popupContent = function() {
 		return popupContent;
-	}
+	};
 	this.popupButtons = function() {
 		return popupButtons;
-	}
+	};
 	this.popupClose = function() {
 		return popupClose;
-	}
+	};
 }
