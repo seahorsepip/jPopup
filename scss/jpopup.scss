@@ -305,8 +305,7 @@
         }
     }
 
-    &.popup_scroll_top,
-    &.popup_scroll_bottom {
+    &.popup_scroll_top {
         .popup {
             .popup_title {
                 &:after {
@@ -315,6 +314,11 @@
                     height: 0;
                 }
             }
+        }
+    }
+
+    &.popup_scroll_bottom {
+        .popup {
             .popup_buttons {
                 &:before {
                     margin-top: 0;
