@@ -207,6 +207,14 @@
     &[data-position="stretchBottom"] {
         .popup {
             border-radius: 0;
+        }
+    }
+    
+    /* stretchLeft & stretchRight */
+    &[data-position="stretchLeft"],
+    &[data-position="stretchRight"] {
+        .popup {
+            border-radius: 0;
 
             .popup_title {
                 position: absolute;
