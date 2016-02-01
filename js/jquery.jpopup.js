@@ -192,6 +192,10 @@ function jPopup(config) {
 			case "stretchRight":
 				popupWrapper.css({"width": 0, "height": "100%", "position": "fixed", "top": 0, "left": "", "bottom": "", "right": 0});
 				popup.css({"width": "", "height": "100%", "position": "relative", "top": 0, "left": -popup.outerWidth(), "bottom": ""});
+				break;
+			case "full":
+				popupWrapper.css({"width": "100%", "height": "100%", "position": "fixed", "top": 0, "left": 0, "bottom": "", "right": ""});
+				popup.css({"width": "100%", "height": "100%", "position": "relative", "top": 0, "left": 0, "bottom": ""});
 		}
 	}
 	function boundary() {
