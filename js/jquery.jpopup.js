@@ -331,7 +331,7 @@ function jPopup(config) {
 	function getButtons() {
 		var buttons = "";
 		for(var x = 0; x < config["buttons"].length; x++) {
-			var bClass = config["buttons"][x]["class"] ? " class="+config["buttons"][x]["class"]:"";
+			var bClass = config["buttons"][x]["buttonClass"] ? " class="+config["buttons"][x]["buttonClass"]:"";
 			var bCheckForm = config["buttons"][x]["checkForm"] ? " data-checkform=true":"";
 			var bClose = config["buttons"][x]["close"] === false ? " data-close="+config["buttons"][x]["close"]:"";
 			var bValue = config["buttons"][x]["value"] !== undefined	? " data-value="+config["buttons"][x]["value"]:"";
