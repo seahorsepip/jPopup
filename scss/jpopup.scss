@@ -207,9 +207,10 @@
         }
     }
 
-    // stretchTop & stretchBottom
+    // StretchTop, StretchBottom & Full
     &[data-position="stretchTop"],
-    &[data-position="stretchBottom"] {
+    &[data-position="stretchBottom"],
+    &[data-position="full"] {
         .popup {
             border-radius: 0;
         }
