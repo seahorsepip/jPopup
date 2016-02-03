@@ -428,6 +428,7 @@ function jPopup(config) {
 				y = e.pageY || e.originalEvent.touches[0].pageY;
 				x = e.pageX || e.originalEvent.touches[0].pageX;
 				$(document).bind("selectstart.disableSelection", function(e) {e.preventDefault();});
+				$("[data-popup]").css("user-select", "none");
 			}
 		});
 		onMouseMove = function(e) {
@@ -485,6 +486,7 @@ function jPopup(config) {
 				popupTitle.css("cursor", "move");
 			}
 			$(document).unbind(".disableSelection");
+			$("[data-popup]").css("user-select", "");
 		};
 		$(document).on("mouseup touchend", onMouseUp);
 		popupWrapper.on("mousedown touchstart", function() {
@@ -512,8 +514,9 @@ function jPopup(config) {
 				y = e.pageY || e.originalEvent.touches[0].pageY;
 				x = e.pageX || e.originalEvent.touches[0].pageX;
 				resizeHandle = $(this).index();
-				$("html").css("cursor", $(this).css("cursor"));
 				popupTitle.css("cursor", $(this).css("cursor"));
+				$("html").css("cursor", $(this).css("cursor"));
+				$("[data-popup]").css("user-select", "none");
 				$(document).bind("selectstart.disableSelection", function(e) {e.preventDefault();});
 			}
 		});	
