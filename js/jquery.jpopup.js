@@ -16,12 +16,14 @@ function jPopup(config) {
 		overflowYClass: classBase+"_overflow_y",
 		scrollTopClass: classBase+"_scroll_top",
 		scrollBottomClass: classBase+"_scroll_bottom",
+		resizeClass: classBase+"_resize",
 		closeButtonClass: classBase+"_close",
 		closeButtonContent: "&times;<svg fill=\"#000000\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z\"/></svg>",
 		closeButton: false,
 		overlay: true,
 		overlayClose: false,
 		draggable: false,
+		resizeable: false,
 		position: "center",
 		offset: {
 			x: 0,
@@ -34,7 +36,7 @@ function jPopup(config) {
 	
 	config = $.extend(defaults, config);
 	
-	var popupBase = $("<div><div class=\""+config["overlayClass"]+"\" style=\"position: fixed; top: 0; left: 0; bottom: 0; right: 0; display: none;\"></div><div class=\""+config["wrapperClass"]+"\" style=\"opacity: 0;\" data-popup><form class=\""+config["popupClass"]+"\" style=\"position: relative; float: left;\"><div class=\""+config["titleClass"]+"\">"+config["title"]+"</div><div class=\""+config["contentClass"]+"\">"+config["content"]+"</div><div class=\""+config["buttonsClass"]+"\">"+getButtons()+"</div><div class=\""+config["closeButtonClass"]+"\">"+config["closeButtonContent"]+"</div></form></div></div>");
+	var popupBase = $("<div><div class=\""+config["overlayClass"]+"\" style=\"position:fixed;top:0;left:0;bottom:0;right:0;display:none;\"></div><div class=\""+config["wrapperClass"]+"\" style=\"opacity:0;\" data-popup><form class=\""+config["popupClass"]+"\" style=\"position:relative;float:left;\"><div class=\""+config["titleClass"]+"\">"+config["title"]+"</div><div class=\""+config["contentClass"]+"\">"+config["content"]+"</div><div class=\""+config["buttonsClass"]+"\">"+getButtons()+"</div><div class=\""+config["resizeClass"]+"\" style=\"display: none;\"><div style=\"position:absolute;top:0;left:0;right: 0;height:6px;cursor:n-resize;\"></div><div style=\"position:absolute;top:0;left:0;bottom:0;width:6px;cursor:w-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;right:0;height:6px;cursor:s-resize;\"></div><div style=\"position:absolute;top:0;bottom:0;right:0;width:6px;cursor:e-resize;\"></div><div style=\"position:absolute;top:0;left:0;width:6px;height:6px;cursor:nw-resize;\"></div><div style=\"position:absolute;top:0;right:0;width:6px;height:6px;cursor:ne-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;width:6px;height:6px;cursor:sw-resize;\"></div><div style=\"position:absolute;bottom:0;right:0;width:6px;height:6px;cursor:se-resize;\"></div></div><div class=\""+config["closeButtonClass"]+"\">"+config["closeButtonContent"]+"</div></form></div></div>");
 	var popupWrapper = popupBase.children("div:last-child");
 	var popupOverlay = popupBase.children("div:first-child");
 	var popup =  popupWrapper.children("form");
@@ -42,16 +44,22 @@ function jPopup(config) {
 	var popupContent = popup.children("."+config["contentClass"]);
 	var popupButtons = popup.children("."+config["buttonsClass"]);
 	var popupClose = popup.children("."+config["closeButtonClass"]);
+	var popupResize = popup.children("."+config["resizeClass"]);
 	
 	var state,
 		top,
+		fY,
 		fX,
-		fX,
+		rY,
+		rX,
 		y,
 		x,
-		dragging = false,
+		dragging,
 		onResize,
-		onMouseMove;
+		onMouseMove,
+		onMouseUp,
+		resizing,
+		resizeHandle;
 
 	function freeze() {
 		top = $("html").scrollTop();
@@ -68,10 +76,12 @@ function jPopup(config) {
 	}
 	function open() {
 		$("body").append(popupOverlay).append(popupWrapper);
-		setDepth();
 		setOverlay();
+		setDepth();
 		setCloseButton();
 		setDraggable();
+		setResizeable();
+		setButtons();
 		setPosition();
 		setOffset();
 		overflow();
@@ -83,8 +93,10 @@ function jPopup(config) {
 		popupTitle.off("mousedown touchstart");
 		popupContent.off("scroll");
 		popupWrapper.off("click mousedown touchstart mmouseup touchend");
+		popupResize.children("div").off("mousedown touchstart");
 		$(window).off("resize", onResize);
 		$(document).off("mousemove touchmove", onMouseMove);
+		$(document).off("mouseup touchend", onMouseUp);
 		popupWrapper.fadeOut(config["speed"], function() {
 			popupWrapper.remove();
 			unfreeze();
@@ -112,8 +124,26 @@ function jPopup(config) {
 				stickToBottom = false;
 				setPosition();
 			}
+			popupWrapper.attr("data-draggable","");
 		} else {
 			popupTitle.css("cursor", "inherit");
+			popupWrapper.removeAttr("data-draggable");
+		}
+	}
+	function setResizeable() {
+		if(config["resizeable"]) {
+			popupResize.show();
+			popupWrapper.attr("data-resizeable","");
+		} else {
+			popupResize.hide();
+			popupWrapper.removeAttr("data-resizeable");
+		}
+	}
+	function setButtons() {
+		if(config["buttons"].length) {
+			popupWrapper.attr("data-buttons","");
+		} else {
+			popupWrapper.removeAttr("data-buttons");
 		}
 	}
 	function setCloseButton() {
@@ -245,7 +275,9 @@ function jPopup(config) {
 		}
 	}
 	function setDepth() {
-		popupWrapper.css("z-index", maxDepth() + 1);
+		var zIndex = maxDepth() + 1;
+		popupWrapper.css("z-index", zIndex);
+		popupOverlay.css("z-index", zIndex);
 	}
 	function sortDepth() {
 		var currentDepth = popupWrapper.css("z-index");
@@ -395,27 +427,66 @@ function jPopup(config) {
 				fX = popup.offset().left;
 				y = e.pageY || e.originalEvent.touches[0].pageY;
 				x = e.pageX || e.originalEvent.touches[0].pageX;
-				popup.css("user-select", "none");
+				$(document).bind("selectstart.disableSelection", function(e) {e.preventDefault();});
 			}
-		});		
+		});
 		onMouseMove = function(e) {
+			mY = e.pageY == undefined ? e.originalEvent.touches[0].pageY:e.pageY;
+			mX = e.pageX == undefined ? e.originalEvent.touches[0].pageX:e.pageX;
 			if(dragging && config["draggable"]) {
-				mY = e.pageY == undefined ? e.originalEvent.touches[0].pageY:e.pageY;
-				mX = e.pageX == undefined ? e.originalEvent.touches[0].pageX:e.pageX;
 				popup.offset({
 					top: fY + mY - y,
 					left: fX + mX - x
 				});
 				boundary();
 			}
+			if(resizing && config["resizeable"]) {
+				if(/0|4|5/.test(resizeHandle) && (fY + mY - y) > 0) {
+					popup.css("height", "");
+					if((rY - mY + y) > popup.height()) {
+						popup.css("height", rY - mY + y);
+						popup.offset({
+							top: fY + mY - y
+						});
+					}
+				}
+				if(/1|4|6/.test(resizeHandle) && (fX + mX - x) > 0) {
+					popup.css("width", "");
+					if((rX - mX + x) > popup.width()) {
+						popup.css("width", rX - mX + x);
+						popup.offset({
+							left: fX + mX - x
+						});
+					}
+				}
+				if(/2|6|7/.test(resizeHandle) && (fY + mY - y + rY) < $(window).height()) {
+					popup.css("height", "");
+					if((rY + mY - y) > popup.height()) {
+						popup.css("height", rY + mY - y);
+					}
+				}
+				if(/3|5|7/.test(resizeHandle) && (fX + mX - x + rX) < $(window).width()) {
+					popup.css("width", "");
+					if((rX + mX - x) > popup.width()) {
+						popup.css("width", rX + mX - x);
+					}
+				}
+			}
 		};
 		$(document).on("mousemove touchmove", onMouseMove);
-		popupWrapper.on("mouseup touchend", function(e) {
+		onMouseUp = function(e) {
+			if(config["resizeable"]) {
+				resizing = false;
+				popupTitle.css("cursor", "");
+				$("html").css("cursor", "");
+			}
 			if(config["draggable"]) {
 				dragging = false;
-				popup.css("user-select", "inherit");
+				popupTitle.css("cursor", "move");
 			}
-		});
+			$(document).unbind(".disableSelection");
+		};
+		$(document).on("mouseup touchend", onMouseUp);
 		popupWrapper.on("mousedown touchstart", function() {
 			if(config["draggable"]) {
 				sortDepth();
@@ -431,6 +502,21 @@ function jPopup(config) {
 				close();
 			}
 		});
+		popupResize.children("div").on("mousedown touchstart", function(e) {
+			if(config["resizeable"]) {
+				resizing = true;
+				fY = popup.offset().top;
+				fX = popup.offset().left;
+				rY = popup.height();
+				rX = popup.width();
+				y = e.pageY || e.originalEvent.touches[0].pageY;
+				x = e.pageX || e.originalEvent.touches[0].pageX;
+				resizeHandle = $(this).index();
+				$("html").css("cursor", $(this).css("cursor"));
+				popupTitle.css("cursor", $(this).css("cursor"));
+				$(document).bind("selectstart.disableSelection", function(e) {e.preventDefault();});
+			}
+		});	
 		return r.progress(f);
 	};
 	this.close = function() {
@@ -469,6 +555,7 @@ function jPopup(config) {
 		} else {
 			config["buttons"] = fButtons;
 			popupButtons.html(getButtons());
+			setButtons()
 			return this;
 		}
 	};
@@ -487,6 +574,15 @@ function jPopup(config) {
 		} else {
 			config["draggable"] = fDraggable ? true:false;
 			setDraggable();
+			return this;
+		}
+	};
+	this.resizeable = function(fResizeable) {
+		if(fResizeable == undefined) {
+			return config["resizeable"];
+		} else {
+			config["resizeable"] = fResizeable ? true:false;
+			setResizeable();
 			return this;
 		}
 	};
