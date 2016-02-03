@@ -189,13 +189,17 @@ $padding: 20px;
 				float: right;
 				cursor: pointer;
 				outline: 0;
-
+				
 				&.ok {
 					color: #1565C0;
 				}
 
 				&.no {
 					color: #F44336;
+				}
+				
+				&::-moz-focus-inner {
+					border: 0; // Remove dotted border because Mozilla decided to add them for no reason
 				}
 			}
 		}
@@ -316,7 +320,7 @@ $padding: 20px;
 		}
 	}
 
-	//ScrollTop & ScrollBottom
+	// ScrollTop & ScrollBottom
 	&.popup_scroll_top {
 		.popup {
 			.popup_title {
@@ -341,7 +345,7 @@ $padding: 20px;
 		}
 	}
 	
-	//Resizeable
+	// Resizeable
 	&[data-resizeable][data-buttons]:not(.popup_overflow_y):not(.popup_overflow_x) {
 		.popup {
 			padding-bottom: 36px+$padding+$padding;
