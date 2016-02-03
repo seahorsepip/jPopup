@@ -334,7 +334,6 @@ function jPopup(config) {
 			case "bottomRight":
 			case "stretchBottom":
 				getOffset["y"] = popupWrapper.offset().top - popup.offset().top - popup.outerHeight();
-				break;
 		}
 		switch(config["position"]) {
 			case "center":
