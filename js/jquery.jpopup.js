@@ -443,8 +443,8 @@ function jPopup(config) {
 			if(resizing && config["resizeable"]) {
 				if(/0|4|5/.test(resizeHandle) && (fY + mY - y) > 0) {
 					popup.css("height", "");
-					if((rY - mY + y) > popup.height()) {
-						popup.css("height", rY - mY + y);
+					if((rY - mY + y) > popup.outerHeight()) {
+						popup.outerHeight(rY - mY + y);
 						popup.offset({
 							top: fY + mY - y
 						});
@@ -452,23 +452,25 @@ function jPopup(config) {
 				}
 				if(/1|4|6/.test(resizeHandle) && (fX + mX - x) > 0) {
 					popup.css("width", "");
-					if((rX - mX + x) > popup.width()) {
-						popup.css("width", rX - mX + x);
+					if((rX - mX + x) > popup.outerWidth()) {
+						popup.outerWidth(rX - mX + x);
 						popup.offset({
 							left: fX + mX - x
 						});
 					}
 				}
+				console.log($(window).height());
+				console.log(fY + mY - y + rY);
 				if(/2|6|7/.test(resizeHandle) && (fY + mY - y + rY) < $(window).height()) {
 					popup.css("height", "");
-					if((rY + mY - y) > popup.height()) {
-						popup.css("height", rY + mY - y);
+					if((rY + mY - y) > popup.outerHeight()) {
+						popup.outerHeight(rY + mY - y);
 					}
 				}
 				if(/3|5|7/.test(resizeHandle) && (fX + mX - x + rX) < $(window).width()) {
 					popup.css("width", "");
-					if((rX + mX - x) > popup.width()) {
-						popup.css("width", rX + mX - x);
+					if((rX + mX - x) > popup.outerWidth()) {
+						popup.outerWidth(rX + mX - x);
 					}
 				}
 			}
@@ -508,8 +510,8 @@ function jPopup(config) {
 				resizing = true;
 				fY = popup.offset().top;
 				fX = popup.offset().left;
-				rY = popup.height();
-				rX = popup.width();
+				rY = popup.outerHeight();
+				rX = popup.outerWidth();
 				y = e.pageY || e.originalEvent.touches[0].pageY;
 				x = e.pageX || e.originalEvent.touches[0].pageX;
 				resizeHandle = $(this).index();
