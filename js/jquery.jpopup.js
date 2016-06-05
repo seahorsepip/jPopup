@@ -1,23 +1,24 @@
-function jPopup(config) {
+jPopup.classBase = "jpopup";
+jPopup.zIndex = 10000;
 
-	var classBase = "popup";
+function jPopup(config) {
 	
 	var defaults = {
 		title: "",
 		content: "",
 		buttons: [],
-		popupClass: classBase,
-		wrapperClass: classBase+"_wrapper",
-		overlayClass: classBase+"_overlay",
-		titleClass: classBase+"_title",
-		contentClass: classBase+"_content",
-		buttonsClass: classBase+"_buttons",
-		overflowXClass: classBase+"_overflow_x",
-		overflowYClass: classBase+"_overflow_y",
-		scrollTopClass: classBase+"_scroll_top",
-		scrollBottomClass: classBase+"_scroll_bottom",
-		resizeClass: classBase+"_resize",
-		closeButtonClass: classBase+"_close",
+		popupClass: jPopup.classBase,
+		wrapperClass: jPopup.classBase+"_wrapper",
+		overlayClass: jPopup.classBase+"_overlay",
+		titleClass: jPopup.classBase+"_title",
+		contentClass: jPopup.classBase+"_content",
+		buttonsClass: jPopup.classBase+"_buttons",
+		overflowXClass: jPopup.classBase+"_overflow_x",
+		overflowYClass: jPopup.classBase+"_overflow_y",
+		scrollTopClass: jPopup.classBase+"_scroll_top",
+		scrollBottomClass: jPopup.classBase+"_scroll_bottom",
+		resizeClass: jPopup.classBase+"_resize",
+		closeButtonClass: jPopup.classBase+"_close",
 		closeButtonContent: "&times;<svg fill=\"#000000\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z\"/></svg>",
 		closeButton: false,
 		overlay: true,
@@ -29,25 +30,25 @@ function jPopup(config) {
 			x: 0,
 			y: 0
 		},
-		speed: 200,
+		speed: 300,
 		stickToBottom: true,
 		keyClose: false
 	};
 	
 	config = $.extend(defaults, config);
 	
-	var popupBase = $("<div><div class=\""+config["overlayClass"]+"\" style=\"position:fixed;top:0;left:0;bottom:0;right:0;display:none;\"></div><div class=\""+config["wrapperClass"]+"\" style=\"opacity:0;\" data-popup><form class=\""+config["popupClass"]+"\" style=\"position:relative;float:left;\"><div class=\""+config["titleClass"]+"\">"+config["title"]+"</div><div class=\""+config["contentClass"]+"\">"+config["content"]+"</div><div class=\""+config["buttonsClass"]+"\">"+getButtons()+"</div><div class=\""+config["resizeClass"]+"\" style=\"display: none;\"><div style=\"position:absolute;top:0;left:0;right: 0;height:6px;cursor:n-resize;\"></div><div style=\"position:absolute;top:0;left:0;bottom:0;width:6px;cursor:w-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;right:0;height:6px;cursor:s-resize;\"></div><div style=\"position:absolute;top:0;bottom:0;right:0;width:6px;cursor:e-resize;\"></div><div style=\"position:absolute;top:0;left:0;width:6px;height:6px;cursor:nw-resize;\"></div><div style=\"position:absolute;top:0;right:0;width:6px;height:6px;cursor:ne-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;width:6px;height:6px;cursor:sw-resize;\"></div><div style=\"position:absolute;bottom:0;right:0;width:6px;height:6px;cursor:se-resize;\"></div></div><div class=\""+config["closeButtonClass"]+"\">"+config["closeButtonContent"]+"</div></form></div></div>");
-	var popupWrapper = popupBase.children("div:last-child");
-	var popupOverlay = popupBase.children("div:first-child");
-	var popup =  popupWrapper.children("form");
+	var popupBase = $("<div><div class=\""+config["overlayClass"]+"\"></div><div class=\""+config["wrapperClass"]+"\"><form class=\""+config["popupClass"]+"\"><div class=\""+config["titleClass"]+"\">"+config["title"]+"</div><div class=\""+config["contentClass"]+"\">"+config["content"]+"</div><div class=\""+config["buttonsClass"]+"\">"+getButtons()+"</div><div class=\""+config["closeButtonClass"]+"\">"+config["closeButtonContent"]+"</div></form></div></div>");
+	var popupWrapper = (!config["element"].length ? popupBase:config["element"]).children("."+config["wrapperClass"]).css({"display": "none", "opacity": 0});
+	var popupOverlay = (!config["element"].length ? popupBase:config["element"]).children("."+config["overlayClass"]).css({"position": "fixed", "top": 0, "left": 0, "bottom": 0, "right": 0, "display": "none", "opacity": 0});
+	var popup =  popupWrapper.children("."+config["popupClass"]).css({"position": "absolute", "float": "left"});
 	var popupTitle = popup.children("."+config["titleClass"]);
 	var popupContent = popup.children("."+config["contentClass"]);
 	var popupButtons = popup.children("."+config["buttonsClass"]);
 	var popupClose = popup.children("."+config["closeButtonClass"]);
-	var popupResize = popup.children("."+config["resizeClass"]);
-	
-	var state,
-		top,
+	var popupResize = $("<div class=\""+config["resizeClass"]+"\" style=\"display: none;\"><div style=\"position:absolute;top:0;left:0;right: 0;height:6px;cursor:n-resize;\"></div><div style=\"position:absolute;top:0;left:0;bottom:0;width:6px;cursor:w-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;right:0;height:6px;cursor:s-resize;\"></div><div style=\"position:absolute;top:0;bottom:0;right:0;width:6px;cursor:e-resize;\"></div><div style=\"position:absolute;top:0;left:0;width:6px;height:6px;cursor:nw-resize;\"></div><div style=\"position:absolute;top:0;right:0;width:6px;height:6px;cursor:ne-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;width:6px;height:6px;cursor:sw-resize;\"></div><div style=\"position:absolute;bottom:0;right:0;width:6px;height:6px;cursor:se-resize;\"></div></div>");
+	console.log(popupWrapper);
+	popup.append(popupResize);
+	var top,
 		fY,
 		fX,
 		rY,
@@ -62,20 +63,29 @@ function jPopup(config) {
 		resizeHandle;
 
 	function freeze() {
-		top = $("html").scrollTop();
 		if($("html").css("position") != "fixed" && config["overlay"]) {
+			top = $("html, body").scrollTop();
+			if(window.innerWidth > $("html").width()) {
+				$("html").css("overflow-y", "scroll");
+			}
 			$("html").css({"width": "100%", "height": "100%", "position": "fixed", "top": -top});
 		}
 	}
 	function unfreeze() {
-		if($("html").css("position") == "fixed" && !$("[data-popup][data-overlay]").length) {
+		if($("html").css("position") == "fixed" && $("[data-popup][data-overlay]").length == 1) {
 			$("html").css("position", "static");
 			$("html").scrollTop(-parseInt($("html").css("top")));
-			$("html").css({"width": "", "height": "", "top": 0});
+			$("html").css({"position": "", "width": "", "height": "", "top": "", "overflow-y": ""});
 		}
 	}
 	function open() {
-		$("body").append(popupOverlay).append(popupWrapper);
+		if(!config["element"].length) {
+			$("body").append(popupOverlay).append(popupWrapper);
+		} else {
+			config["element"].show();
+		}
+		popupWrapper.attr("data-popup", "");
+		(popupOverlay, popupWrapper).show();
 		setOverlay();
 		setDepth();
 		setCloseButton();
@@ -86,8 +96,11 @@ function jPopup(config) {
 		setOffset();
 		overflow();
 		scrollTop();
-		popupWrapper.attr("data-position", config["position"]).fadeTo(config["speed"], 1);
-		state = true;
+		animation();
+		setTimeout(function() {
+			popup.css({"transition": "transform "+(config["speed"] / 1000)+"s", "transform": "scale(1)translate(0,0)"});
+		}, 1);
+		popupWrapper.attr("data-position", config["position"]).css({"transition": "opacity "+(config["speed"] / 1000)+"s", "opacity": 1});
 	}
 	function close() {
 		popupTitle.off("mousedown touchstart");
@@ -97,23 +110,66 @@ function jPopup(config) {
 		$(window).off("resize", onResize);
 		$(document).off("mousemove touchmove", onMouseMove);
 		$(document).off("mouseup touchend", onMouseUp);
-		popupWrapper.fadeOut(config["speed"], function() {
-			popupWrapper.remove();
+		hide();
+		setTimeout(function() {
+			if(!config["element"].length) {
+				popupWrapper.remove();
+				popupOverlay.remove();
+			} else {
+				config["element"].hide();
+			}
+		}, config["speed"]);
+	}
+	function hide() {
+		config["offset"] = getOffset();
+		popupWrapper.css("opacity", 0);
+		popupOverlay.css("opacity", 0);
+		animation();
+		setTimeout(function() {
+			popup.css({"transition": "", "transform": ""});
+			popupWrapper.hide();
+			popupOverlay.hide();
+			if(config["element"].length) {
+				popupWrapper.removeAttr("data-popup").removeAttr("data-overlay");
+			}
 			unfreeze();
-		});
-		popupOverlay.fadeOut(config["speed"], function() {
-			popupOverlay.remove();
-		});
-		state = false;
+		}, config["speed"]);
+	}
+	function animation() {
+		switch(config["position"]) {
+			case "stretchTop":
+				popup.css({"transform": "translateY(-100%)"});
+				break;
+			case "stretchLeft":
+				popup.css({"transform": "translateX(-100%)"});
+				break;
+			case "stretchBottom":
+				popup.css({"transform": "translateY(100%)"});
+				break;
+			case "stretchRight":
+				popup.css({"transform": "translateX(100%)"});
+				break;
+			case "full":
+				break;
+			default:
+				popup.css({"transform": "scale(.8)"});
+				break;
+		}
 	}
 	function setOverlay() {
 		if(config["overlay"]) {
 			popupWrapper.attr("data-overlay", "");
-			popupOverlay.css("z-index", popupWrapper.css("z-index")).fadeIn(config["speed"]);
+			popupOverlay.show();
+			setTimeout(function() {
+				popupOverlay.css({"z-index": maxDepth(), "transition": "opacity "+(config["speed"] / 1000)+"s", "opacity": 1});
+			}, 1);
 			freeze();
 		} else {
 			popupWrapper.removeAttr("data-overlay");
-			popupOverlay.fadeOut(config["speed"]);
+			popupOverlay.css({"transition": "opacity "+(config["speed"] / 1000)+"s", "opacity": 0});
+			setTimeout(function() {
+				popupOverlay.hide();
+			}, config["speed"]);
 			unfreeze();
 		}
 	}
@@ -291,7 +347,7 @@ function jPopup(config) {
 		popupWrapper.css("z-index", currentMaxDepth);
 	}
 	function maxDepth() {
-		var depths = [9999];
+		var depths = [jPopup.zIndex-1];
 		$("[data-popup]").each(function() {
 			var depth = parseInt($(this).css("z-index"));
 			if(depth) {
@@ -384,7 +440,6 @@ function jPopup(config) {
 			var checkForm = $(this).data("checkform");
 			var autoClose = $(this).data("close");
 			if(hasFormValidation() && checkForm) {
-				console.log(popup[0].checkValidity());
 				if(!popup[0].checkValidity()) {
 					$('<input type="submit">').hide().appendTo(popup).click().remove();
 				} else {
@@ -459,8 +514,6 @@ function jPopup(config) {
 						});
 					}
 				}
-				console.log($(window).height());
-				console.log(fY + mY - y + rY);
 				if(/2|6|7/.test(resizeHandle) && (fY + mY - y + rY) < $(window).height()) {
 					popup.css("height", "");
 					if((rY + mY - y) > popup.outerHeight()) {
@@ -501,7 +554,7 @@ function jPopup(config) {
 			}
 		});
 		$(document).on("keydown", function(e) {
-			if(e.which == config["keyClose"] && popupWrapper.css("z-index") == maxDepth() && state) {
+			if(e.which == config["keyClose"] && popupWrapper.css("z-index") == maxDepth()) {
 				close();
 			}
 		});
@@ -523,8 +576,16 @@ function jPopup(config) {
 		});	
 		return r.progress(f);
 	};
+	this.show = function() {
+		open();
+		return this;
+	};
 	this.close = function() {
 		close();
+		return this;
+	};
+	this.hide = function() {
+		hide();
 		return this;
 	};
 	this.addClass = function(fClass) {
@@ -707,7 +768,7 @@ function jPopup(config) {
 			return this;
 		}
 	};
-	this.speed = function(fFadeTime) {
+	this.speed = function(fSpeed) {
 		if(fSpeed == undefined) {
 			return config["speed"];
 		} else {
@@ -763,6 +824,10 @@ function jPopup(config) {
 		} else {
 			config["keyClose"] = fKeyClose ? fKeyClose:false;
 		}
+	}
+	this.clone = function(fClone) {
+		config["offset"] = getOffset();
+		return new jPopup(config);
 	}
 	this.popupWrapper = function() {
 		return popupWrapper;
