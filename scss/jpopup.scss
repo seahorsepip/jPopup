@@ -1,12 +1,12 @@
 $padding: 20px;
 
-.popup_overlay {
+.jpopup_overlay {
 	background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AEOFQs3Rovy/gAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAADUlEQVQI12N48eLFGQAI+QOFL6ImxwAAAABJRU5ErkJggg==");
 	background: rgba(232,232,232,.8);
 }
 
-.popup_wrapper {
-	.popup {
+.jpopup_wrapper {
+	.jpopup {
 		border: 0;
 		width: 400px;
 		background: #fff;
@@ -17,7 +17,7 @@ $padding: 20px;
 		outline: 1px solid #ddd;
 		outline: 1px solid rgba(0,0,0, 0.03);
 
-		.popup_title {
+		.jpopup_title {
 			color: #444;
 			padding: 0 $padding;
 			min-height: $padding;
@@ -62,7 +62,7 @@ $padding: 20px;
 			h6 { font-size: 12px; }
 		}
 
-		.popup_buttons {
+		.jpopup_buttons {
 			&:before {
 				content: " "; // Add a space because Mozilla fails on this sometimes
 
@@ -86,7 +86,7 @@ $padding: 20px;
 			}
 		}
 		
-		.popup_close {
+		.jpopup_close {
 			position: absolute;
 			top: $padding;
 			right: $padding;
@@ -120,11 +120,11 @@ $padding: 20px;
 		}
 	}
 
-	.popup_content {
+	.jpopup_content {
 		padding: 0 $padding;
 	}
 
-	.popup {
+	.jpopup {
 
 		p {
 			font-size: 16px;
@@ -168,7 +168,7 @@ $padding: 20px;
 			}
 		}
 
-		.popup_buttons {
+		.jpopup_buttons {
 			float: left;
 			width: 100%;
 			box-sizing: border-box;
@@ -204,11 +204,11 @@ $padding: 20px;
 			}
 		}
 
-		.popup_buttons button:hover {
+		.jpopup_buttons button:hover {
 			background: #eee;
 		}
 		
-		.popup_buttons button:active {
+		.jpopup_buttons button:active {
 			background: #ddd;
 		}
 	}
@@ -217,7 +217,7 @@ $padding: 20px;
 	&[data-position="stretchTop"],
 	&[data-position="stretchBottom"],
 	&[data-position="full"] {
-		.popup {
+		.jpopup {
 			border-radius: 0;
 		}
 	}
@@ -225,24 +225,24 @@ $padding: 20px;
 	// StretchLeft & StretchRight
 	&[data-position="stretchLeft"],
 	&[data-position="stretchRight"] {
-		.popup {
+		.jpopup {
 			border-radius: 0;
 
-			.popup_title {
+			.jpopup_title {
 				position: absolute;
 				right: 0;
 				left: 0;
 				top: 0;
 			}
 
-			.popup_buttons {
+			.jpopup_buttons {
 				position: absolute;
 				bottom: 0;
 				right: 0;
 				left: 0;
 			}
 
-			.popup_content {
+			.jpopup_content {
 				position: absolute;
 				overflow: auto;
 				bottom: 76px;
@@ -254,10 +254,10 @@ $padding: 20px;
 	}
 
 	// Overflow
-	&.popup_overflow_y,
-	&.popup_overflow_x:not([data-position="stretchTop"]):not([data-position="stretchBottom"]) {
-		.popup {
-			.popup_title {
+	&.jpopup_overflow_y,
+	&.jpopup_overflow_x:not([data-position="stretchTop"]):not([data-position="stretchBottom"]) {
+		.jpopup {
+			.jpopup_title {
 				position: absolute;
 				right: 0;
 				left: 0;
@@ -265,14 +265,14 @@ $padding: 20px;
 				cursor: inherit;
 			}
 
-			.popup_buttons {
+			.jpopup_buttons {
 				position: absolute;
 				bottom: 0;
 				right: 0;
 				left: 0;
 			}
 
-			.popup_content {
+			.jpopup_content {
 				position: absolute;
 				overflow: auto;
 				bottom: 36px+$padding+$padding;
@@ -283,17 +283,17 @@ $padding: 20px;
 		}
 	}
 	
-	&.popup_overflow_y {
+	&.jpopup_overflow_y {
 		&,
-		.popup {
+		.jpopup {
 			height: 100% !important;
 			top: 0 !important;
 		}
 	}
 
-	&.popup_overflow_x:not([data-position="stretchTop"]):not([data-position="stretchBottom"]) {
+	&.jpopup_overflow_x:not([data-position="stretchTop"]):not([data-position="stretchBottom"]) {
 		&,
-		.popup {
+		.jpopup {
 			height: 100% !important;
 			width: 100% !important;
 			left: 0 !important;
@@ -301,29 +301,29 @@ $padding: 20px;
 			border-radius: 0;
 			border: 0;
 			
-			.popup_resize {
+			.jpopup_resize {
 				display: none;
 			}
 		}
 	}
 	
-	&.popup_overflow_y:not([data-buttons]),
-	&.popup_overflow_x:not([data-position="stretchTop"]):not([data-position="stretchBottom"]):not([data-buttons]) {
-		.popup {
-			.popup_content {
+	&.jpopup_overflow_y:not([data-buttons]),
+	&.jpopup_overflow_x:not([data-position="stretchTop"]):not([data-position="stretchBottom"]):not([data-buttons]) {
+		.jpopup {
+			.jpopup_content {
 				bottom: 0;
 			}
 			
-			.popup_buttons:before {
+			.jpopup_buttons:before {
 				display: none;
 			}
 		}
 	}
 
 	// ScrollTop & ScrollBottom
-	&.popup_scroll_top {
-		.popup {
-			.popup_title {
+	&.jpopup_scroll_top {
+		.jpopup {
+			.jpopup_title {
 				&:after {
 					margin-bottom: -10px;
 					opacity: 0;
@@ -333,9 +333,9 @@ $padding: 20px;
 		}
 	}
 
-	&.popup_scroll_bottom {
-		.popup {
-			.popup_buttons {
+	&.jpopup_scroll_bottom {
+		.jpopup {
+			.jpopup_buttons {
 				&:before {
 					margin-top: 0;
 					opacity: 0;
@@ -346,10 +346,10 @@ $padding: 20px;
 	}
 	
 	// Resizeable
-	&[data-resizeable][data-buttons]:not(.popup_overflow_y):not(.popup_overflow_x) {
-		.popup {
+	&[data-resizeable][data-buttons]:not(.jpopup_overflow_y):not(.jpopup_overflow_x) {
+		.jpopup {
 			padding-bottom: 36px+$padding+$padding;
-			.popup_buttons {
+			.jpopup_buttons {
 				position: absolute;
 				bottom: 0;
 				right: 0;
