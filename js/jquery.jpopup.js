@@ -32,7 +32,8 @@ function jPopup(config) {
 		},
 		speed: 300,
 		stickToBottom: true,
-		keyClose: false
+		keyClose: false,
+		element: false
 	};
 	
 	config = $.extend(defaults, config);
