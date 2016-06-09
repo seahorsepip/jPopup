@@ -65,7 +65,7 @@ function jPopup(config) {
 
 	function freeze() {
 		if($("html").css("position") != "fixed" && config["overlay"]) {
-			top = $("html, body").scrollTop();
+			top = $("html").scrollTop() ? $("html").scrollTop() : $("body").scrollTop();
 			if(window.innerWidth > $("html").width()) {
 				$("html").css("overflow-y", "scroll");
 			}
@@ -75,7 +75,7 @@ function jPopup(config) {
 	function unfreeze() {
 		if($("html").css("position") == "fixed" && $("[data-popup][data-overlay]").length == 1) {
 			$("html").css("position", "static");
-			$("html").scrollTop(-parseInt($("html").css("top")));
+			$("html, body").scrollTop(-parseInt($("html").css("top")));
 			$("html").css({"position": "", "width": "", "height": "", "top": "", "overflow-y": ""});
 		}
 	}
