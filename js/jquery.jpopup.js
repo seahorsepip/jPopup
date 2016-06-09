@@ -47,7 +47,6 @@ function jPopup(config) {
 	var popupButtons = popup.children("."+config["buttonsClass"]);
 	var popupClose = popup.children("."+config["closeButtonClass"]);
 	var popupResize = $("<div class=\""+config["resizeClass"]+"\" style=\"display: none;\"><div style=\"position:absolute;top:0;left:0;right: 0;height:6px;cursor:n-resize;\"></div><div style=\"position:absolute;top:0;left:0;bottom:0;width:6px;cursor:w-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;right:0;height:6px;cursor:s-resize;\"></div><div style=\"position:absolute;top:0;bottom:0;right:0;width:6px;cursor:e-resize;\"></div><div style=\"position:absolute;top:0;left:0;width:6px;height:6px;cursor:nw-resize;\"></div><div style=\"position:absolute;top:0;right:0;width:6px;height:6px;cursor:ne-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;width:6px;height:6px;cursor:sw-resize;\"></div><div style=\"position:absolute;bottom:0;right:0;width:6px;height:6px;cursor:se-resize;\"></div></div>");
-	console.log(popupWrapper);
 	popup.append(popupResize);
 	var fY,
 		fX,
