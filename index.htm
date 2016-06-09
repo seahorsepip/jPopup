@@ -54,7 +54,7 @@ $(function() {
 				});
 				why.open(function(r, f) {
 					alert("See console for form data");
-					var textarea_value = f.find(".textarea_wrapper textarea").val();
+					var textarea_value = f.find("textarea").val();
 					console.log("textarea value: "+textarea_value);
 				});
 				break;
