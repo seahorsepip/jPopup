@@ -785,6 +785,7 @@ function jPopup(config) {
 			config["offset"]["x"] = 0;
 			setPosition();
 			setPosition();
+			overflow();
 			return this;
 		}
 	};
