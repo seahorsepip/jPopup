@@ -71,7 +71,7 @@ function jPopup(config) {
 		}
 	}
 	function unfreeze() {
-		if($("html").css("position") == "fixed" && $("[data-popup][data-overlay]").length == 1) {
+		if($("html").css("position") == "fixed" && $("[data-popup][data-overlay]:not([style*=\"display: none\"])").length == 1) {
 			$("html").css("position", "static");
 			$("html, body").scrollTop(-parseInt($("html").css("top")));
 			$("html").css({"position": "", "width": "", "height": "", "top": "", "overflow-y": ""});
