@@ -125,13 +125,13 @@ function jPopup(config) {
 		popupOverlay.css("opacity", 0);
 		animation();
 		setTimeout(function() {
+			unfreeze();
 			popup.css({"transition": "", "transform": ""});
 			popupWrapper.hide();
 			popupOverlay.hide();
 			if(config["element"].length) {
 				popupWrapper.removeAttr("data-popup").removeAttr("data-overlay");
 			}
-			unfreeze();
 		}, config["speed"]);
 	}
 	function animation() {
