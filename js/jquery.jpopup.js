@@ -1,10 +1,11 @@
 function jPopup(config) {
 	//Default options
+	//Todo: clean these up...
 	var defaults = {
 		title: "",
 		content: "",
 		buttons: [],
-		closeButtonContent: "&times;<svg fill=\"#000000\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z\"/></svg>",
+		closeButtonContent: "&times;"
 		closeButton: false,
 		overlay: true,
 		overlayClose: false,
@@ -19,12 +20,12 @@ function jPopup(config) {
 		animations: {
 			open: {
 				center: function() {
-					this._animations.open.center.apply(this);
+					this._animations.zoomIn.apply(this);
 				}
 			},
 			close: {
 				center: function() {
-					this._animations.close.center.apply(this);
+					this._animations.zoomOut.apply(this);
 				}
 			}
 		},
@@ -40,13 +41,47 @@ function jPopup(config) {
 		onHide: function() {},
 		afterHide: function() {},
 		mediaquery: true,
-		responsive: {}
+		responsive: {},
+		plugins: {}
 	};
+	
+	
+	//Apply plugins
+	var self = this;
+	function override(object, proto, name, p, k) {
+		if (typeof object === "function") {
+			p[k] = function() {
+				
+				//Original arguments
+				var a = arguments;
+				
+				//Original function
+				self._super = function() {
+					return proto.apply(self, a);
+				};
+				
+				//Additional functions
+				self.functions = jPopup.plugins[name].functions;
+				
+				//Custom function
+				return object.apply(self, a);
+			};
+		} else {
+			for(key in object) {
+				override(object[key], proto[key], name, proto, key);
+			}
+		}
+	}
+	for(name in jPopup.plugins) {
+		//Load plugin defaults in config
+		defaults.plugins[name] = jPopup.plugins[name].defaults;
+		
+		//Override functions
+		override(jPopup.plugins[name].overrides, jPopup.prototype, name);
+	}
 	
 	//Apply options to config
 	this._config = $.extend(defaults, config);
-
-	var self = this;
 	
 	//Generate unique id
 	do {
@@ -54,16 +89,16 @@ function jPopup(config) {
 	} while(!this.id);
 	
 	//Generate html elements
-	var elements = $("<div><div data-jp=\"overlay\" style=\"position:fixed;top:0;left:0;bottom:0;right:0;display:none;opacity:0;\"></div><div data-jp=\"wrapper\" style=\"display:none;\"><form data-jp=\"popup\" style=\"position:absolute;float:left;\"><header data-jp=\"title\"></header><section data-jp=\"content\"></section><footer data-jp=\"buttons\"></footer><button data-jp=\"close\"></button><div data-jp=\"resize\" style=\"display:none;\"><div style=\"position:absolute;top:0;left:0;right:0;height:6px;cursor:n-resize;\"></div><div style=\"position:absolute;top:0;left:0;bottom:0;width:6px;cursor:w-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;right:0;height:6px;cursor:s-resize;\"></div><div style=\"position:absolute;top:0;bottom:0;right:0;width:6px;cursor:e-resize;\"></div><div style=\"position:absolute;top:0;left:0;width:6px;height:6px;cursor:nw-resize;\"></div><div style=\"position:absolute;top:0;right:0;width:6px;height:6px;cursor:ne-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;width:6px;height:6px;cursor:sw-resize;\"></div><div style=\"position:absolute;bottom:0;right:0;width:6px;height:6px;cursor:se-resize;\"></div></div></form></div></div>");
+	var elements = $("<div><div class=\"jp_overlay\" style=\"position:fixed;top:0;left:0;bottom:0;right:0;display:none;opacity:0;\"></div><div class=\"jp_wrapper\" style=\"display:none;\"><form class=\"jp_popup\" style=\"position:absolute;float:left;\"><header class=\"jp_title\"></header><section class=\"jp_content\"></section><footer class=\"jp_buttons\"></footer><button class=\"jp_close\"></button><div class=\"jp_resize\" style=\"display:none;\"><div style=\"position:absolute;top:0;left:0;right:0;height:6px;cursor:n-resize;\"></div><div style=\"position:absolute;top:0;left:0;bottom:0;width:6px;cursor:w-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;right:0;height:6px;cursor:s-resize;\"></div><div style=\"position:absolute;top:0;bottom:0;right:0;width:6px;cursor:e-resize;\"></div><div style=\"position:absolute;top:0;left:0;width:6px;height:6px;cursor:nw-resize;\"></div><div style=\"position:absolute;top:0;right:0;width:6px;height:6px;cursor:ne-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;width:6px;height:6px;cursor:sw-resize;\"></div><div style=\"position:absolute;bottom:0;right:0;width:6px;height:6px;cursor:se-resize;\"></div></div></form></div></div>");
 	this.elements = {};
-	this.elements.overlay = elements.children("[data-jp=overlay]");
-	this.elements.wrapper = elements.children("[data-jp=wrapper]");
-	this.elements.popup =  this.elements.wrapper.children("[data-jp=popup]");
-	this.elements.title = this.elements.popup.children("[data-jp=title]");
-	this.elements.content = this.elements.popup.children("[data-jp=content]");
-	this.elements.buttons = this.elements.popup.children("[data-jp=buttons]");
-	this.elements.close = this.elements.popup.children("[data-jp=close]");
-	this.elements.resize = this.elements.popup.children("[data-jp=resize]");
+	this.elements.overlay = elements.children(".jp_overlay");
+	this.elements.wrapper = elements.children(".jp_wrapper");
+	this.elements.popup =  this.elements.wrapper.children(".jp_popup");
+	this.elements.title = this.elements.popup.children(".jp_title");
+	this.elements.content = this.elements.popup.children(".jp_content");
+	this.elements.buttons = this.elements.popup.children(".jp_buttons");
+	this.elements.close = this.elements.popup.children(".jp_close");
+	this.elements.resize = this.elements.popup.children(".jp_resize");
 	
 	//Apply config
 	this.title(this._config.title);
@@ -72,10 +107,12 @@ function jPopup(config) {
 }
 
 jPopup.zIndex = 10000;
-jPopup.instances = {}
+jPopup.instances = {};
+jPopup.plugins = {};
 
 jPopup.prototype = {
 	open: function() {
+		
 		//Add popup to instances
 		jPopup.instances[this.id] = this;
 		
@@ -97,6 +134,38 @@ jPopup.prototype = {
 		//Animate
 		this._config.animations.open[this._config.position].apply(this);
 		
+		//Button click
+		var self = this;
+		var r = $.Deferred();
+		this.elements.buttons.on("click", "button", function(e) {
+			e.preventDefault();
+			var button = self._config.buttons[$(this).index()];
+			
+			/*
+			if(hasFormValidation() && validate) {
+				if(!popup[0].checkValidity()) {
+					$("<input type=\"submit\">").hide().appendTo(popup).click().remove();
+				} else {
+					if(!closed) {
+						r.notify(value, popup);
+					}
+					if(autoClose != false) {
+						close();
+						closed = true;
+					}
+				}
+			} else {
+				if(!closed) {
+					r.notify(value, popup);
+				}
+				if(autoClose != false) {
+					close();
+					closed = true;
+				}
+			}
+			*/
+		});
+		
 	},
 	close: function() {
 		//Remove popup from instances
@@ -104,6 +173,15 @@ jPopup.prototype = {
 		
 		//Animate
 		this._config.animations.close[this._config.position].apply(this);
+		
+		//Hide wrapper
+		var self = this;
+		setTimeout(function() {
+			self.elements.wrapper.hide();
+		}, this._config.speed);
+		
+		//Remove button click event
+		this.elements.buttons.off("click");
 	},
 	title: function(title) {
 		if(title) {
@@ -184,7 +262,7 @@ jPopup.prototype = {
 					this.elements.popup.css({"width": "", "height": "", "position": "relative", "top": 0, "left": -this.elements.popup.outerWidth(), "bottom": ""});
 					break;
 				case "bottomLeft":
-					this.elements.wrapper.css({"width": 0, "height": 0, "position": "fixed", "top": "", "left": "0", "bottom": 0, "right": ""});
+					this.elements.wrapper.css({"width": 0, "height": 0, "position": "fixed", "top": "", "left": 0, "bottom": 0, "right": ""});
 					if(this._config.stickToBottom && !this._config.draggable) {
 						this.elements.popup.css({"position": "absolute", "top": "", "left": 0, "bottom": 0});
 					} else {
@@ -238,21 +316,32 @@ jPopup.prototype = {
 		this.elements.wrapper.css("z-index", zIndex);
 	},
 	_animations: {
-		open: {
-			center: function() {
-				var self = this;
-				var speed = this._config.speed;
-				self.elements.popup.css({"opacity": "0", "transform": "scale(.8)"});
-				
-				setTimeout(function() {
-					self.elements.popup.css({"opacity": "1", "transform": "scale(1)", "transition": "opacity "+speed+"ms, transform "+speed+"ms"});
-				}, 1);
-			}
+		zoomIn: function() {
+			var self = this;
+			var speed = this._config.speed;
+			
+			//Animation start
+			this.elements.popup.css({"opacity": 0, "transform": "scale(.8)"});
+			
+			setTimeout(function() {
+				//Animation end
+				self.elements.popup.css({"opacity": "1", "transform": "scale(1)", "transition": "opacity "+speed+"ms, transform "+speed+"ms"});
+				self._animations._clean.apply(self);
+			}, 10);
 		},
-		close: {
-			center: function() {
-				this.elements.popup.css({"opacity": "0", "transform": "scale(.8)"});
-			}
+		zoomOut: function() {
+			var speed = this._config.speed;
+			
+			//Animation end
+			this.elements.popup.css({"opacity": 0, "transform": "scale(.8)", "transition": "opacity "+speed+"ms, transform "+speed+"ms"});
+			this._animations._clean.apply(this);
+		},
+		_clean: function() {
+			//Remove animation css when finished
+			var self = this;
+			setTimeout(function() {
+				self.elements.popup.css({"opacity": "", "transform": "", "transition": ""});
+			}, this._config.speed);
 		}
 	}
 };
