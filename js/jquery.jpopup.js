@@ -5,7 +5,7 @@ function jPopup(config) {
 		title: "",
 		content: "",
 		buttons: [],
-		closeButtonContent: "&times;"
+		closeButtonContent: "&times;",
 		closeButton: false,
 		overlay: true,
 		overlayClose: false,
