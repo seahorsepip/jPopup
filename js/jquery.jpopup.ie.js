@@ -61,7 +61,6 @@ jPopup.plugins.ie = {
 				if(!("scrollBarWidth" in this._vars)) {
 					this._vars.scrollBarWidth = $("html").width() - $(window).width();
 				}
-				//alert(this._vars.scrollBarWidth);
 				$("html").css({"overflow": "hidden", "padding-right": this._vars.scrollBarWidth});
 				$("body").append(this._vars.fakeScrollbar);
 			} else {
