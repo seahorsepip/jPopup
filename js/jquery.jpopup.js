@@ -324,7 +324,7 @@ jPopup.prototype = {
 			if($.contains(self.elements.buttons[0], this)) {
 				e.preventDefault();
 				var button = self._config.buttons[$(this).index()];
-				if(button.close() == true) {
+				if(button.close()) {
 					self.close();
 				}
 				method.call(self, button.value());
@@ -714,7 +714,6 @@ jPopup.prototype = {
 				//Animation end
 				self.elements.popup.css({"opacity": "1", "transform": "scale(1)", "transition": "opacity "+speed+"ms, transform "+speed+"ms"});
 				self._animations._clean.apply(self);
-				//jPopup.prototype._animations._clean.apply(self);
 			}, 10);
 		},
 		zoomOut: function() {
