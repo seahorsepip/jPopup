@@ -19,10 +19,34 @@ function jPopup(config) {
 			open: {
 				center: function() {
 					this._animations.zoomIn.call(this);
+				},
+				top: function() {
+					this._animations.zoomIn.call(this);
+				},
+				left: function() {
+					this._animations.zoomIn.call(this);
+				},
+				bottom: function() {
+					this._animations.zoomIn.call(this);
+				},
+				right: function() {
+					this._animations.zoomIn.call(this);
 				}
 			},
 			close: {
 				center: function() {
+					this._animations.zoomOut.call(this);
+				},
+				top: function() {
+					this._animations.zoomOut.call(this);
+				},
+				left: function() {
+					this._animations.zoomOut.call(this);
+				},
+				bottom: function() {
+					this._animations.zoomOut.call(this);
+				},
+				right: function() {
 					this._animations.zoomOut.call(this);
 				}
 			}
@@ -299,12 +323,15 @@ jPopup.prototype = {
 		//Add overlay and wrapper to document body
 		$("body").append(this.elements.overlay);
 		$("body").append(this.elements.wrapper);
+
+		//Temporarily save offset to variable
+		var offset = this._config.offset;
 		
 		//Set position
-		this.position(this._config.position, true);
+		this.position(this._config.position);
 		
 		//Set offset
-		this.offset(this._config.offset);
+		this.offset(offset);
 
 		//Set z-index
 		this._zIndex();
@@ -579,11 +606,9 @@ jPopup.prototype = {
 			this._config.position = position;
 			
 			//Reset offset
-			if(!offset) {
-				this._config.offset = {
-					x: 0,
-					y: 0
-				}
+			this._config.offset = {
+				x: 0,
+				y: 0
 			}
 			
 			//Apply position to popup
@@ -669,24 +694,59 @@ jPopup.prototype = {
 			var position = this.position();
 			if(this.position() != "stretchTop"  && this.position() != "stretchLeft" && this.position() != "stretchBottom" && this.position() != "stretchRight") {
 				var popup = this.elements.popup;
+				
+				//Get current popup offset
 				var top = popup.offset().top;
 				var left = popup.offset().left;
+				
+				//If undefined set values to 0
 				offset = {
 					x: offset.x || 0,
 					y: offset.y || 0
 				};
+				
+				//Calculate new popup offset
+				var offsetTop = top - offset.y;
+				var offsetLeft = left + offset.x;
+				
+				//Top boundary
+				if(offsetTop - $("html").scrollTop() < 0) {
+					offset.y = 0;
+					offsetTop = 0;
+				}
+				
+				//Bottom boundary
+				if($(window).height() - offsetTop - popup.outerHeight() + $("html").scrollTop() < 0) {
+					offset.y = 0;
+					offsetTop = $(window).height() - popup.outerHeight() + $("html").scrollTop();
+				}
+				
+				//Left boundary
+				if(offsetLeft < 0) {
+					offset.x = 0;
+					offsetLeft = 0;
+				}
+				
+				//Right boundary
+				if($(window).width() - offsetLeft - popup.outerWidth() < 0) {
+					offset.x = 0;
+					offsetLeft = $(window).width() - popup.outerWidth();
+				}
+				
+				//Set new offset in config
 				this._config.offset = {
 					x: this._config.offset.x + offset.x,
 					y: this._config.offset.y + offset.y
 				}
+				
+				//Apply new offset to popup
 				popup.offset({
-					top: top - offset.y,
-					left: left + offset.x
+					top: offsetTop,
+					left: offsetLeft
 				});
 			}
-		} else {
-			return this._config.offset;
 		}
+		return this._config.offset;
 	},
 	clone: function() {
 		return new jPopup(this._config);
