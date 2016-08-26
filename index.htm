@@ -4,12 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="minimum-scale=1.0, maximum-scale=1.0, width=device-width">
 <title>jPopup</title>
-<link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
+<link href="./code.css" rel="stylesheet" type="text/css">
 <!-- link rel="stylesheet" type="text/css" href="./css/jpopup.min.css" / -->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" type="text/javascript"></script>
-<script src="./js/jquery.jpopup.js" type="text/javascript"></script>
-<script src="./js/jquery.jpopup.ie.js" type="text/javascript"></script>
-<script src="./js/jquery.jpopup.draggable.js" type="text/javascript"></script>
+<script src="./js/jquery.jpopup.min.js" type="text/javascript"></script>
+<script src="./js/jquery.jpopup.ie.min.js" type="text/javascript"></script>
+<script src="./js/jquery.jpopup.draggable.min.js" type="text/javascript"></script>
+<script src="./js/highlight.js" type="text/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 <script type="text/javascript">
 $(function() {
 	example = new jPopup({
@@ -34,11 +37,6 @@ $(function() {
 		}],
 		closeButton: true
 	});
-	$(".toggle").click(function() {
-		example.open(function(value) {
-			alert(value);
-		});
-	});
 });
 </script>
 <style type="text/css">
@@ -53,10 +51,6 @@ html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address
 }
 article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {
 	display: block;
-}
-body {
-	width: 600px;
-	margin: 0 auto;
 }
 .jp_overlay {
 	background: rgba(232,232,232,.8);
@@ -73,7 +67,7 @@ body {
 	background: #fff;
 	border-radius: 3px;
 	box-shadow: 0 2px 10px rgba(0,0,0,.1),
-				0 5px 20px rgba(0,0,0,.2);
+				0 10px 30px rgba(0,0,0,.1);
 	outline: 1px #ccc;
 	outline: 1px rgba(0,0,0,.05);
 	font-family: Roboto, sans-serif;
@@ -128,6 +122,7 @@ body {
 	cursor: pointer;
 	outline: 0;
 	display: block;
+	min-width: 52px;
 }
 .jp_buttons button:hover {
 	background: #eee;
@@ -169,53 +164,304 @@ body {
 .jp_close:active {
 	background-color: #ddd;
 }
+/* Site  styles */
+body {
+	width: 600px;
+	margin: 0 auto;
+	font-family: "Roboto", sans-serif;
+}
+#wrapper hr {
+	width: 100%;
+	margin: 48px 0;
+	background: #eee;
+	height: 2px;
+	border: 0;
+}
+#wrapper h1 {
+	font-size: 64px;
+	font-weight: 300;
+	line-height: 128px;
+	margin-top: 48px;
+}
+#wrapper h2 {
+	font-size: 32px;
+	font-weight: 300;
+	line-height: 92px;
+	margin-bottom: 24px;
+}
+#wrapper h3 {
+	font-size: 22px;
+	font-weight: 400;
+	color: #444;
+	margin: 24px 0;
+}
+#wrapper p + h3 {
+	margin-top: 64px;
+}
+#wrapper h4 {
+	font-size: 18px;
+	font-weight: 500;
+	color: #777;
+}
+#wrapper .button {
+	font-family: "Roboto", sans-serif;
+	font-size: 16px;
+	font-weight: 700;
+	color: #777;
+	line-height: 48px;
+	padding: 0 16px;
+	margin: 0 10px;
+	border: 0;
+	border-radius: 3px;
+	background: #f6f6f6;
+	cursor: pointer;
+	outline: 0;
+	display: inline-block;
+	text-decoration: none;
+}
+#wrapper .button svg {
+	margin: 12px 10px 0 0;
+	float: left;
+	fill: #777;
+}
+#wrapper .buttons {
+	margin-top: 48px;
+}
+#wrapper .buttons .button {
+	margin-left: 0;
+}
+#wrapper .button:hover {
+	background: #eee;
+}
+#wrapper .button:active {
+	background: #ddd;
+}
+#wrapper ul li {
+	color: #777;
+	line-height: 64px;
+	font-weight: 300;
+	font-size: 20px;
+	list-style: none;
+}
+#wrapper p {
+	color #777;
+	line-height: 24px;
+	margin-bottom: 24px;
+}
+#wrapper code {
+	line-height: 24px;
+	margin-bottom: 48px;
+	padding-left: 10px;
+}
 </style>
 </head>
 <body>
-<h1>HTML Ipsum Presents</h1>
-	       
-<p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
-
-<button class="toggle">Open popup</button>
-
-<h2>Header Level 2</h2>
-
-<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-	       
-<ol>
-   <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-   <li>Aliquam tincidunt mauris eu risus.</li>
-</ol>
-
-<blockquote><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p></blockquote>
-
-<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-
-<h3>Header Level 3</h3>
-
-<ul>
-   <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-   <li>Aliquam tincidunt mauris eu risus.</li>
-</ul>
-
-<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-
-<pre><code>
-#header h1 a { 
-	display: block; 
-	width: 300px; 
-	height: 80px; 
-}
-</code></pre>
-<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+<div id="wrapper">
+	<h1>jPopup.js</h1>
+	<h4>Advanced jQuery plugin to show popups.</h4>
+	<div class="buttons">
+		<a href="" class="button">
+			<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+				<path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+			</svg>
+			Demo
+		</a>
+		<a href="" class="button">
+			<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+				<path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+			</svg>
+			Download v2.0.0
+		</a>
+		<a href="" class="button">
+			<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+				<path d="M12 3.4C7 3.4 3 7.5 3 12.4c0 4 2.6 7.3 6.2 8.5 0.5 0.1 0.6-0.2 0.6-0.4 0-0.2 0-0.8 0-1.5C7.3 19.6 6.7 17.8 6.7 17.8 6.3 16.8 5.7 16.5 5.7 16.5c-0.8-0.6 0.1-0.5 0.1-0.5 0.9 0.1 1.4 0.9 1.4 0.9 0.8 1.4 2.1 1 2.6 0.7 0.1-0.6 0.3-1 0.6-1.2-2-0.2-4.1-1-4.1-4.4 0-1 0.4-1.8 0.9-2.4-0.1-0.2-0.4-1.1 0.1-2.4 0 0 0.8-0.2 2.5 0.9 0.7-0.2 1.5-0.3 2.3-0.3 0.8 0 1.5 0.1 2.3 0.3 1.7-1.2 2.5-0.9 2.5-0.9 0.5 1.2 0.2 2.2 0.1 2.4 0.6 0.6 0.9 1.4 0.9 2.4 0 3.5-2.1 4.2-4.1 4.4 0.3 0.3 0.6 0.8 0.6 1.7 0 1.2 0 2.2 0 2.5 0 0.2 0.2 0.5 0.6 0.4 3.6-1.2 6.1-4.6 6.1-8.5 0-5-4-9-9-9"/>
+			</svg>
+			Github
+		</a>
+	</div>
+	<hr />
+	<h2>Features</h2>
+	<ul>
+		<li>Supports all browsers including IE6 and above.</li>
+		<li>Small footprint with a filesize of just 3KB.</li>
+		<li>No CSS dependencies.</li>
+		<li>Responsive.</li>
+	</ul>
+	<hr />
+	<h2>Start</h2>
+	<p>Include jpopup.js in your page:</p>
+	<pre><code>&lt;script src="jquery.jpopup.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
+	<p>Create a new jPopup instance:</p>
+	<pre><code>var example = new jPopup({
+	title: "&lt;h2&gt;Hello World!&lt;/h2&gt;",
+	content: "&lt;p&gt;Sudo make me a sandwich?&lt;/p&gt;",
+	buttons: [{
+		text: "Sure"
+	}, {
+		text: "Nope"
+	}]
+});</code></pre>
+	<p>Open the popup instance on button click:</p>
+	<pre><code>$("button").click(function() {
+	example.open();
+});</code></pre>
+	<p>Try it yourself:<button class="button" id="example1">Open popup</button></p>
+	<hr />
+	<h2>Options</h2>
+	<p>There are many of options:</p>
+	<pre><code>var example = new jPopup({
+	title: "&lt;h2&gt;Hello World!&lt;/h2&gt;", //Title
+	content: "&lt;p&gt;Sudo make me a sandwich?&lt;/p&gt;", //Content
+	/* Array of button objects. */
+	buttons: [{
+		text: "Sure", //Text to show on button.
+		name: "", //Name of the button.
+		value: null, //Value passed to callback function.
+		classes: "", //Space seperated list of classes.
+		disabled: false, //Disabled state.
+		close: true //Popup closes when button is clicked.
+		
+	}],
+	/*
+	Set position, you can choose between:
+	center, top, left, bottom, right,
+	stretchTop, stretchLeft, stretchBottom, stretchRight and full.
+	*/
+	position: "center",
+	offset: { //Offset relative to position.
+		x: 0,
+		y: 0
+	}
+	overlay: true, //Show overlay.
+	overlayClose: false, //Close popup when overlay is clicked.
+	closeButton: false, //Show close button.
+	closeButtonContent: "&amp;#215", //Content of close button.
+	speed: 300, //Animation speed in milliseconds.
+	animations: {}, //Animation functions for each position.
+	closeKeys: [], //Array of keycodes that should close the popup.
+	freeze: true, //Disable scrolling when a popup opens.
+	classes: "", //Space seperated list of classes to add.
+	stickToBottom: true //Bottom positioned popups grow from bottom to top.
+});</code></pre>
+	<hr />
+	<h2>Advanced</h2>
+	<hr />
+	<h2>Buttons</h2>
+	<hr />
+	<h2>Plugins</h2>
+	<h3>Internet Explorer</h3>
+	<p>By default there's support for IE10+.</p>
+	<p>To add support for IE6+ include jpopup.ie.js in your page:</p>
+	<pre><code>&lt;script src="jquery.jpopup.ie.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
+	<p>The plugin will automatically add a class to the popup with the IE version which can be used to style the popup.</p>
+	<h3>Draggable</h3>
+	<p>To make popups draggable include jpopup.draggable.js in your page:</p>
+	<pre><code>&lt;script src="jquery.jpopup.draggable.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
+	<p>Then enable dragging on a popup:</p>
+	<pre><code>var exampleDraggable = new jPopup({
+	title: "&lt;h2&gt;Hello World!&lt;/h2&gt;",
+	content: "&lt;p&gt;Sudo make me a sandwich?&lt;/p&gt;",
+	buttons: [{
+		text: "Sure"
+	}, {
+		text: "Nope"
+	}],
+	plugins: {
+		draggable: true
+	}
+});</code></pre>
+	<p>Try it yourself:<button class="button" id="exampleDraggable">Open popup</button></p>
+	<h3>Resizable</h3>
+	<p>To make popups resizeable include jpopup.resizeable.js in your page:</p>
+	<pre><code>&lt;script src="jquery.jpopup.resizeable.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
+	<p>Then enable resizing on a popup:</p>
+	<pre><code>var exampleResizeable = new jPopup({
+	title: "&lt;h2&gt;Hello World!&lt;/h2&gt;",
+	content: "&lt;p&gt;Sudo make me a sandwich?&lt;/p&gt;",
+	buttons: [{
+		text: "Sure"
+	}, {
+		text: "Nope"
+	}],
+	plugins: {
+		resizeable: true
+	}
+});</code></pre>
+	<p>Try it yourself:<button class="button" id="exampleResizeable">Open popup</button></p>
+	<h3>Responsive</h3>
+	<p>To add responsive functionality to your popups include jpopup.responsive.js in your page:</p>
+	<pre><code>&lt;script src="jquery.jpopup.resizeable.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
+	<p>Then set responsive breakpoint functions on a popup:</p>
+	<pre><code>var exampleResponsive = new jPopup({
+	content: "&lt;p&gt;Sudo make me a sandwich?&lt;/p&gt;",
+	buttons: [{
+		text: "Sure"
+	}, {
+		text: "Nope"
+	}],
+	plugins: {
+		responsive: {
+			0: function() { //499px and below
+				this.title("Hello!");
+			},
+			500: function() { //Between 500 and 999px
+				this.title("Hello World!");
+			},
+			1000: function() { //1000px and above
+				this.title("Hello Galaxy!");
+			}
+		}
+	}
+});</code></pre>
+	<p>Try it yourself:<button class="button" id="exampleResponsive">Open popup</button></p>
+</div>
+<script type="text/javascript">
+$(function() {
+	var example1 = new jPopup({
+		title: "<h2>Hello World!</h2>",
+		content: "<p>Sudo make me a sandwich?</p>",
+		buttons: [{
+			text: "Sure"
+		}, {
+			text: "Nope"
+		}]
+	});
+	$("#example1").click(function() {
+		example1.open();
+	});
+	
+	var exampleDraggable = new jPopup({
+		title: "<h2>Hello World!</h2>",
+		content: "<p>Sudo make me a sandwich?</p>",
+		buttons: [{
+			text: "Sure"
+		}, {
+			text: "Nope"
+		}],
+		plugins: {
+			draggable: true
+		}
+	});
+	$("#exampleDraggable").click(function() {
+		exampleDraggable.open();
+	});
+	
+		var exampleResizeable = new jPopup({
+		title: "<h2>Hello World!</h2>",
+		content: "<p>Sudo make me a sandwich?</p>",
+		buttons: [{
+			text: "Sure"
+		}, {
+			text: "Nope"
+		}],
+		plugins: {
+			resizeable: true
+		}
+	});
+	$("#exampleResizeable").click(function() {
+		exampleResizeable.open();
+	});
+});
+</script>
 </body>
 </html>
