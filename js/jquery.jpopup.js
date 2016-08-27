@@ -171,6 +171,8 @@ function jPopup(config) {
 	
 	//Call create function
 	this._create();
+	
+	return this;
 }
 
 jPopup.loaded = false;
@@ -336,17 +338,8 @@ jPopup.prototype = {
 		this.buttons(this._config.buttons);
 		this.closeButton(this._config.closeButton);
 		this.closeButtonContent(this._config.closeButtonContent);
-		
-		//Force render popup (webkit), yes that's a timeout of 0ms
-		var wrapper = this.elements.wrapper;
-		$("body").append(wrapper);
-		setTimeout(function() {
-			wrapper.remove();
-		}, 0);
 	},
-	open: function(method) {
-		console.log(method);
-		
+	open: function(method) {		
 		var self = this;
 		
 		//Add popup to instances
@@ -411,10 +404,14 @@ jPopup.prototype = {
 		this._config.animations.close[this._config.position].call(this);
 		
 		var self = this;
-		setTimeout(function() {			
+		setTimeout(function() {
+			//Trigger animationend in case the wrapper might be removed too soon for custom animations to trigger animationend
+			self.elements.popup.trigger("animationend");
+			
 			//Remove overlay and wrapper from document body
 			self.elements.overlay.remove();
 			self.elements.wrapper.remove();
+			
 		}, this._config.speed);
 		
 		//Remove buttons click event

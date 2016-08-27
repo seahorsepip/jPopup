@@ -6,11 +6,12 @@
 <title>jPopup</title>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
 <link href="./css/code.css" rel="stylesheet" type="text/css">
+<link href="./css/animate.min.css" rel="stylesheet" type="text/css">
 <!-- link rel="stylesheet" type="text/css" href="./css/jpopup.min.css" / -->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" type="text/javascript"></script>
-<script src="./js/jquery.jpopup.min.js" type="text/javascript"></script>
-<script src="./js/jquery.jpopup.ie.min.js" type="text/javascript"></script>
-<script src="./js/jquery.jpopup.draggable.min.js" type="text/javascript"></script>
+<script src="./js/jquery.jpopup.js" type="text/javascript"></script>
+<script src="./js/jquery.jpopup.ie.js" type="text/javascript"></script>
+<script src="./js/jquery.jpopup.draggable.js" type="text/javascript"></script>
 <script src="./js/highlight.js" type="text/javascript"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 <script type="text/javascript">
@@ -253,11 +254,60 @@ body {
 	margin-bottom: 48px;
 	padding-left: 10px;
 }
+#wrapper a.link {
+	color: #000080;
+	text-decoration: none;
+	border-bottom: 1px solid #000080;
+	font-weight: 500;
+}
+#wrapper i {
+	color: #008080;
+	font-style: normal;
+	font-weight: 500;
+}
+#menu {
+	position: fixed;
+	top: 86px;
+	bottom: 86px;
+	left: 50%;
+	margin-left: -550px;
+	width: 200px;
+	border-right: 2px solid #eee;
+}
+#menu li {
+	list-style: none;
+}
+#menu li ul {
+	display: none;
+}
+#menu li a.current + ul {
+	display: block;
+}
+#menu li ul li {
+	padding-left: 20px;
+}
+#menu li a {
+	font-size: 16px;
+	text-decoration: none;
+	line-height: 48px;
+	color: #777;
+}
+#menu li li a {
+	font-size: 14px;
+	line-height: 32px;
+}
+#menu li a.current {
+	color: #444;
+	font-weight: 700;
+	border-right: 2px solid #444;
+	display: block;
+	margin-right: -2px;
+}
 </style>
 </head>
 <body>
-<div id="wrapper">
-	<h1>jPopup.js</h1>
+<section id="wrapper">
+	<h1 id="logo">jPopup.js</h1>
 	<h4>Advanced jQuery plugin to show popups.</h4>
 	<div class="buttons">
 		<a href="" class="button">
@@ -280,7 +330,7 @@ body {
 		</a>
 	</div>
 	<hr />
-	<h2>Features</h2>
+	<h2 id="features">Features</h2>
 	<ul>
 		<li>Supports all browsers including IE6 and above.</li>
 		<li>Small footprint with a filesize of just 3KB.</li>
@@ -288,8 +338,9 @@ body {
 		<li>Responsive.</li>
 	</ul>
 	<hr />
-	<h2>Start</h2>
-	<p>Include jpopup.js in your page:</p>
+	<h2 id="getting_started">Getting started</h2>
+	<h3 id="installation">Installation</h3>
+	<p>include <i>jquery.jpopup.min.js</i> in your page:</p>
 	<pre><code>&lt;script src="jquery.jpopup.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
 	<p>Create a new jPopup instance:</p>
 	<pre><code>var example = new jPopup({
@@ -301,13 +352,40 @@ body {
 		text: "Nope"
 	}]
 });</code></pre>
-	<p>Open the popup instance on button click:</p>
+	<p>Open the jPopup instance on button click:</p>
 	<pre><code>$("button").click(function() {
 	example.open();
 });</code></pre>
 	<p>Try it yourself:<button class="button" id="example1">Open popup</button></p>
+	<h3 id="callback_function">Callback function</h3>
+	<p>In most cases you want to know which button is clicked, this can be done by adding a value to a button and passing a callback function to the open method.</p>
+	<pre><code>var example2 = new jPopup({
+	title: "&lt;h2&gt;Hello World!&lt;/h2&gt;",
+	content: "&lt;p&gt;Sudo make me a sandwich?&lt;/p&gt;",
+	buttons: [{
+		text: "Sure",
+		value: true
+	}, {
+		text: "Nope"
+	}]
+});</code></pre>
+	<p>Open the jPopup instance on button click:</p>
+	<pre><code>$("button").click(function() {
+	example2.open(function(value) {
+		if(value) {
+			//Create new popup to say thank you
+			new jPopup({
+				content: "&lt;p&gt;Thanks!&lt;/p&gt;",
+				buttons: [{
+					text: "Ok"
+				}]
+			}).open();
+		}
+	});
+});</code></pre>
+	<p>Try it yourself:<button class="button" id="example2">Open popup</button></p>
 	<hr />
-	<h2>Options</h2>
+	<h2 id="options">Options</h2>
 	<p>There are many of options:</p>
 	<pre><code>var example = new jPopup({
 	title: "&lt;h2&gt;Hello World!&lt;/h2&gt;", //Title
@@ -344,18 +422,50 @@ body {
 	stickToBottom: true //Bottom positioned popups grow from bottom to top.
 });</code></pre>
 	<hr />
-	<h2>Advanced</h2>
+	<h2 id="advanced">Advanced</h2>
+	<h3 id="methods">Methods</h3>
+	<h3 id="input">Input</h3>
+	<h3 id="global_options">Global options</h3>
+	<h3 id="buttons">Buttons</h3>
+	<h3 id="elements">Elements</h3>
+	<h3 id="animations">Animations</h3>
+	<p>Custom animation functions can be defined in the animations option.</p>
+	<p>A custom animation function can be seperately defined for opening, closing and each position.</p>
+	<p>Make sure that the speed option is equal to the speed of the closing animations.</p>
+	<p>In this example <a href="https://daneden.github.io/animate.css/" target="_blank" class="link">animate.css</a> is used for the custom animations:</p>
+	<pre><code>var example6 = new jPopup({
+	title: "&lt;h2&gt;Hello World!&lt;/h2&gt;",
+	content: "&lt;p&gt;Sudo make me a sandwich?&lt;/p&gt;",
+	buttons: [{
+		text: "Sure"
+	}, {
+		text: "Nope"
+	}],
+	speed: 2000,
+	animations: {
+		open: {
+			center: function() {
+				this.elements.popup.animateCss("lightSpeedIn");
+			}
+		},
+		close: {
+			center: function() {
+				this.elements.popup.animateCss("hinge");
+			}
+		}
+	}
+});</code></pre>
+	<p>Try it yourself:<button class="button" id="example6">Open popup</button></p>
+	<h3 id="overrides">Overrides</h3>
 	<hr />
-	<h2>Buttons</h2>
-	<hr />
-	<h2>Plugins</h2>
-	<h3>Internet Explorer</h3>
+	<h2 id="plugins">Plugins</h2>
+	<h3 id="internet_explorer">Internet Explorer</h3>
 	<p>By default there's support for IE10+.</p>
-	<p>To add support for IE6+ include jpopup.ie.js in your page:</p>
+	<p>To add support for IE6+ include <i>jquery.jpopup.ie.min.js</i> in your page:</p>
 	<pre><code>&lt;script src="jquery.jpopup.ie.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
 	<p>The plugin will automatically add a class to the popup with the IE version which can be used to style the popup.</p>
-	<h3>Draggable</h3>
-	<p>To make popups draggable include jpopup.draggable.js in your page:</p>
+	<h3 id="draggable">Draggable</h3>
+	<p>To make popups draggable include <i>jquery.jpopup.draggable.min.js</i> in your page:</p>
 	<pre><code>&lt;script src="jquery.jpopup.draggable.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
 	<p>Then enable dragging on a popup:</p>
 	<pre><code>var exampleDraggable = new jPopup({
@@ -371,8 +481,8 @@ body {
 	}
 });</code></pre>
 	<p>Try it yourself:<button class="button" id="exampleDraggable">Open popup</button></p>
-	<h3>Resizable</h3>
-	<p>To make popups resizeable include jpopup.resizeable.js in your page:</p>
+	<h3 id="resizeable">Resizable</h3>
+	<p>To make popups resizeable include <i>jquery.jpopup.resizeable.min.js</i> in your page:</p>
 	<pre><code>&lt;script src="jquery.jpopup.resizeable.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
 	<p>Then enable resizing on a popup:</p>
 	<pre><code>var exampleResizeable = new jPopup({
@@ -388,8 +498,8 @@ body {
 	}
 });</code></pre>
 	<p>Try it yourself:<button class="button" id="exampleResizeable">Open popup</button></p>
-	<h3>Responsive</h3>
-	<p>To add responsive functionality to your popups include jpopup.responsive.js in your page:</p>
+	<h3 id="responsive">Responsive</h3>
+	<p>To add responsive functionality to your popups include <i>jquery.jpopup.responsive.min.js</i> in your page:</p>
 	<pre><code>&lt;script src="jquery.jpopup.resizeable.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
 	<p>Then set responsive breakpoint functions on a popup:</p>
 	<pre><code>var exampleResponsive = new jPopup({
@@ -414,9 +524,74 @@ body {
 	}
 });</code></pre>
 	<p>Try it yourself:<button class="button" id="exampleResponsive">Open popup</button></p>
-</div>
+</section>
+<aside id="menu">
+	<ul>
+		<li><a href="#logo">Download</a></li>
+		<li><a href="#features">Features</a></li>
+		<li>
+			<a href="#getting_started">Getting started</a>
+			<ul>
+				<li><a href="#installation">Installation</a></li>
+				<li><a href="#callback_function">Callback function</a></li>
+			</ul>
+		</li>
+		<li><a href="#options">Options</a></li>
+		<li>
+			<a href="#advanced">Advanced</a>
+			<ul>
+				<li><a href="#methods">Methods</a></li>
+				<li><a href="#input">Input</a></li>
+				<li><a href="#global_options">Global options</a></li>
+				<li><a href="#buttons">Buttons</a></li>
+				<li><a href="#elements">Elements</a></li>
+				<li><a href="#animations">Animations</a></li>
+				<li><a href="#overrides">Overrides</a></li>
+			</ul>
+		</li>
+		<li>
+			<a href="#plugins">Plugins</a>
+			<ul>
+				<li><a href="#internet_explorer">Internet Explorer</a></li>
+				<li><a href="#draggable">Draggable</a></li>
+				<li><a href="#resizeable">Resizable</a></li>
+				<li><a href="#responsive">Responsive</a></li>
+			</ul>
+		</li>
+		<li><a href="#help">Support</a></li>
+		<li><a href="#about">About</a></li>
+	</ul>
+</aside>
 <script type="text/javascript">
 $(function() {
+	function scroll() {
+		var top = $("html").scrollTop() ? $("html").scrollTop() : $("body").scrollTop();
+		var id;
+		$("h1, h2, h3").each(function() {
+			if($(this).offset().top - top - 200 > 0) {
+				return false;
+			} else {
+				id = $(this).attr("id");
+			}
+		});
+		$("#menu a").removeClass("current");
+		if(id) {
+			var target = $("#menu a[href=\"#" + id + "\"]");
+			target.addClass("current");
+			target.parent("li").parent("ul").parent("li").children("a").addClass("current");
+		}
+	}
+	scroll();
+	$(document).on("scroll", function() {
+		scroll();
+	});
+	
+	$("#menu a").click(function(e) {
+		e.preventDefault();
+		var id = $(this).attr("href");
+		$("html, body").scrollTop($(id).offset().top - 200);
+	});
+	
 	var example1 = new jPopup({
 		title: "<h2>Hello World!</h2>",
 		content: "<p>Sudo make me a sandwich?</p>",
@@ -428,6 +603,56 @@ $(function() {
 	});
 	$("#example1").click(function() {
 		example1.open();
+	});
+	
+	var example2 = new jPopup({
+		title: "<h2>Hello World!</h2>",
+		content: "<p>Sudo make me a sandwich?</p>",
+		buttons: [{
+			text: "Sure",
+			value: true
+		}, {
+			text: "Nope"
+		}]
+	});
+	$("#example2").click(function() {
+		example2.open(function(value) {
+			if(value) {
+				//Create new popup to say thank you
+				new jPopup({
+					content: "<p>Thanks!</p>",
+					buttons: [{
+						text: "Ok"
+					}]
+				}).open();
+			}
+		});
+	});
+	
+	var example6 = new jPopup({
+		title: "<h2>Hello World!</h2>",
+		content: "<p>Sudo make me a sandwich?</p>",
+		buttons: [{
+			text: "Sure"
+		}, {
+			text: "Nope"
+		}],
+		speed: 2000,
+		animations: {
+			open: {
+				center: function() {
+					this.elements.popup.animateCss("lightSpeedIn");
+				}
+			},
+			close: {
+				center: function() {
+					this.elements.popup.animateCss("hinge");
+				}
+			}
+		}
+	});
+	$("#example6").click(function() {
+		example6.open();
 	});
 	
 	var exampleDraggable = new jPopup({
@@ -460,6 +685,15 @@ $(function() {
 	});
 	$("#exampleResizeable").click(function() {
 		exampleResizeable.open();
+	});
+	
+	$.fn.extend({
+		animateCss: function (animationName) {
+			var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+			$(this).addClass('animated ' + animationName).one(animationEnd, function() {
+				$(this).removeClass('animated ' + animationName);
+			});
+		}
 	});
 });
 </script>
