@@ -31,21 +31,6 @@ function jPopup(config) {
 				},
 				right: function() {
 					this._animations.zoomIn.call(this);
-				},
-				stretchTop: function() {
-					this._animations.zoomIn.call(this);
-				},
-				stretchLeft: function() {
-					this._animations.zoomIn.call(this);
-				},
-				stretchBottom: function() {
-					this._animations.zoomIn.call(this);
-				},
-				stretchRight: function() {
-					this._animations.zoomIn.call(this);
-				},
-				full: function() {
-					this._animations.zoomIn.call(this);
 				}
 			},
 			close: {
@@ -62,21 +47,6 @@ function jPopup(config) {
 					this._animations.zoomOut.call(this);
 				},
 				right: function() {
-					this._animations.zoomOut.call(this);
-				},
-				stretchTop: function() {
-					this._animations.zoomOut.call(this);
-				},
-				stretchLeft: function() {
-					this._animations.zoomOut.call(this);
-				},
-				stretchBottom: function() {
-					this._animations.zoomOut.call(this);
-				},
-				stretchRight: function() {
-					this._animations.zoomOut.call(this);
-				},
-				full: function() {
 					this._animations.zoomOut.call(this);
 				}
 			}
@@ -158,7 +128,7 @@ function jPopup(config) {
 	
 
 	//Generate html elements
-	var elements = $("<div><div class=\"jp_overlay\" style=\"position:fixed;top:0;left:0;bottom:0;right:0;display:none;\"></div><div class=\"jp_wrapper\" style=\"position:fixed;top:-9999px;left:-9999px;\"><form class=\"jp_popup\" style=\"position:absolute;float:left;\" tabindex=\"0\"><header class=\"jp_title\"></header><section class=\"jp_content\"></section><footer class=\"jp_buttons\"></footer><button class=\"jp_close\" style=\"position:absolute;top:0;right:0;width:20px;height:20px;\"></button><div class=\"jp_resize\" style=\"display:none;\"><div style=\"position:absolute;top:0;left:0;right:0;height:6px;cursor:n-resize;\"></div><div style=\"position:absolute;top:0;left:0;bottom:0;width:6px;cursor:w-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;right:0;height:6px;cursor:s-resize;\"></div><div style=\"position:absolute;top:0;bottom:0;right:0;width:6px;cursor:e-resize;\"></div><div style=\"position:absolute;top:0;left:0;width:6px;height:6px;cursor:nw-resize;\"></div><div style=\"position:absolute;top:0;right:0;width:6px;height:6px;cursor:ne-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;width:6px;height:6px;cursor:sw-resize;\"></div><div style=\"position:absolute;bottom:0;right:0;width:6px;height:6px;cursor:se-resize;\"></div></div></form></div></div>");
+	var elements = $("<div><div class=\"jp_overlay\" style=\"position:fixed;top:0;left:0;bottom:0;right:0;display:none;\"></div><div class=\"jp_wrapper\" style=\"position:fixed;\"><form class=\"jp_popup\" style=\"position:absolute;float:left;\"><header class=\"jp_title\"></header><section class=\"jp_content\"></section><footer class=\"jp_buttons\"></footer><button class=\"jp_close\" style=\"position:absolute;top:0;right:0;width:20px;height:20px;\"></button><div class=\"jp_resize\" style=\"display:none;\"><div style=\"position:absolute;top:0;left:0;right:0;height:6px;cursor:n-resize;\"></div><div style=\"position:absolute;top:0;left:0;bottom:0;width:6px;cursor:w-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;right:0;height:6px;cursor:s-resize;\"></div><div style=\"position:absolute;top:0;bottom:0;right:0;width:6px;cursor:e-resize;\"></div><div style=\"position:absolute;top:0;left:0;width:6px;height:6px;cursor:nw-resize;\"></div><div style=\"position:absolute;top:0;right:0;width:6px;height:6px;cursor:ne-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;width:6px;height:6px;cursor:sw-resize;\"></div><div style=\"position:absolute;bottom:0;right:0;width:6px;height:6px;cursor:se-resize;\"></div></div></form></div></div>");
 	this.elements = {};
 	this.elements.overlay = elements.children(".jp_overlay");
 	this.elements.wrapper = elements.children(".jp_wrapper");
@@ -171,8 +141,6 @@ function jPopup(config) {
 	
 	//Call create function
 	this._create();
-	
-	return this;
 }
 
 jPopup.loaded = false;
@@ -191,7 +159,6 @@ jPopup.button = function(config) {
 		value: null,
 		classes: "",
 		disabled: false,
-		hidden: false,
 		close: true
 	};
 	this._config = $.extend(true, defaults, config);
@@ -237,23 +204,16 @@ jPopup.button.prototype = {
 		}
 	},
 	addClass: function(c) {
-		var classes = this._config.classes.split(" ");
-		classes.push(c);
-		this._config.classes = jPopup.prototype._unique(classes).join(" ");
+		this._config.classes = jPopup.prototype._unique(c.split(" ")).join(" ");
 		this._elements(function() {
 			this.addClass(c);
 		});
 	},
 	removeClass: function(c) {
-		var classes = this._config.classes.split(" ");
-		var i = jPopup.prototype._inArray(c, classes);
-		if(i.length) {
-			classes.splice(i, 1);
-			this._config.classes = jPopup.prototype._unique(classes).join(" ");
-			this._elements(function() {
-				this.removeClass(c);
-			});
-		}
+		this._config.classes = jPopup.prototype._unique(c.split(" ")).join(" ");
+		this._elements(function() {
+			this.removeClass(c);
+		});
 	},
 	remove: function() {
 		var self = this;
@@ -346,8 +306,15 @@ jPopup.prototype = {
 		this.buttons(this._config.buttons);
 		this.closeButton(this._config.closeButton);
 		this.closeButtonContent(this._config.closeButtonContent);
+		
+		//Force render popup (webkit), yes that's a timeout of 0ms
+		var wrapper = this.elements.wrapper;
+		$("body").append(wrapper);
+		setTimeout(function() {
+			wrapper.remove();
+		}, 0);
 	},
-	open: function(method) {		
+	open: function(method) {
 		var self = this;
 		
 		//Add popup to instances
@@ -387,9 +354,7 @@ jPopup.prototype = {
 				if(button.close()) {
 					self.close();
 				}
-				if(method) {
-					method.call(self, button.value());
-				}
+				method.call(self, button.value());
 			}
 		});
 		
@@ -397,18 +362,6 @@ jPopup.prototype = {
 		this.elements.close.on("click", function(e) {
 			e.preventDefault();
 			self.close();
-		});
-		
-		//Focus on popup
-		this.elements.popup.focus();
-		
-		//Keep tab key inside popup
-		$(document).on("keydown", function (e) { 
-			if(e.which == 9) {
-				if(!$.contains(self.elements.popup[0], document.activeElement)) {
-					self.elements.popup.focus();
-				}
-			}
 		});
 		
 		return this;
@@ -424,14 +377,10 @@ jPopup.prototype = {
 		this._config.animations.close[this._config.position].call(this);
 		
 		var self = this;
-		setTimeout(function() {
-			//Trigger animationend in case the wrapper might be removed too soon for custom animations to trigger animationend
-			self.elements.popup.trigger("animationend");
-			
+		setTimeout(function() {			
 			//Remove overlay and wrapper from document body
 			self.elements.overlay.remove();
 			self.elements.wrapper.remove();
-			
 		}, this._config.speed);
 		
 		//Remove buttons click event
@@ -488,20 +437,6 @@ jPopup.prototype = {
 		}
 	},
 	buttons: function(buttons) {
-		var self = this;
-		this.buttons.add = function(button) {
-			if(!(button instanceof jPopup.button)) {
-				button = new jPopup.button(button);
-			}
-			self._config.buttons.push(button);
-			self.elements.buttons.append($("<button>"));
-			button._parents.push(self);
-			button.text(button._config.text);
-			button.classes(button._config.classes);
-			if(button._config.disabled) {
-				button.disable();
-			}
-		}
 		if($.isArray(buttons)) {
 			//Apply new buttons to config
 			this._config.buttons = buttons;
@@ -641,15 +576,13 @@ jPopup.prototype = {
 			if(!config) {
 				this._config.freeze = freeze ? true : false;
 			}
-			
-			return this;
 		} else {
 			return this._config.freeze;
 		}
 	},
 	_freeze: function() {
-		var top = $(window).scrollTop();
-		var left = $(window).scrollLeft();
+		var top = $("html").scrollTop() ? $("html").scrollTop() : $("body").scrollTop();
+		var left = $("html").scrollLeft() ? $("html").scrollLeft() : $("body").scrollLeft();
 		if(window.innerWidth > document.documentElement.clientWidth) {
 			$("html").css("overflow-y", "scroll");
 		}
@@ -752,8 +685,6 @@ jPopup.prototype = {
 					this.elements.wrapper.css({"width": "100%", "height": "100%", "position": "fixed", "top": 0, "left": 0, "bottom": "", "right": ""});
 					this.elements.popup.css({"width": "100%", "height": "100%", "position": "relative", "top": 0, "left": 0, "bottom": ""});
 			}
-			
-			return this;
 		} else {
 			return this._config.position;
 		}
@@ -779,14 +710,15 @@ jPopup.prototype = {
 				var offsetLeft = left + offset.x;
 				
 				//Top boundary
-				if(offsetTop - $(window).scrollTop() < 0) {
+				if(offsetTop - $("html").scrollTop() < 0) {
 					offset.y = 0;
 					offsetTop = 0;
 				}
+				
 				//Bottom boundary
-				if($(window).height() - offsetTop - popup.outerHeight() + $(window).scrollTop() < 0) {
+				if($(window).height() - offsetTop - popup.outerHeight() + $("html").scrollTop() < 0) {
 					offset.y = 0;
-					offsetTop = $(window).height() - popup.outerHeight() + $(window).scrollTop();
+					offsetTop = $(window).height() - popup.outerHeight() + $("html").scrollTop();
 				}
 				
 				//Left boundary
@@ -813,18 +745,11 @@ jPopup.prototype = {
 					left: offsetLeft
 				});
 			}
-			
-			return this;
-		} else {
-			this._config.offset;
 		}
+		return this._config.offset;
 	},
 	clone: function() {
 		return new jPopup(this._config);
-	},
-	clear: function() {
-		this.elements.popup[0].reset();
-		return this;
 	},
 	_zIndex: function() {
 		//Calculate new z-index
