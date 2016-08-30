@@ -1,45 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" style=""><head>
 <meta charset="utf-8">
 <meta name="viewport" content="minimum-scale=1.0, maximum-scale=1.0, width=device-width">
 <title>jPopup</title>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
 <link href="./css/code.css" rel="stylesheet" type="text/css">
 <link href="./css/animate.min.css" rel="stylesheet" type="text/css">
-<!-- link rel="stylesheet" type="text/css" href="./css/jpopup.min.css" / -->
-<script src="https://code.jquery.com/jquery-1.12.4.min.js" type="text/javascript"></script>
+<script src="./js/jquery-1.12.0.min.js" type="text/javascript"></script>
 <script src="./js/jquery.jpopup.js" type="text/javascript"></script>
 <script src="./js/jquery.jpopup.ie.js" type="text/javascript"></script>
 <script src="./js/jquery.jpopup.draggable.js" type="text/javascript"></script>
 <script src="./js/highlight.js" type="text/javascript"></script>
 <script>hljs.initHighlightingOnLoad();</script>
-<script type="text/javascript">
-$(function() {
-	example = new jPopup({
-		title: "<h2>Hello world!</h2>",
-		content: "<p>Sudo make me a sandwich?</p>",
-		buttons: [{
-			text: "Sure!",
-			value: true,
-			classes: "ok"
-		}, {
-			text: "Nope",
-			value: false,
-			classes: "no"
-		}, {
-			text: "What?",
-			value: "what",
-			close: false
-		}, {
-			text: "Github",
-			value: "github",
-			close: false
-		}],
-		closeButton: true
-	});
-});
-</script>
 <style type="text/css">
 html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,video {
 	margin: 0;
@@ -92,6 +63,31 @@ article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {
 	font-size: 16px;
 	line-height: 24px;
 }
+.jp_popup input {
+	height: 32px;
+	width: 100%;
+	border: 0;
+	border-bottom: 2px solid #999;
+	outline: 0;
+	font-family: "roboto", sans-serif;
+    font-size: 14px;
+	color: #444;
+}
+.jp_popup input:focus {
+	border-bottom: 2px solid #444;
+}
+.jp_popup input::-webkit-input-placeholder {
+  color: #ccc;
+}
+.jp_popup input::-moz-placeholder {
+  color: #ccc;
+}
+.jp_popup input:-ms-input-placeholder {
+  color: #ccc;
+}
+.jp_popup input:-moz-placeholder {
+  color: #ccc;
+}
 .jp_title h1,
 .jp_title h2,
 .jp_title h3,
@@ -128,7 +124,8 @@ article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {
 .jp_buttons button:hover {
 	background: #eee;
 }
-.jp_buttons button:active {
+.jp_buttons button:active,
+.jp_buttons button:focus {
 	background: #ddd;
 }
 .jp_buttons button[disabled] {
@@ -195,9 +192,10 @@ body {
 	font-weight: 400;
 	color: #444;
 	margin: 24px 0;
+	padding-top: 32px;
 }
 #wrapper p + h3 {
-	margin-top: 64px;
+	margin-top: 48px;
 }
 #wrapper h4 {
 	font-size: 18px;
@@ -291,6 +289,8 @@ body {
 	text-decoration: none;
 	line-height: 48px;
 	color: #777;
+	display: block;
+	cursor: pointer;
 }
 #menu li li a {
 	font-size: 14px;
@@ -300,7 +300,6 @@ body {
 	color: #444;
 	font-weight: 700;
 	border-right: 2px solid #444;
-	display: block;
 	margin-right: -2px;
 }
 </style>
@@ -310,26 +309,26 @@ body {
 	<h1 id="logo">jPopup.js</h1>
 	<h4>Advanced jQuery plugin to show popups.</h4>
 	<div class="buttons">
-		<a href="" class="button">
+		<button class="button">
 			<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-				<path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+				<path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"></path>
 			</svg>
 			Demo
-		</a>
-		<a href="" class="button">
+		</button>
+		<a class="button" id="download">
 			<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-				<path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+				<path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path>
 			</svg>
-			Download v2.0.0
+			Download
 		</a>
-		<a href="" class="button">
+		<a href="https://github.com/seahorsepip/jPopup" target="_blank" class="button">
 			<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-				<path d="M12 3.4C7 3.4 3 7.5 3 12.4c0 4 2.6 7.3 6.2 8.5 0.5 0.1 0.6-0.2 0.6-0.4 0-0.2 0-0.8 0-1.5C7.3 19.6 6.7 17.8 6.7 17.8 6.3 16.8 5.7 16.5 5.7 16.5c-0.8-0.6 0.1-0.5 0.1-0.5 0.9 0.1 1.4 0.9 1.4 0.9 0.8 1.4 2.1 1 2.6 0.7 0.1-0.6 0.3-1 0.6-1.2-2-0.2-4.1-1-4.1-4.4 0-1 0.4-1.8 0.9-2.4-0.1-0.2-0.4-1.1 0.1-2.4 0 0 0.8-0.2 2.5 0.9 0.7-0.2 1.5-0.3 2.3-0.3 0.8 0 1.5 0.1 2.3 0.3 1.7-1.2 2.5-0.9 2.5-0.9 0.5 1.2 0.2 2.2 0.1 2.4 0.6 0.6 0.9 1.4 0.9 2.4 0 3.5-2.1 4.2-4.1 4.4 0.3 0.3 0.6 0.8 0.6 1.7 0 1.2 0 2.2 0 2.5 0 0.2 0.2 0.5 0.6 0.4 3.6-1.2 6.1-4.6 6.1-8.5 0-5-4-9-9-9"/>
+				<path d="M12 3.4C7 3.4 3 7.5 3 12.4c0 4 2.6 7.3 6.2 8.5 0.5 0.1 0.6-0.2 0.6-0.4 0-0.2 0-0.8 0-1.5C7.3 19.6 6.7 17.8 6.7 17.8 6.3 16.8 5.7 16.5 5.7 16.5c-0.8-0.6 0.1-0.5 0.1-0.5 0.9 0.1 1.4 0.9 1.4 0.9 0.8 1.4 2.1 1 2.6 0.7 0.1-0.6 0.3-1 0.6-1.2-2-0.2-4.1-1-4.1-4.4 0-1 0.4-1.8 0.9-2.4-0.1-0.2-0.4-1.1 0.1-2.4 0 0 0.8-0.2 2.5 0.9 0.7-0.2 1.5-0.3 2.3-0.3 0.8 0 1.5 0.1 2.3 0.3 1.7-1.2 2.5-0.9 2.5-0.9 0.5 1.2 0.2 2.2 0.1 2.4 0.6 0.6 0.9 1.4 0.9 2.4 0 3.5-2.1 4.2-4.1 4.4 0.3 0.3 0.6 0.8 0.6 1.7 0 1.2 0 2.2 0 2.5 0 0.2 0.2 0.5 0.6 0.4 3.6-1.2 6.1-4.6 6.1-8.5 0-5-4-9-9-9"></path>
 			</svg>
 			Github
 		</a>
 	</div>
-	<hr />
+	<hr>
 	<h2 id="features">Features</h2>
 	<ul>
 		<li>Supports all browsers including IE6 and above.</li>
@@ -337,7 +336,7 @@ body {
 		<li>No CSS dependencies.</li>
 		<li>Responsive.</li>
 	</ul>
-	<hr />
+	<hr>
 	<h2 id="getting_started">Getting started</h2>
 	<h3 id="installation">Installation</h3>
 	<p>include <i>jquery.jpopup.min.js</i> in your page:</p>
@@ -373,7 +372,7 @@ body {
 	<pre><code>$("button").click(function() {
 	example2.open(function(value) {
 		if(value) {
-			//Create new popup to say thank you
+			//Create new popup to say thank you.
 			new jPopup({
 				content: "&lt;p&gt;Thanks!&lt;/p&gt;",
 				buttons: [{
@@ -384,9 +383,9 @@ body {
 	});
 });</code></pre>
 	<p>Try it yourself:<button class="button" id="example2">Open popup</button></p>
-	<hr />
+	<hr>
 	<h2 id="options">Options</h2>
-	<p>There are many of options:</p>
+	<p>The available options:</p>
 	<pre><code>var example = new jPopup({
 	title: "&lt;h2&gt;Hello World!&lt;/h2&gt;", //Title
 	content: "&lt;p&gt;Sudo make me a sandwich?&lt;/p&gt;", //Content
@@ -397,8 +396,8 @@ body {
 		value: null, //Value passed to callback function.
 		classes: "", //Space seperated list of classes.
 		disabled: false, //Disabled state.
+		hidden: false, //Hide button.
 		close: true //Popup closes when button is clicked.
-		
 	}],
 	/*
 	Set position, you can choose between:
@@ -418,16 +417,145 @@ body {
 	animations: {}, //Animation functions for each position.
 	closeKeys: [], //Array of keycodes that should close the popup.
 	freeze: true, //Disable scrolling when a popup opens.
-	classes: "", //Space seperated list of classes to add.
+	classes: "", //Space seperated list of classes to be added.
 	stickToBottom: true //Bottom positioned popups grow from bottom to top.
 });</code></pre>
-	<hr />
+	<hr>
 	<h2 id="advanced">Advanced</h2>
 	<h3 id="methods">Methods</h3>
+	<p>An option like position:</p>
+	<pre><code>var example3 = new jPopup({
+	title: "&lt;h2&gt;Hello World!&lt;/h2&gt;",
+	content: "&lt;p&gt;Sudo make me a sandwich?&lt;/p&gt;",
+	buttons: [{
+		text: "Sure",
+		value: true
+	}, {
+		text: "Nope"
+	}],
+	position: "top"
+});</code></pre>
+	<p>Can also be set using a method of the jPopup instance:</p>
+	<pre><code>example3.position("bottom");</code></pre>
+	<p>The value of an option can also be retrieved using the same method without parameters:</p>
+	<pre><code>example3.position(); //Will output "bottom".</code></pre>
+	<p>Methods are also chainable:</p>
+	<pre><code>example3.position("left").overlay(false).offset({x: 400});</code></pre>
+	<p>The method names and accepted parameter values are the same the as options available when creating a new jPopup instance.</p>
+	<p>The following methods are also available:</p>
+	<pre><code>addClass(); //Add a class to the popup wrapper and overlay.
+removeClass(); //Remove a class from the popup wrapper and overlay.
+form(); //Get popup form jQuery object.
+clear(); //Clear input values.
+clone(); //Create a copy of this jPopup instance as new jPopup instance.</code></pre>
 	<h3 id="input">Input</h3>
+	<p>To get user input you can add an input element to the content:</p>
+	<pre><code>var example4 = new jPopup({
+	title: "&lt;h2&gt;What's your name?&lt;/h2&gt;",
+	content: "&lt;input type=\"text\" placeholder=\"Name\" /&gt;",
+	buttons: [{
+		text: "Submit name",
+		value: true
+	}, {
+		text: "Cancel"
+	}]
+});</code></pre>
+	<p>Open the jPopup instance on button click and get the name:</p>
+	<pre><code>$("button").click(function() {
+	example4.open(function(value) {
+		if(value) {
+			//Get the name of the user.
+			var name = this.form().find("input").val();
+			
+			//Reply with the name of the user.
+			new jPopup({
+				content: "&lt;p&gt;Hello " + name + "!&lt;/p&gt;",
+				buttons: [{
+					text: "Ok"
+				}]
+			}).open();
+		}
+
+		//Clear input values.
+		this.clear();
+	});
+});</code></pre>
+	<p>Try it yourself:<button class="button" id="example4">Open popup</button></p>
 	<h3 id="global_options">Global options</h3>
+	<p>The default options for new jPopup instances can be changed by defining global options:</p>
+	<pre><code>jPopup.options = {
+	//Define global options.
+};</code></pre>
 	<h3 id="buttons">Buttons</h3>
+	<p>The buttons option in a jPopup instance consists of an array of button objects.</p>
+	<p>A button object has the following options:</p>
+	<pre><code>var button = {
+	text: "Sure", //Text to show on button.
+	name: "", //Name of the button.
+	value: null, //Value passed to callback function.
+	classes: "", //Space seperated list of classes.
+	disabled: false, //Disabled state.
+	hidden: false, //Hide button.
+	close: true //Popup closes when button is clicked.
+};</code></pre>
+	<p>The buttons method can return and replace the buttons in a jPopup instance:</p>
+	<pre><code>buttons(); //Get an array of the button objects.
+buttons(2); //Get third button object in array of buttons (array starts with 0).
+buttons("confirm"); //Get the button object with the name "confirm".
+buttons(arrayOfButtons); //Replaces the buttons in the jPopup instance.</code></pre>
+	<p>Buttons can also be added to the jPopup instance:</p>
+	<pre><code>buttons.add(button);</code></pre>
+	<p>Buttons returned using the buttons method are dynamic and have methods:</p>
+	<pre><code>name(); //Get or set button name.
+text(); //Get or set button text.
+value(): //Get or set button value.
+classes(); //Get or replace button classes.
+addClass(); //Add a class to the button.
+removeClass(); //Remove a class from the button.
+remove(); //Remove the button from all jPopup instances.
+disable(); //Disable the button.
+enable(); //Enable the button.
+close(); //Get or set if the popup should be clsoed on click.
+hide(); //Hide the button
+show(); //Show the button.
+move(x); //Move button x positions relative to current position.
+move(x, true); //Move button to position x.
+clone(); //Create a copy of the button.
+</code></pre>
+	<p>To create a dynamic button object to be later added to jPopup instances you can also create a new jPopup.button instance:</p>
+	<pre><code>var button = new jPopup.button({
+	text: "Sure", //Text to show on button.
+	name: "", //Name of the button.
+	value: null, //Value passed to callback function.
+	classes: "", //Space seperated list of classes.
+	disabled: false, //Disabled state.
+	hidden: false, //Hide button.
+	close: true //Popup closes when button is clicked.
+});</code></pre>
 	<h3 id="elements">Elements</h3>
+	<p>Each jPopup instance has the following html structure:</p>
+	<pre><code>&lt;div class="jp_overlay"&gt;&lt;/div&gt;
+&lt;div class="jp_wrapper"&gt;
+	&lt;form class="jp_popup"&gt;
+		&lt;header class="jp_title"&gt;
+			&lt;!-- Title --&gt;
+		&lt;/header&gt;
+		&lt;section class="jp_content"&gt;
+			&lt;!-- Content --&gt;
+		&lt;/section&gt;
+		&lt;footer class="jp_buttons"&gt;
+			&lt;!-- Buttons --&gt;
+		&lt;/footer&gt;
+	&lt;/form&gt;
+&lt;/div&gt;</code></pre>
+	<p>The jQuery object references for each html element:</p>
+	<pre><code class="javascript">exampleElements.elements.overlay //&lt;div class="jp_overlay"&gt;&lt;/div&gt;
+exampleElements.elements.wrapper //&lt;div class="jp_wrapper"&gt;&lt;/div&gt;
+exampleElements.elements.popup //&lt;form class="jp_popup"&gt;&lt;/form&gt;
+exampleElements.elements.title //&lt;header class="jp_title"&gt;&lt;/header&gt;
+exampleElements.elements.content //&lt;section class="jp_content"&gt;&lt;/section&gt;
+exampleElements.elements.buttons //&lt;footer class="jp_buttons"&gt;&lt;/footer&gt;</code></pre>
+	<p>The jQuery object references are useful for animations, overrides and plugins.</p>
 	<h3 id="animations">Animations</h3>
 	<p>Custom animation functions can be defined in the animations option.</p>
 	<p>A custom animation function can be seperately defined for opening, closing and each position.</p>
@@ -457,7 +585,7 @@ body {
 });</code></pre>
 	<p>Try it yourself:<button class="button" id="example6">Open popup</button></p>
 	<h3 id="overrides">Overrides</h3>
-	<hr />
+	<hr>
 	<h2 id="plugins">Plugins</h2>
 	<h3 id="internet_explorer">Internet Explorer</h3>
 	<p>By default there's support for IE10+.</p>
@@ -527,47 +655,51 @@ body {
 </section>
 <aside id="menu">
 	<ul>
-		<li><a href="#logo">Download</a></li>
+		<li><a href="#logo" class="">Download</a></li>
 		<li><a href="#features">Features</a></li>
 		<li>
-			<a href="#getting_started">Getting started</a>
+			<a href="#getting_started" class="">Getting started</a>
 			<ul>
 				<li><a href="#installation">Installation</a></li>
-				<li><a href="#callback_function">Callback function</a></li>
+				<li><a href="#callback_function" class="">Callback function</a></li>
 			</ul>
 		</li>
-		<li><a href="#options">Options</a></li>
+		<li><a href="#options" class="">Options</a></li>
 		<li>
-			<a href="#advanced">Advanced</a>
+			<a href="#advanced" class="current">Advanced</a>
 			<ul>
-				<li><a href="#methods">Methods</a></li>
-				<li><a href="#input">Input</a></li>
-				<li><a href="#global_options">Global options</a></li>
-				<li><a href="#buttons">Buttons</a></li>
-				<li><a href="#elements">Elements</a></li>
-				<li><a href="#animations">Animations</a></li>
-				<li><a href="#overrides">Overrides</a></li>
+				<li><a href="#methods" class="">Methods</a></li>
+				<li><a href="#input" class="">Input</a></li>
+				<li><a href="#global_options" class="">Global options</a></li>
+				<li><a href="#buttons" class="">Buttons</a></li>
+				<li><a href="#elements" class="">Elements</a></li>
+				<li><a href="#animations" class="current">Animations</a></li>
+				<li><a href="#overrides" class="">Overrides</a></li>
 			</ul>
 		</li>
 		<li>
-			<a href="#plugins">Plugins</a>
+			<a href="#plugins" class="">Plugins</a>
 			<ul>
-				<li><a href="#internet_explorer">Internet Explorer</a></li>
-				<li><a href="#draggable">Draggable</a></li>
-				<li><a href="#resizeable">Resizable</a></li>
-				<li><a href="#responsive">Responsive</a></li>
+				<li><a href="#internet_explorer" class="">Internet Explorer</a></li>
+				<li><a href="#draggable" class="">Draggable</a></li>
+				<li><a href="#resizeable" class="">Resizable</a></li>
+				<li><a href="#responsive" class="">Responsive</a></li>
 			</ul>
 		</li>
-		<li><a href="#help">Support</a></li>
-		<li><a href="#about">About</a></li>
+		<li><a id="contact">Contact</a></li>
 	</ul>
 </aside>
 <script type="text/javascript">
 $(function() {
+	$.get("https://api.github.com/repos/seahorsepip/jPopup/releases/latest", function(data) {
+		$("#download").append(data.tag_name);
+		$("#download").attr("href", data.zipball_url);
+	});
+	
 	function scroll() {
 		var top = $("html").scrollTop() ? $("html").scrollTop() : $("body").scrollTop();
 		var id;
-		$("h1, h2, h3").each(function() {
+		$("#wrapper h1, #wrapper h2, #wrapper h3").each(function() {
 			if($(this).offset().top - top - 200 > 0) {
 				return false;
 			} else {
@@ -586,11 +718,25 @@ $(function() {
 		scroll();
 	});
 	
-	$("#menu a").click(function(e) {
+	$("#menu a:not(#contact)").click(function(e) {
 		e.preventDefault();
 		var id = $(this).attr("href");
-		$("html, body").scrollTop($(id).offset().top - 200);
+		$("html, body").scrollTop($(id).offset().top - 48);
 	});
+	
+	//Damn spambots
+	var Base64 = {_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(e){var t="";var n,r,i,s,o,u,a;var f=0;e=Base64._utf8_encode(e);while(f<e.length){n=e.charCodeAt(f++);r=e.charCodeAt(f++);i=e.charCodeAt(f++);s=n>>2;o=(n&3)<<4|r>>4;u=(r&15)<<2|i>>6;a=i&63;if(isNaN(r)){u=a=64}else if(isNaN(i)){a=64}t=t+this._keyStr.charAt(s)+this._keyStr.charAt(o)+this._keyStr.charAt(u)+this._keyStr.charAt(a)}return t},decode:function(e){var t="";var n,r,i;var s,o,u,a;var f=0;e=e.replace(/[^A-Za-z0-9\+\/\=]/g,"");while(f<e.length){s=this._keyStr.indexOf(e.charAt(f++));o=this._keyStr.indexOf(e.charAt(f++));u=this._keyStr.indexOf(e.charAt(f++));a=this._keyStr.indexOf(e.charAt(f++));n=s<<2|o>>4;r=(o&15)<<4|u>>2;i=(u&3)<<6|a;t=t+String.fromCharCode(n);if(u!=64){t=t+String.fromCharCode(r)}if(a!=64){t=t+String.fromCharCode(i)}}t=Base64._utf8_decode(t);return t},_utf8_encode:function(e){e=e.replace(/\r\n/g,"\n");var t="";for(var n=0;n<e.length;n++){var r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r)}else if(r>127&&r<2048){t+=String.fromCharCode(r>>6|192);t+=String.fromCharCode(r&63|128)}else{t+=String.fromCharCode(r>>12|224);t+=String.fromCharCode(r>>6&63|128);t+=String.fromCharCode(r&63|128)}}return t},_utf8_decode:function(e){var t="";var n=0;var r=c1=c2=0;while(n<e.length){r=e.charCodeAt(n);if(r<128){t+=String.fromCharCode(r);n++}else if(r>191&&r<224){c2=e.charCodeAt(n+1);t+=String.fromCharCode((r&31)<<6|c2&63);n+=2}else{c2=e.charCodeAt(n+1);c3=e.charCodeAt(n+2);t+=String.fromCharCode((r&15)<<12|(c2&63)<<6|c3&63);n+=3}}return t}}
+	var email = "Vm0wd2VHUXhTWGxUV0d4V1YwZG9WbFl3Wkc5WFZsbDNXa1JTVjFKdGVGWlZNakExVmpGS2RHVkdXbFpOYWtFeFZtMTRZV015U2tWVWJHaG9UVlZ3VlZkV1pEUlpWMDE0Vkc1T2FWSXdXbGhXYWtaTFUxWmFjbHBJY0d4U2JWSkpWbTEwYTJGR1NuVlJiR2hYWWxob00xWldXbUZqTVhCRlZXeG9hVlpyV1RGV1ZFb3dWakZrU0ZOcmFGWmlhMHBZVkZWYVlWUkdWbk5YYlhSWFRWZFNNRlZ0ZUZOVWJFcEhWMWhrVjFaRmIzZFdha1poVTBaT2NtSkdTbWxTTTJoWVYxWmtlazFXVmtkVmJrcFlZbGhTV0ZSV1pEQk9iR3hXVjJ4T2FGWnNjSHBaTUZwdlZqRktjMk5HYUZkaGExcFVXWHBHVDJOc1duTlRiR1JUVFRBd01RPT0="
+	$("#contact").click(function() {
+		//Decode email
+		var email_str = email;
+		for(var x = 0; x < 10; x++) {
+			email_str = Base64.decode(email_str);
+		}
+		
+		//Open email
+		var open = window.open("mailto:" + email_str);
+	});	
 	
 	var example1 = new jPopup({
 		title: "<h2>Hello World!</h2>",
@@ -618,7 +764,6 @@ $(function() {
 	$("#example2").click(function() {
 		example2.open(function(value) {
 			if(value) {
-				//Create new popup to say thank you
 				new jPopup({
 					content: "<p>Thanks!</p>",
 					buttons: [{
@@ -626,6 +771,31 @@ $(function() {
 					}]
 				}).open();
 			}
+		});
+	});
+	
+	var example4 = new jPopup({
+		title: "<h2>What's your name?</h2>",
+		content: "<input type=\"text\" placeholder=\"Name\" />",
+		buttons: [{
+			text: "Submit name",
+			value: true
+		}, {
+			text: "Cancel"
+		}]
+	});
+	$("#example4").click(function() {
+		example4.open(function(value) {
+			if(value) {
+				var name = this.form().find("input").val();
+				new jPopup({
+					content: "<p>Hello " + name + "!</p>",
+					buttons: [{
+						text: "Ok"
+					}]
+				}).open();
+			}
+			this.clear();
 		});
 	});
 	
