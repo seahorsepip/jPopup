@@ -14,6 +14,7 @@ jPopup.plugins.draggable = {
 				var offset;
 				this.elements.title.on("mousedown touchstart", function(e) {
 					dragging = true;
+					console.log("A");
 					offset = {
 						x: (e.pageX || (e.originalEvent.touches ? e.originalEvent.touches[0].pageX : 0)) - self.offset().x,
 						y: (e.pageY || (e.originalEvent.touches ? e.originalEvent.touches[0].pageY : 0)) + self.offset().y
@@ -30,6 +31,7 @@ jPopup.plugins.draggable = {
 						});
 					}
 				});
+				
 				$(document).on("mouseup touchend", function() {
 					dragging = false;
 					$(document).off("selectstart");

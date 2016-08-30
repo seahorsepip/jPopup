@@ -816,7 +816,7 @@ jPopup.prototype = {
 			
 			return this;
 		} else {
-			this._config.offset;
+			return this._config.offset;
 		}
 	},
 	clone: function() {
