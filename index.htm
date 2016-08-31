@@ -9,6 +9,7 @@
 <script src="./js/jquery.jpopup.min.js" type="text/javascript"></script>
 <script src="./js/jquery.jpopup.ie.min.js" type="text/javascript"></script>
 <script src="./js/jquery.jpopup.draggable.min.js" type="text/javascript"></script>
+<script src="./js/jquery.jpopup.responsive.min.js" type="text/javascript"></script>
 <script src="./js/highlight.min.js" type="text/javascript"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 <style type="text/css">
@@ -629,7 +630,7 @@ example5.elements.buttons //&lt;footer class="jp_buttons"&gt;&lt;/footer&gt;</co
 });</code></pre>
 	<p>Overrides are used to extend functionality of the jPopup methods.</p>
 	<p>The jPopup methods and their functionality can be found by looking at the <i>jquery.jpopup.js</i> file, the methods are documented with comments.</p>
-	<p>Keep in mind that that not calling the <i>_super</i> method means that any code that would be executed after the override code would not be executed.</p>
+	<p>Keep in mind that not calling the <i>jPopup._super(this)</i> method means that any code that would be executed after the override code would not be executed.</p>
 	<p>The jPopup functions can be overriden multiple times because of multiple plugins and overrides on the jPopup instance itself.</p>
 	<hr>
 	<h2 id="plugins">Plugins</h2>
@@ -685,14 +686,14 @@ example5.elements.buttons //&lt;footer class="jp_buttons"&gt;&lt;/footer&gt;</co
 	}],
 	plugins: {
 		responsive: {
-			0: function() { //499px and below
-				this.title("Hello!");
+			0: function() { //799px and below
+				this.title("&lt;h3&gt;Hello!&lt;/h3&gt;");
 			},
-			500: function() { //Between 500 and 999px
-				this.title("Hello World!");
+			800: function() { //Between 800 and 1399px
+				this.title("&lt;h2&gt;Hello World!&lt;/h2&gt;");
 			},
-			1000: function() { //1000px and above
-				this.title("Hello Galaxy!");
+			1400: function() { //1400px and above
+				this.title("&lt;h1&gt;Hello Galaxy!&lt;/h1&gt;");
 			}
 		}
 	}
@@ -907,7 +908,7 @@ $(function() {
 		exampleDraggable.open();
 	});
 	
-		var exampleResizeable = new jPopup({
+	var exampleResizeable = new jPopup({
 		title: "<h2>Hello World!</h2>",
 		content: "<p>Sudo make me a sandwich?</p>",
 		buttons: [{
@@ -921,6 +922,31 @@ $(function() {
 	});
 	$("#exampleResizeable").click(function() {
 		exampleResizeable.open();
+	});
+	
+	var exampleResponsive = new jPopup({
+		content: "<p>Sudo make me a sandwich?</p>",
+		buttons: [{
+			text: "Sure"
+		}, {
+			text: "Nope"
+		}],
+		plugins: {
+			responsive: {
+				0: function() { //799px and below
+					this.title("<h3>Hello!</h3>");
+				},
+				800: function() { //Between 800 and 1399px
+					this.title("<h2>Hello World!</h2>");
+				},
+				1400: function() { //1400px and above
+					this.title("<h1>Hello Galaxy!</h1>");
+				}
+			}
+		}
+	});
+	$("#exampleResponsive").click(function() {
+		exampleResponsive.open();
 	});
 	
 	$.fn.extend({

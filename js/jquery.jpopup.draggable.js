@@ -11,18 +11,31 @@ jPopup.plugins.draggable = {
 	defaults: false,
 	overrides: {
 		_create: function() {
-			if(this._config.plugins.draggable) {
-				this.elements.title.css("cursor", "move");
-				this.elements.overlay.addClass("jp_draggable");
-				this.elements.wrapper.addClass("jp_draggable");
-			}
+			this._methods.call(this, this._config.plugins.draggable);
 			return jPopup._super(this);
 		},
 		open: function() {
-			if(this._config.plugins.draggable) {
+			this._methods.call(this, this._config.plugins.draggable);
+			return jPopup._super(this);
+		},
+		close: function() {
+			this.elements.title.off("mousedown touchstart");
+			$(document).off("mousemove.jp_draggable"+this.id+" touchmove.jp_draggable"+this.id);
+			$(document).off("mouseup.jp_draggable"+this.id+" touchend.jp_draggable"+this.id);
+			return jPopup._super(this);
+		}
+	},
+	methods: function(draggable) {
+		if(arguments.length) {
+			if(draggable) {	
 				var self = this;
 				var dragging;
 				var offset;
+				
+				this.elements.title.css("cursor", "move");
+				this.elements.overlay.addClass("jp_draggable");
+				this.elements.wrapper.addClass("jp_draggable");
+				
 				this.elements.title.on("mousedown touchstart", function(e) {
 					dragging = true;
 					offset = {
@@ -51,16 +64,21 @@ jPopup.plugins.draggable = {
 					dragging = false;
 					$(document).off("selectstart");
 				});
-			}
-			return jPopup._super(this);
-		},
-		close: function() {
-			if(this._config.plugins.draggable) {
+				
+			} else {
+				this.elements.title.css("cursor", "");
+				this.elements.overlay.removeClass("jp_draggable");
+				this.elements.wrapper.removeClass("jp_draggable");
+				
 				this.elements.title.off("mousedown touchstart");
 				$(document).off("mousemove.jp_draggable"+this.id+" touchmove.jp_draggable"+this.id);
 				$(document).off("mouseup.jp_draggable"+this.id+" touchend.jp_draggable"+this.id);
 			}
-			return jPopup._super(this);
+			this._config.plugins.draggable = draggable ? true: false;
+			
+			return this;
 		}
+		
+		return this._config.plugins.draggable;
 	}
 };
