@@ -51,8 +51,6 @@ function jPopup(config) {
 					}
 					
 					//Private variables
-					console.log(this.___vars);
-					console.log(name);
 					if(!(name in this.___vars)) {
 						this.___vars[name] = {test: 123};
 					}
