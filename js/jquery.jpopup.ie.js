@@ -1,3 +1,12 @@
+/**
+ * @license
+ *
+ * jPopup v2.0.0
+ * http://jpopup.seapip.com
+ 
+ * Copyright Thomas Gladdines
+ * http://jpopup.seapip.com/LICENSE
+ */
 jPopup.plugins.ie = {
 	overrides: {
 		_create: function() {

@@ -385,7 +385,7 @@ body {
 	<p>Try it yourself:<button class="button" id="example2">Open popup</button></p>
 	<hr>
 	<h2 id="options">Options</h2>
-	<p>The available options:</p>
+	<p>Available options:</p>
 	<pre><code>var example = new jPopup({
 	title: "&lt;h2&gt;Hello World!&lt;/h2&gt;", //Title
 	content: "&lt;p&gt;Sudo make me a sandwich?&lt;/p&gt;", //Content
@@ -585,6 +585,52 @@ example5.elements.buttons //&lt;footer class="jp_buttons"&gt;&lt;/footer&gt;</co
 });</code></pre>
 	<p>Try it yourself:<button class="button" id="example6">Open popup</button></p>
 	<h3 id="overrides">Overrides</h3>
+	<p>To extend or replace functionality you can use overrides.</p>
+	<p>The example below uses an override to show an alert before the original open function is executed.</p>
+	<pre><code>var example7 = new jPopup({
+	title: "&lt;h2&gt;Hello World!&lt;/h2&gt;",
+	content: "&lt;p&gt;Sudo make me a sandwich?&lt;/p&gt;",
+	buttons: [{
+		text: "Sure"
+	}, {
+		text: "Nope"
+	}],
+	overrides: {
+		open: function() {
+			//Show an alert.
+			alert("Opening popup");
+			
+			//Execute original method.
+			jPopup._super(this);
+		}
+	}
+});</code></pre>
+	<p>Try it yourself:<button class="button" id="example7">Open popup</button></p>
+	<p>To execute code after the original function:</p>
+	<pre><code>var example8 = new jPopup({
+	title: "&lt;h2&gt;Hello World!&lt;/h2&gt;",
+	content: "&lt;p&gt;Sudo make me a sandwich?&lt;/p&gt;",
+	buttons: [{
+		text: "Sure"
+	}, {
+		text: "Nope"
+	}],
+	overrides: {
+		open: function() {
+			//Execute original method.
+			var s = jPopup._super(this);
+			
+			//Show an alert.
+			alert("Opening popup");
+			
+			return s;
+		}
+	}
+});</code></pre>
+	<p>Overrides are used to extend functionality of the jPopup methods.</p>
+	<p>The jPopup methods and their functionality can be found by looking at the <i>jquery.jpopup.js</i> file, the methods are documented with comments.</p>
+	<p>Keep in mind that that not calling the <i>_super</i> method means that any code that would be executed after the override code would not be executed.</p>
+	<p>The jPopup functions can be overriden multiple times because of multiple plugins and overrides on the jPopup instance itself.</p>
 	<hr>
 	<h2 id="plugins">Plugins</h2>
 	<h3 id="internet_explorer">Internet Explorer</h3>
@@ -824,6 +870,26 @@ $(function() {
 	$("#example6").click(function() {
 		example6.open();
 	});
+	
+	var example7 = new jPopup({
+		title: "<h2>Hello World!</h2>",
+		content: "<p>Sudo make me a sandwich?</p>",
+		buttons: [{
+			text: "Sure"
+		}, {
+			text: "Nope"
+		}],
+		overrides: {
+			open: function() {
+				alert("Opening popup");
+				jPopup._super(this);
+			}
+		}
+	});
+	$("#example7").click(function() {
+		example7.open();
+	});
+	
 	
 	var exampleDraggable = new jPopup({
 		title: "<h2>Hello World!</h2>",

@@ -1,94 +1,15 @@
+/**
+ * @license
+ *
+ * jPopup v2.0.0
+ * http://jpopup.seapip.com
+ 
+ * Copyright Thomas Gladdines
+ * http://jpopup.seapip.com/LICENSE
+ */
 function jPopup(config) {
 	//Default options
-	//Todo: clean these up...
-	var defaults = {
-		title: "",
-		content: "",
-		buttons: [],
-		closeButtonContent: "&#215;",
-		closeButton: false,
-		overlay: true,
-		overlayClose: false,
-		position: "center",
-		offset: {
-			x: 0,
-			y: 0
-		},
-		speed: 300,
-		animations: {
-			open: {
-				center: function() {
-					this._animations.zoomIn.call(this);
-				},
-				top: function() {
-					this._animations.zoomIn.call(this);
-				},
-				left: function() {
-					this._animations.zoomIn.call(this);
-				},
-				bottom: function() {
-					this._animations.zoomIn.call(this);
-				},
-				right: function() {
-					this._animations.zoomIn.call(this);
-				},
-				stretchTop: function() {
-					this._animations.zoomIn.call(this);
-				},
-				stretchLeft: function() {
-					this._animations.zoomIn.call(this);
-				},
-				stretchBottom: function() {
-					this._animations.zoomIn.call(this);
-				},
-				stretchRight: function() {
-					this._animations.zoomIn.call(this);
-				},
-				full: function() {
-					this._animations.zoomIn.call(this);
-				}
-			},
-			close: {
-				center: function() {
-					this._animations.zoomOut.call(this);
-				},
-				top: function() {
-					this._animations.zoomOut.call(this);
-				},
-				left: function() {
-					this._animations.zoomOut.call(this);
-				},
-				bottom: function() {
-					this._animations.zoomOut.call(this);
-				},
-				right: function() {
-					this._animations.zoomOut.call(this);
-				},
-				stretchTop: function() {
-					this._animations.zoomOut.call(this);
-				},
-				stretchLeft: function() {
-					this._animations.zoomOut.call(this);
-				},
-				stretchBottom: function() {
-					this._animations.zoomOut.call(this);
-				},
-				stretchRight: function() {
-					this._animations.zoomOut.call(this);
-				},
-				full: function() {
-					this._animations.zoomOut.call(this);
-				}
-			}
-		},
-		stickToBottom: true,
-		closeKeys: [],
-		freeze: true,
-		mediaquery: true,
-		responsive: {},
-		plugins: {},
-		overrides: {}
-	};
+	var defaults = $.extend(true, {}, jPopup.options);
 	
 	//Generate unique id
 	do {
@@ -174,6 +95,94 @@ function jPopup(config) {
 	
 	return this;
 }
+
+jPopup.options = {
+	title: "",
+	content: "",
+	buttons: [],
+	closeButtonContent: "&#215;",
+	closeButton: false,
+	overlay: true,
+	overlayClose: false,
+	position: "center",
+	offset: {
+		x: 0,
+		y: 0
+	},
+	speed: 300,
+	animations: {
+		open: {
+			center: function() {
+				this._animations.zoomIn.call(this);
+			},
+			top: function() {
+				this._animations.zoomIn.call(this);
+			},
+			left: function() {
+				this._animations.zoomIn.call(this);
+			},
+			bottom: function() {
+				this._animations.zoomIn.call(this);
+			},
+			right: function() {
+				this._animations.zoomIn.call(this);
+			},
+			stretchTop: function() {
+				this._animations.zoomIn.call(this);
+			},
+			stretchLeft: function() {
+				this._animations.zoomIn.call(this);
+			},
+			stretchBottom: function() {
+				this._animations.zoomIn.call(this);
+			},
+			stretchRight: function() {
+				this._animations.zoomIn.call(this);
+			},
+			full: function() {
+				this._animations.zoomIn.call(this);
+			}
+		},
+		close: {
+			center: function() {
+				this._animations.zoomOut.call(this);
+			},
+			top: function() {
+				this._animations.zoomOut.call(this);
+			},
+			left: function() {
+				this._animations.zoomOut.call(this);
+			},
+			bottom: function() {
+				this._animations.zoomOut.call(this);
+			},
+			right: function() {
+				this._animations.zoomOut.call(this);
+			},
+			stretchTop: function() {
+				this._animations.zoomOut.call(this);
+			},
+			stretchLeft: function() {
+				this._animations.zoomOut.call(this);
+			},
+			stretchBottom: function() {
+				this._animations.zoomOut.call(this);
+			},
+			stretchRight: function() {
+				this._animations.zoomOut.call(this);
+			},
+			full: function() {
+				this._animations.zoomOut.call(this);
+			}
+		}
+	},
+	stickToBottom: true,
+	closeKeys: [],
+	classes: "",
+	freeze: true,
+	plugins: {},
+	overrides: {}
+};
 
 jPopup.loaded = false;
 jPopup.zIndex = 10000;
@@ -346,6 +355,7 @@ jPopup.prototype = {
 		this.buttons(this._config.buttons);
 		this.closeButton(this._config.closeButton);
 		this.closeButtonContent(this._config.closeButtonContent);
+		this.classes(this._config.classes);
 	},
 	open: function(method) {		
 		var self = this;
@@ -399,15 +409,26 @@ jPopup.prototype = {
 			self.close();
 		});
 		
+		//Overlay click
+		this.elements.overlay.on("click", function() {
+			if(self._config.overlayClose) {
+				self.close();				
+			}
+		});
+		
 		//Focus on popup
 		this.elements.popup.focus();
 		
-		//Keep tab key inside popup
-		$(document).on("keydown", function (e) { 
+		$(document).on("keydown.jp_"+this.id, function (e) { 
+			//Keep tab key inside popup
 			if(e.which == 9) {
 				if(!$.contains(self.elements.popup[0], document.activeElement)) {
 					self.elements.popup.focus();
 				}
+			}
+			//Close key
+			if(self._inArray(e.which, self._config.closeKeys).length && self.elements.wrapper.is(":last-child")) {
+				self.close();
 			}
 		});
 		
@@ -439,6 +460,12 @@ jPopup.prototype = {
 		
 		//Remove close button click event
 		this.elements.close.off("click");
+		
+		//Remove overlay click event
+		this.elements.overlay.off("click");
+		
+		//Remove tab and close key event
+		$(document).off("keydown.jp_"+this.id);
 		
 		//Remove popup from instances
 		delete jPopup.instances[this.id];
@@ -620,13 +647,32 @@ jPopup.prototype = {
 			}, speed);
 		}
 	},
+	overlayClose: function(overlayClose) {
+		if(arguments.length) {
+			//Apply new overlayClose to config
+			this._config.overlayClose = overlayClose ? true : false;
+			return this;
+		} else {
+			return this._config.overlayClose;
+		}
+	},
+	closeKeys: function(closeKeys) {
+		if(arguments.length) {
+			//Apply new closeKeys to config
+			this._config.closeKeys = closeKeys;
+			return this;
+		} else {
+			return this._config.closeKeys;
+		}
+		
+	},
 	freeze: function(freeze, config) {
 		if(arguments.length) {
 			var frozen;
 			var count = 0;
 			for(id in jPopup.instances) {
 				var instance = jPopup.instances[id];
-				if(instance.overlay() && instance.freeze()) {
+				if(instance.freeze()) {
 					frozen = true;
 					count++;
 				}
@@ -826,16 +872,43 @@ jPopup.prototype = {
 		this.elements.popup[0].reset();
 		return this;
 	},
-	_zIndex: function() {
-		//Calculate new z-index
-		var zIndex = jPopup.zIndex - 1;
-		for(var id in jPopup.instances) {
-			zIndex++;
+	classes: function(classes) {
+		if(arguments.length) {
+			classes = this._unique(classes.split(" ")).join(" ");
+			this._config.classes = classes;
+			this.elements.overlay.addClass(classes);
+			this.elements.wrapper.addClass(classes);
+			
+			return this;
 		}
 		
+		return this._config.classes;
+	},
+	addClass: function(c) {
+		var classes = this._config.classes.split(" ");
+		classes.push(c);
+		this._config.classes = this._unique(classes).join(" ");
+		this.elements.overlay.addClass(c);
+		this.elements.wrapper.addClass(c);
+		
+		return this;
+	},
+	removeClass: function(c) {
+		var classes = this._config.classes.split(" ");
+		var i = this._inArray(c, classes);
+		if(i.length) {
+			classes.splice(i, 1);
+			this._config.classes = this._unique(classes).join(" ");
+			this.elements.overlay.removeClass(c);
+			this.elements.wrapper.removeClass(c);
+		}
+		
+		return this;
+	},
+	_zIndex: function() {
 		//Set z-index
-		this.elements.overlay.css("z-index", zIndex);
-		this.elements.wrapper.css("z-index", zIndex);
+		this.elements.overlay.css("z-index", jPopup.zIndex);
+		this.elements.wrapper.css("z-index", jPopup.zIndex);
 	},
 	_animations: {
 		zoomIn: function() {

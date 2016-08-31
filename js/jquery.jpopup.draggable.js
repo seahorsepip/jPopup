@@ -1,9 +1,20 @@
+/**
+ * @license
+ *
+ * jPopup v2.0.0
+ * http://jpopup.seapip.com
+ 
+ * Copyright Thomas Gladdines
+ * http://jpopup.seapip.com/LICENSE
+ */
 jPopup.plugins.draggable = {
 	defaults: false,
 	overrides: {
 		_create: function() {
 			if(this._config.plugins.draggable) {
 				this.elements.title.css("cursor", "move");
+				this.elements.overlay.addClass("jp_draggable");
+				this.elements.wrapper.addClass("jp_draggable");
 			}
 			return jPopup._super(this);
 		},
@@ -14,7 +25,6 @@ jPopup.plugins.draggable = {
 				var offset;
 				this.elements.title.on("mousedown touchstart", function(e) {
 					dragging = true;
-					console.log("A");
 					offset = {
 						x: (e.pageX || (e.originalEvent.touches ? e.originalEvent.touches[0].pageX : 0)) - self.offset().x,
 						y: (e.pageY || (e.originalEvent.touches ? e.originalEvent.touches[0].pageY : 0)) + self.offset().y
@@ -23,7 +33,13 @@ jPopup.plugins.draggable = {
 						e.preventDefault();
 					});
 				});
-				$(document).on("mousemove touchmove", function(e) {
+				this.elements.popup.on("mousedown touchstart", function(e) {
+					if(!self.elements.wrapper.is(":last-child") && $(e.target).parent()[0] != self.elements.buttons[0] && e.target != self.elements.close[0]) {
+						$("body").append(self.elements.overlay);
+						$("body").append(self.elements.wrapper);
+					}
+				});
+				$(document).on("mousemove.jp_draggable"+this.id+" touchmove.jp_draggable"+this.id, function(e) {
 					if(dragging) {
 						self.offset({
 							x: (e.pageX || (e.originalEvent.touches ? e.originalEvent.touches[0].pageX : 0)) - offset.x - self.offset().x,
@@ -31,8 +47,7 @@ jPopup.plugins.draggable = {
 						});
 					}
 				});
-				
-				$(document).on("mouseup touchend", function() {
+				$(document).on("mouseup.jp_draggable"+this.id+" touchend.jp_draggable"+this.id, function() {
 					dragging = false;
 					$(document).off("selectstart");
 				});
@@ -42,8 +57,8 @@ jPopup.plugins.draggable = {
 		close: function() {
 			if(this._config.plugins.draggable) {
 				this.elements.title.off("mousedown touchstart");
-				$(document).off("mousemove touchmove");
-				$(document).off("mouseup touchend");
+				$(document).off("mousemove.jp_draggable"+this.id+" touchmove.jp_draggable"+this.id);
+				$(document).off("mouseup.jp_draggable"+this.id+" touchend.jp_draggable"+this.id);
 			}
 			return jPopup._super(this);
 		}
