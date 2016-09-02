@@ -257,12 +257,11 @@ jPopup.button = function(config) {
 
 jPopup.button.prototype = {
 	name: function(name) {
-		if(arguments.length) {
-			this._config.name = name;
-		} else {
+		if(!arguments.length) {
 			return this._config.name;
 		}
-		
+		this._config.name = name;
+		return this;
 	},
 	text: function(text) {
 		if(text) {
@@ -270,16 +269,17 @@ jPopup.button.prototype = {
 			this._elements(function() {
 				this.html(text);
 			});
+			return this;
 		} else {
 			return this._config.text;
 		}
 	},
 	value: function(value) {
-		if(arguments.length) {
-			this._config.value = value;
-		} else {
+		if(!arguments.length) {
 			return this._config.value;
 		}
+		this._config.value = value;
+		return this;
 		
 	},
 	classes: function(classes) {
@@ -289,6 +289,7 @@ jPopup.button.prototype = {
 			this._elements(function() {
 				this.attr("class", classes);
 			});
+			return this;
 		} else {
 			return this._config.classes;
 		}
@@ -300,6 +301,7 @@ jPopup.button.prototype = {
 		this._elements(function() {
 			this.addClass(c);
 		});
+		return this;
 	},
 	removeClass: function(c) {
 		var classes = this._config.classes.split(" ");
@@ -311,6 +313,7 @@ jPopup.button.prototype = {
 				this.removeClass(c);
 			});
 		}
+		return this;
 	},
 	remove: function() {
 		var self = this;
@@ -318,36 +321,38 @@ jPopup.button.prototype = {
 			this.remove();
 			self._parents[x]._config.buttons.splice(y, 1);
 		});
+		return this;
 	},
 	disable: function() {
 		this._elements(function() {
 			this.attr("disabled","");
 		});
+		return this;
 	},
 	enable: function() {
 		this._elements(function() {
 			this.removeAttr("disabled");
 		});
+		return this;
 	},
 	close: function(close) {
-		if(arguments.length) {
-			this._config.close = close;
-		} else {
+		if(!arguments.length) {
 			return this._config.close;
 		}
-		
+		this._config.close = close;
+		return this;
 	},
 	hide: function() {
 		this._elements(function() {
 			this.hide();
 		});
-		
+		return this;
 	},
 	show: function() {
 		this._elements(function() {
 			this.show();
 		});
-		
+		return this;
 	},
 	move: function(position, absolute) {
 		var a = arguments.length;
@@ -376,8 +381,15 @@ jPopup.button.prototype = {
 		});
 		return positions;
 	},
+	onclick: function(onclick) {
+		if(!arguments.length) {
+			return this._config.onclick;
+		}
+		this._config.onclick = onclick;
+		return this;
+	},
 	clone: function() {
-		new jPopup.button(this._config);
+		return new jPopup.button(this._config);
 	},
 	_elements: function(method) {
 		var elements = [];
@@ -584,9 +596,8 @@ jPopup.prototype = {
 			}
 			
 			return this;
-		} else {
-			return this._config.content;
 		}
+		return this._config.content;
 	},
 	buttons: function(buttons) {
 		var self = this;
@@ -644,9 +655,8 @@ jPopup.prototype = {
 			}
 		} else if(buttons % 1 == 0) {
 			return this._config.buttons[buttons];
-		} else {
-			return this._config.buttons;
 		}
+		return this._config.buttons;
 	},
 	closeButton: function(close) {
 		if(arguments.length) {
@@ -661,9 +671,8 @@ jPopup.prototype = {
 			}
 			
 			return this;
-		} else {
-			return this._config.closeButton;
 		}
+		return this._config.closeButton;
 	},
 	closeButtonContent: function(content) {
 		if(arguments.length) {
@@ -674,9 +683,8 @@ jPopup.prototype = {
 			this.elements.close.html(content);
 			
 			return this;
-		} else {
-			return this._config.closeButtonContent;
 		}
+		return this._config.closeButtonContent;
 	},
 	overlay: function(overlay) {
 		if(arguments.length) {
@@ -691,9 +699,8 @@ jPopup.prototype = {
 			}
 			
 			return this;
-		} else {
-			return this._config.overlay;
 		}
+		return this._config.overlay;
 	},
 	_overlay: {
 		show: function() {
@@ -726,18 +733,16 @@ jPopup.prototype = {
 			//Apply new overlayClose to config
 			this._config.overlayClose = overlayClose ? true : false;
 			return this;
-		} else {
-			return this._config.overlayClose;
 		}
+		return this._config.overlayClose;
 	},
 	closeKeys: function(closeKeys) {
 		if(arguments.length) {
 			//Apply new closeKeys to config
 			this._config.closeKeys = closeKeys;
 			return this;
-		} else {
-			return this._config.closeKeys;
 		}
+		return this._config.closeKeys;
 		
 	},
 	freeze: function(freeze, config) {
@@ -763,9 +768,8 @@ jPopup.prototype = {
 			}
 			
 			return this;
-		} else {
-			return this._config.freeze;
 		}
+		return this._config.freeze;
 	},
 	_freeze: function() {
 		var top = $(window).scrollTop();
@@ -871,9 +875,8 @@ jPopup.prototype = {
 			}
 			
 			return this;
-		} else {
-			return this._config.position;
 		}
+		return this._config.position;
 	},
 	offset: function(offset) {
 		if(arguments.length) {
@@ -932,9 +935,8 @@ jPopup.prototype = {
 			}
 			
 			return this;
-		} else {
-			return this._config.offset;
 		}
+		return this._config.offset;
 	},
 	clone: function() {
 		return new jPopup(this._config);

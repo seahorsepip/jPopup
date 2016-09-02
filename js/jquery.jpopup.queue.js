@@ -13,21 +13,25 @@ jPopup.plugins.queue = {
 		_create: function() {
 			var s = jPopup._super(this);
 			if(this._config.plugins.queue) {
-				this.__vars.config = $.extend(true, {}, this._config);
 				this.__vars.step = 0;
-				this.__vars.nextButton = new jPopup.button({
-					text: this._config.plugins.queue.text,
-					close: false,
-					onclick: function() {
-						this._config.plugins.queue.steps[this.__vars.step].call(this);
-						this.__vars.nextButton.remove();
-						if(this._config.plugins.queue.steps.length - 1 > this.__vars.step) {
-							this.buttons.add(this.__vars.nextButton);
-							this.__vars.nextButton.move(0, true);
-							this.__vars.step++;
-						}
+				this.__vars.config = $.extend(true, {}, this._config);
+				if(!(this._config.plugins.queue.button instanceof jPopup.button)) {
+					this._config.plugins.queue.button = new jPopup.button(this._config.plugins.queue.button);
+				}
+				this.__vars.nextButton = this._config.plugins.queue.button.clone();
+				var onclick = this.__vars.nextButton.onclick();
+				this.__vars.nextButton.onclick(function() {
+					if(onclick) {
+						onclick.call(this);
 					}
-				});
+					this._config.plugins.queue.steps[this.__vars.step].call(this);
+					this.__vars.nextButton.remove();
+					if(this._config.plugins.queue.steps.length - 1 > this.__vars.step) {
+						this.buttons.add(this.__vars.nextButton);
+						this.__vars.nextButton.move(0, true);
+						this.__vars.step++;
+					}
+				}).close(false);
 				this.buttons.add(this.__vars.nextButton);
 				this.__vars.nextButton.move(0, true);
 			}

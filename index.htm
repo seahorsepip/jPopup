@@ -263,6 +263,7 @@ body {
 		disabled: false, //Disabled state.
 		hidden: false, //Hide button.
 		close: true //Popup closes when button is clicked.
+		onclick: null //Function called on click.
 	}],
 	/*
 	Set position, you can choose between:
@@ -363,6 +364,7 @@ clone(); //Create a copy of this jPopup instance as new jPopup instance.</code><
 	disabled: false, //Disabled state.
 	hidden: false, //Hide button.
 	close: true //Popup closes when button is clicked.
+	onclick: null //Function called on click.
 };</code></pre>
 	<p>The buttons method can return and replace the buttons in a jPopup instance:</p>
 	<pre><code>buttons(); //Get an array of the button objects.
@@ -387,6 +389,7 @@ show(); //Show the button.
 move(x); //Move button x positions relative to current position.
 move(x, true); //Move button to position x.
 clone(); //Create a copy of the button.
+onclick(); //Get or set function on click.
 </code></pre>
 	<p>To create a dynamic button object to be later added to jPopup instances you can also create a new jPopup.button instance:</p>
 	<pre><code>var button = new jPopup.button({
@@ -397,6 +400,7 @@ clone(); //Create a copy of the button.
 	disabled: false, //Disabled state.
 	hidden: false, //Hide button.
 	close: true //Popup closes when button is clicked.
+	onclick: null //Function called on click.
 });</code></pre>
 	<h3 id="elements">Elements</h3>
 	<p>Each jPopup instance has the following html structure:</p>
@@ -576,8 +580,10 @@ example5.elements.buttons //&lt;footer class="jp_buttons"&gt;&lt;/footer&gt;</co
 	}],
 	plugins: {
 		queue: {
-			text: "Next",
-			sequence: [
+			button: {
+				text: "Next"
+			},
+			steps: [
 				function() { //Step 2
 					this.title("&lt;h2&gt;Step 2&lt;/h3&gt;");
 				},
@@ -854,7 +860,9 @@ $(function() {
 		}],
 		plugins: {
 			queue: {
-				text: "Next",
+				button: {
+					text: "Next"
+				},
 				steps: [
 					function() { //Step 2
 						this.title("<h2>Step 2</h3>");
