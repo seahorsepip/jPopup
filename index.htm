@@ -3,13 +3,16 @@
 <meta name="viewport" content="minimum-scale=1.0, maximum-scale=1.0, width=device-width">
 <title>jPopup</title>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
-<link href="./css/code.css" rel="stylesheet" type="text/css">
+<link href="./css/jpopup.min.css" rel="stylesheet" type="text/css" />
+<link href="./css/jpopup.ie.min.css" rel="stylesheet" type="text/css" />
 <link href="./css/animate.min.css" rel="stylesheet" type="text/css">
+<link href="./css/code.css" rel="stylesheet" type="text/css">
 <script src="./js/jquery-1.12.0.min.js" type="text/javascript"></script>
-<script src="./js/jquery.jpopup.min.js" type="text/javascript"></script>
+<script src="./js/jquery.jpopup.js" type="text/javascript"></script>
 <script src="./js/jquery.jpopup.ie.min.js" type="text/javascript"></script>
 <script src="./js/jquery.jpopup.draggable.min.js" type="text/javascript"></script>
 <script src="./js/jquery.jpopup.responsive.min.js" type="text/javascript"></script>
+<script src="./js/jquery.jpopup.queue.js" type="text/javascript"></script>
 <script src="./js/highlight.min.js" type="text/javascript"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 <style type="text/css">
@@ -25,145 +28,6 @@ html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address
 article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {
 	display: block;
 }
-.jp_overlay {
-	background: rgba(232,232,232,.8);
-}
-.jp_ie8.jp_overlay,
-.jp_ie7.jp_overlay,
-.jp_ie6.jp_overlay {
-	background: tranparent;
-	-ms-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cce8e8e8', endColorstr='#cce8e8e8',GradientType=0 );
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cce8e8e8', endColorstr='#cce8e8e8',GradientType=0 );
-}
-.jp_popup {
-	width: 500px;
-	background: #fff;
-	border-radius: 3px;
-	box-shadow: 0 2px 10px rgba(0,0,0,.1),
-				0 10px 30px rgba(0,0,0,.1);
-	outline: 1px #ccc;
-	outline: 1px rgba(0,0,0,.05);
-	font-family: Roboto, sans-serif;
-}
-.jp_popup h1,
-.jp_popup h2,
-.jp_popup h3,
-.jp_popup h4,
-.jp_popup h5,
-.jp_popup h6 {
-	color: #444;
-}
-.jp_popup h1 { font-size: 22px; }
-.jp_popup h2 { font-size: 18px; }
-.jp_popup h3 { font-size: 16px; }
-.jp_popup h4 { font-size: 14px; }
-.jp_popup h5 { font-size: 12px; }
-.jp_popup h6 { font-size: 10px; }
-.jp_popup p {
-	color: #777;
-	font-size: 16px;
-	line-height: 24px;
-}
-.jp_popup input {
-	height: 32px;
-	width: 100%;
-	border: 0;
-	border-bottom: 2px solid #999;
-	outline: 0;
-	font-family: "roboto", sans-serif;
-    font-size: 14px;
-	color: #444;
-}
-.jp_popup input:focus {
-	border-bottom: 2px solid #444;
-}
-.jp_popup input::-webkit-input-placeholder {
-  color: #ccc;
-}
-.jp_popup input::-moz-placeholder {
-  color: #ccc;
-}
-.jp_popup input:-ms-input-placeholder {
-  color: #ccc;
-}
-.jp_popup input:-moz-placeholder {
-  color: #ccc;
-}
-.jp_title h1,
-.jp_title h2,
-.jp_title h3,
-.jp_title h4,
-.jp_title h5,
-.jp_title h6,
-.jp_title p {
-	padding: 0 20px;
-	line-height: 64px;
-}
-.jp_content {
-	padding: 20px;
-}
-.jp_buttons {
-	padding-right: 10px;
-}
-.jp_buttons button {
-	font-family: "Roboto", sans-serif;
-	font-size: 14px;
-	font-weight: 700;
-	color: #777;
-	line-height: 36px;
-	padding: 0 10px;
-	margin: 20px 10px 20px 0;
-	border: 0;
-	border-radius: 3px;
-	background: none;
-	float: right;
-	cursor: pointer;
-	outline: 0;
-	display: block;
-	min-width: 52px;
-}
-.jp_buttons button:hover {
-	background: #eee;
-}
-.jp_buttons button:active,
-.jp_buttons button:focus {
-	background: #ddd;
-}
-.jp_buttons button[disabled] {
-	background: none;
-	color: #ccc;
-	cursor: not-allowed;
-}
-.jp_close {
-	margin: 20px;
-	border: 0;
-	background: url('data:image/gif;base64,R0lGODlhMAAwAMIEAD4+Pj8/P0NDQ0RERP///////////////yH5BAEKAAQALAAAAAAwADAAAAOKSLrc/jDKSau9OOvNu/9gKI5kaY6Al3rBIHDCEHTAYL9ZbK+b7mI+XCdoIYKMEuTR9osoQ89FFMoUSqsnhXJKMnJLwa/Jh81CyFZzA61+kG9tRrjc9tKz2ztYTxAP+VqAHmJ+QIJyh4ZwFYUTjVeLGy2RFz4zHDVplQM8mCpxoKGio6SlpqeoqaQJADs=');
-	background-size: 100%;
-	width: 24px !important;
-	height: 24px !important;
-	cursor: pointer;
-	border-radius: 3px;
-	padding: 0;
-	outline: 0;
-	font-size: 0;
-}
-.jp_ie8 .jp_close,
-.jp_ie7 .jp_close,
-.jp_ie6 .jp_close {
-	background: none;
-	line-height: 24px;
-	font-size: 26px;
-	font-family: sans-serif;
-	text-align: center;
-	color: #444;
-}
-.jp_close:hover {
-	background-color: #eee;
-}
-.jp_close:active {
-	background-color: #ddd;
-}
-/* Site  styles */
 body {
 	width: 600px;
 	margin: 0 auto;
@@ -403,6 +267,7 @@ body {
 	/*
 	Set position, you can choose between:
 	center, top, left, bottom, right,
+	topLeft, topRight, bottomLeft, bottomRight,
 	stretchTop, stretchLeft, stretchBottom, stretchRight and full.
 	*/
 	position: "center",
@@ -699,6 +564,35 @@ example5.elements.buttons //&lt;footer class="jp_buttons"&gt;&lt;/footer&gt;</co
 	}
 });</code></pre>
 	<p>Try it yourself:<button class="button" id="exampleResponsive">Open popup</button></p>
+	<h3 id="queue">Queue</h3>
+	<p>To add queue functionality to your popups include <i>jquery.jpopup.queue.min.js</i> in your page:</p>
+	<pre><code>&lt;script src="jquery.jpopup.queue.min.js" type="text/javascript"&gt;&lt;/script&gt;</code></pre>
+	<p>Then set responsive breakpoint functions on a popup:</p>
+	<pre><code>var exampleQueue = new jPopup({
+	title: "&lt;h2&gt;Step 1&lt;/h2&gt;",
+	content: "&lt;p&gt;Sudo make me a sandwich?&lt;/p&gt;",
+	buttons: [{
+		text: "Cancel"
+	}],
+	plugins: {
+		queue: {
+			text: "Next",
+			sequence: [
+				function() { //Step 2
+					this.title("&lt;h2&gt;Step 2&lt;/h3&gt;");
+				},
+				function() { //Step 3
+					this.title("&lt;h2&gt;Step 3&lt;/h2&gt;");
+				},
+				function() { //Step 4 (final)
+					this.title("&lt;h2&gt;Step 4&lt;/h2&gt;");
+					this.buttons([{text: "Finish"}]);
+				}
+			]
+		}
+	}
+});</code></pre>
+	<p>Try it yourself:<button class="button" id="exampleQueue">Open popup</button></p>
 </section>
 <aside id="menu">
 	<ul>
@@ -731,6 +625,7 @@ example5.elements.buttons //&lt;footer class="jp_buttons"&gt;&lt;/footer&gt;</co
 				<li><a href="#draggable" class="">Draggable</a></li>
 				<li><a href="#resizeable" class="">Resizable</a></li>
 				<li><a href="#responsive" class="">Responsive</a></li>
+				<li><a href="#queue" class="">Queue</a></li>
 			</ul>
 		</li>
 		<li><a id="contact">Contact</a></li>
@@ -768,7 +663,9 @@ $(function() {
 	$("#menu a:not(#contact)").click(function(e) {
 		e.preventDefault();
 		var id = $(this).attr("href");
-		$("html, body").scrollTop($(id).offset().top - 48);
+		$("html, body").animate({
+			scrollTop: $(id).offset().top - 48
+		}, 500);
 	});
 	
 	//Damn spambots
@@ -947,6 +844,34 @@ $(function() {
 	});
 	$("#exampleResponsive").click(function() {
 		exampleResponsive.open();
+	});
+	
+	var exampleQueue = new jPopup({
+		title: "<h2>Step 1</h2>",
+		content: "<p>Sudo make me a sandwich?</p>",
+		buttons: [{
+			text: "Cancel"
+		}],
+		plugins: {
+			queue: {
+				text: "Next",
+				steps: [
+					function() { //Step 2
+						this.title("<h2>Step 2</h3>");
+					},
+					function() { //Step 3
+						this.title("<h2>Step 3</h2>");
+					},
+					function() { //Step 4 (final)
+						this.title("<h2>Step 4</h2>");
+						this.buttons([{text: "Finish"}]);
+					}
+				]
+			}
+		}
+	});
+	$("#exampleQueue").click(function() {
+		exampleQueue.open();
 	});
 	
 	$.fn.extend({

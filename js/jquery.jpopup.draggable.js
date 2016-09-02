@@ -10,10 +10,6 @@
 jPopup.plugins.draggable = {
 	defaults: false,
 	overrides: {
-		_create: function() {
-			this._methods.call(this, this._config.plugins.draggable);
-			return jPopup._super(this);
-		},
 		open: function() {
 			this._methods.call(this, this._config.plugins.draggable);
 			return jPopup._super(this);

@@ -149,6 +149,18 @@ jPopup.options = {
 			right: function() {
 				this._animations.zoomIn.call(this);
 			},
+			topLeft: function() {
+				this._animations.zoomIn.call(this);
+			},
+			topRight: function() {
+				this._animations.zoomIn.call(this);
+			},
+			bottomLeft: function() {
+				this._animations.zoomIn.call(this);
+			},
+			bottomRight: function() {
+				this._animations.zoomIn.call(this);
+			},
 			stretchTop: function() {
 				this._animations.zoomIn.call(this);
 			},
@@ -181,6 +193,18 @@ jPopup.options = {
 			right: function() {
 				this._animations.zoomOut.call(this);
 			},
+			topLeft: function() {
+				this._animations.zoomOut.call(this);
+			},
+			topRight: function() {
+				this._animations.zoomOut.call(this);
+			},
+			bottomLeft: function() {
+				this._animations.zoomOut.call(this);
+			},
+			bottomRight: function() {
+				this._animations.zoomOut.call(this);
+			},
 			stretchTop: function() {
 				this._animations.zoomOut.call(this);
 			},
@@ -203,7 +227,8 @@ jPopup.options = {
 	classes: "",
 	freeze: true,
 	plugins: {},
-	overrides: {}
+	overrides: {},
+	mediaqueries: true
 };
 
 jPopup.loaded = false;
@@ -223,7 +248,8 @@ jPopup.button = function(config) {
 		classes: "",
 		disabled: false,
 		hidden: false,
-		close: true
+		close: true,
+		onclick: null
 	};
 	this._config = $.extend(true, defaults, config);
 	this._parents = [];
@@ -419,6 +445,9 @@ jPopup.prototype = {
 				if(button.close()) {
 					self.close();
 				}
+				if(button._config.onclick) {
+					button._config.onclick.call(self);
+				}
 				if(method) {
 					method.call(self, button.value());
 				}
@@ -451,6 +480,26 @@ jPopup.prototype = {
 			//Close key
 			if(self._inArray(e.which, self._config.closeKeys).length && self.elements.wrapper.is(":last-child")) {
 				self.close();
+			}
+		});
+		
+		//Mediaqueries
+		$(window).on("resize.jp_"+this.id, function () { 
+			var width = self.elements.popup.outerWidth();
+			if(self._config.mediaqueries && width != self._mediaqueries) {
+				if(self._mediaqueries) {
+					if(self._config.position == "center" || self._config.position == "top" || self._config.position == "bottom") {
+						self.elements.popup.offset({
+							left: self.elements.popup.offset().left + ((self._mediaqueries - width) / 2)
+						});
+					}
+					if(self._config.position == "right" || self._config.position == "topRight" || self._config.position == "bottomRight" || self._config.position == "stretchRight") {
+						self.elements.popup.offset({
+							left: self.elements.popup.offset().left + self._mediaqueries - width
+						});
+					}
+				}
+				self._mediaqueries = width;
 			}
 		});
 		
@@ -488,6 +537,9 @@ jPopup.prototype = {
 		
 		//Remove tab and close key event
 		$(document).off("keydown.jp_"+this.id);
+		
+		//Remove mediaqueries resize event
+		$(window).off("resize.jp_"+this.id);
 		
 		//Remove popup from instances
 		delete jPopup.instances[this.id];
@@ -720,9 +772,6 @@ jPopup.prototype = {
 		var left = $(window).scrollLeft();
 		if(window.innerWidth > document.documentElement.clientWidth) {
 			$("html").css("overflow-y", "scroll");
-		}
-		if(window.innerHeight > document.documentElement.clientHeight) {
-			$("html").css("overflow-x", "scroll");
 		}
 		$("html").css({"width": "100%", "height": "100%", "position": "fixed", "top": -top, "left": -left});
 	},
