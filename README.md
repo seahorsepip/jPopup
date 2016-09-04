@@ -1,6 +1,5 @@
 # jPopup
 ##### Advanced jQuery plugin to show popups.
-<br>
 #### [Demo](http://jpopup.seapip.com/)&nbsp;&nbsp;&nbsp;&nbsp;[Documentation](http://jpopup.seapip.com/)
 <br>
 ###Features
