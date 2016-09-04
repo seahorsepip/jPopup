@@ -16,6 +16,9 @@ function jPopup(config) {
 		this.id = Math.random().toString(36).substr(2, 8)+new Date().getTime().toString(36);
 	} while(!this.id || this.id.length != 16);
 	
+	//Private variables of all plugins
+	this.___vars = {};
+	
 	//Function overrides
 	function overrides(overrideK, protoK, selfK, name, proto, self, key) {
 		if (typeof overrideK === "function") {
@@ -36,12 +39,24 @@ function jPopup(config) {
 					return protoK.apply(this, a);
 				};
 				
-				//Additional variables
 				if(name) {
+					//Public methods
+					if("methods" in jPopup.plugins[name]) {
+						this._methods = jPopup.plugins[name].methods;
+					}
+					
+					//Public variables
 					if("vars" in jPopup.plugins[name]) {
 						this._vars = jPopup.plugins[name].vars;
 					}
+					
+					//Private variables
+					if(!(name in this.___vars)) {
+						this.___vars[name] = {test: 123};
+					}
+					this.__vars = this.___vars[name];
 				}
+				
 				
 				//Custom function
 				return overrideK.apply(this, a);
@@ -66,6 +81,14 @@ function jPopup(config) {
 		}
 	}
 	
+	//Add plugin methods
+	this.plugins = {};
+	for(name in jPopup.plugins) {
+		if(jPopup.plugins[name].methods) {
+			this.plugins[name] = jPopup.plugins[name].methods.bind(this);
+		}
+	}
+	
 	//Load plugin defaults in config
 	for(name in jPopup.plugins) {
 		defaults.plugins[name] = jPopup.plugins[name].defaults;
@@ -77,7 +100,6 @@ function jPopup(config) {
 	//Override functions with config functions
 	overrides(this._config.overrides, jPopup.prototype, this);
 	
-
 	//Generate html elements
 	var elements = $("<div><div class=\"jp_overlay\" style=\"position:fixed;top:0;left:0;bottom:0;right:0;display:none;\"></div><div class=\"jp_wrapper\" style=\"position:fixed;top:-9999px;left:-9999px;\"><form class=\"jp_popup\" style=\"position:absolute;float:left;\" tabindex=\"0\"><header class=\"jp_title\"></header><section class=\"jp_content\"></section><footer class=\"jp_buttons\"></footer><button class=\"jp_close\" style=\"position:absolute;top:0;right:0;width:20px;height:20px;\"></button><div class=\"jp_resize\" style=\"display:none;\"><div style=\"position:absolute;top:0;left:0;right:0;height:6px;cursor:n-resize;\"></div><div style=\"position:absolute;top:0;left:0;bottom:0;width:6px;cursor:w-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;right:0;height:6px;cursor:s-resize;\"></div><div style=\"position:absolute;top:0;bottom:0;right:0;width:6px;cursor:e-resize;\"></div><div style=\"position:absolute;top:0;left:0;width:6px;height:6px;cursor:nw-resize;\"></div><div style=\"position:absolute;top:0;right:0;width:6px;height:6px;cursor:ne-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;width:6px;height:6px;cursor:sw-resize;\"></div><div style=\"position:absolute;bottom:0;right:0;width:6px;height:6px;cursor:se-resize;\"></div></div></form></div></div>");
 	this.elements = {};
@@ -127,6 +149,18 @@ jPopup.options = {
 			right: function() {
 				this._animations.zoomIn.call(this);
 			},
+			topLeft: function() {
+				this._animations.zoomIn.call(this);
+			},
+			topRight: function() {
+				this._animations.zoomIn.call(this);
+			},
+			bottomLeft: function() {
+				this._animations.zoomIn.call(this);
+			},
+			bottomRight: function() {
+				this._animations.zoomIn.call(this);
+			},
 			stretchTop: function() {
 				this._animations.zoomIn.call(this);
 			},
@@ -159,6 +193,18 @@ jPopup.options = {
 			right: function() {
 				this._animations.zoomOut.call(this);
 			},
+			topLeft: function() {
+				this._animations.zoomOut.call(this);
+			},
+			topRight: function() {
+				this._animations.zoomOut.call(this);
+			},
+			bottomLeft: function() {
+				this._animations.zoomOut.call(this);
+			},
+			bottomRight: function() {
+				this._animations.zoomOut.call(this);
+			},
 			stretchTop: function() {
 				this._animations.zoomOut.call(this);
 			},
@@ -181,7 +227,8 @@ jPopup.options = {
 	classes: "",
 	freeze: true,
 	plugins: {},
-	overrides: {}
+	overrides: {},
+	mediaqueries: true
 };
 
 jPopup.loaded = false;
@@ -201,7 +248,8 @@ jPopup.button = function(config) {
 		classes: "",
 		disabled: false,
 		hidden: false,
-		close: true
+		close: true,
+		onclick: null
 	};
 	this._config = $.extend(true, defaults, config);
 	this._parents = [];
@@ -209,12 +257,11 @@ jPopup.button = function(config) {
 
 jPopup.button.prototype = {
 	name: function(name) {
-		if(arguments.length) {
-			this._config.name = name;
-		} else {
+		if(!arguments.length) {
 			return this._config.name;
 		}
-		
+		this._config.name = name;
+		return this;
 	},
 	text: function(text) {
 		if(text) {
@@ -222,16 +269,17 @@ jPopup.button.prototype = {
 			this._elements(function() {
 				this.html(text);
 			});
+			return this;
 		} else {
 			return this._config.text;
 		}
 	},
 	value: function(value) {
-		if(arguments.length) {
-			this._config.value = value;
-		} else {
+		if(!arguments.length) {
 			return this._config.value;
 		}
+		this._config.value = value;
+		return this;
 		
 	},
 	classes: function(classes) {
@@ -241,6 +289,7 @@ jPopup.button.prototype = {
 			this._elements(function() {
 				this.attr("class", classes);
 			});
+			return this;
 		} else {
 			return this._config.classes;
 		}
@@ -252,6 +301,7 @@ jPopup.button.prototype = {
 		this._elements(function() {
 			this.addClass(c);
 		});
+		return this;
 	},
 	removeClass: function(c) {
 		var classes = this._config.classes.split(" ");
@@ -263,6 +313,7 @@ jPopup.button.prototype = {
 				this.removeClass(c);
 			});
 		}
+		return this;
 	},
 	remove: function() {
 		var self = this;
@@ -270,36 +321,38 @@ jPopup.button.prototype = {
 			this.remove();
 			self._parents[x]._config.buttons.splice(y, 1);
 		});
+		return this;
 	},
 	disable: function() {
 		this._elements(function() {
 			this.attr("disabled","");
 		});
+		return this;
 	},
 	enable: function() {
 		this._elements(function() {
 			this.removeAttr("disabled");
 		});
+		return this;
 	},
 	close: function(close) {
-		if(arguments.length) {
-			this._config.close = close;
-		} else {
+		if(!arguments.length) {
 			return this._config.close;
 		}
-		
+		this._config.close = close;
+		return this;
 	},
 	hide: function() {
 		this._elements(function() {
 			this.hide();
 		});
-		
+		return this;
 	},
 	show: function() {
 		this._elements(function() {
 			this.show();
 		});
-		
+		return this;
 	},
 	move: function(position, absolute) {
 		var a = arguments.length;
@@ -328,8 +381,15 @@ jPopup.button.prototype = {
 		});
 		return positions;
 	},
+	onclick: function(onclick) {
+		if(!arguments.length) {
+			return this._config.onclick;
+		}
+		this._config.onclick = onclick;
+		return this;
+	},
 	clone: function() {
-		new jPopup.button(this._config);
+		return new jPopup.button(this._config);
 	},
 	_elements: function(method) {
 		var elements = [];
@@ -397,6 +457,9 @@ jPopup.prototype = {
 				if(button.close()) {
 					self.close();
 				}
+				if(button._config.onclick) {
+					button._config.onclick.call(self);
+				}
 				if(method) {
 					method.call(self, button.value());
 				}
@@ -429,6 +492,26 @@ jPopup.prototype = {
 			//Close key
 			if(self._inArray(e.which, self._config.closeKeys).length && self.elements.wrapper.is(":last-child")) {
 				self.close();
+			}
+		});
+		
+		//Mediaqueries
+		$(window).on("resize.jp_"+this.id, function () { 
+			var width = self.elements.popup.outerWidth();
+			if(self._config.mediaqueries && width != self._mediaqueries) {
+				if(self._mediaqueries) {
+					if(self._config.position == "center" || self._config.position == "top" || self._config.position == "bottom") {
+						self.elements.popup.offset({
+							left: self.elements.popup.offset().left + ((self._mediaqueries - width) / 2)
+						});
+					}
+					if(self._config.position == "right" || self._config.position == "topRight" || self._config.position == "bottomRight" || self._config.position == "stretchRight") {
+						self.elements.popup.offset({
+							left: self.elements.popup.offset().left + self._mediaqueries - width
+						});
+					}
+				}
+				self._mediaqueries = width;
 			}
 		});
 		
@@ -466,6 +549,9 @@ jPopup.prototype = {
 		
 		//Remove tab and close key event
 		$(document).off("keydown.jp_"+this.id);
+		
+		//Remove mediaqueries resize event
+		$(window).off("resize.jp_"+this.id);
 		
 		//Remove popup from instances
 		delete jPopup.instances[this.id];
@@ -510,9 +596,8 @@ jPopup.prototype = {
 			}
 			
 			return this;
-		} else {
-			return this._config.content;
 		}
+		return this._config.content;
 	},
 	buttons: function(buttons) {
 		var self = this;
@@ -570,9 +655,8 @@ jPopup.prototype = {
 			}
 		} else if(buttons % 1 == 0) {
 			return this._config.buttons[buttons];
-		} else {
-			return this._config.buttons;
 		}
+		return this._config.buttons;
 	},
 	closeButton: function(close) {
 		if(arguments.length) {
@@ -587,9 +671,8 @@ jPopup.prototype = {
 			}
 			
 			return this;
-		} else {
-			return this._config.closeButton;
 		}
+		return this._config.closeButton;
 	},
 	closeButtonContent: function(content) {
 		if(arguments.length) {
@@ -600,9 +683,8 @@ jPopup.prototype = {
 			this.elements.close.html(content);
 			
 			return this;
-		} else {
-			return this._config.closeButtonContent;
 		}
+		return this._config.closeButtonContent;
 	},
 	overlay: function(overlay) {
 		if(arguments.length) {
@@ -617,9 +699,8 @@ jPopup.prototype = {
 			}
 			
 			return this;
-		} else {
-			return this._config.overlay;
 		}
+		return this._config.overlay;
 	},
 	_overlay: {
 		show: function() {
@@ -652,18 +733,16 @@ jPopup.prototype = {
 			//Apply new overlayClose to config
 			this._config.overlayClose = overlayClose ? true : false;
 			return this;
-		} else {
-			return this._config.overlayClose;
 		}
+		return this._config.overlayClose;
 	},
 	closeKeys: function(closeKeys) {
 		if(arguments.length) {
 			//Apply new closeKeys to config
 			this._config.closeKeys = closeKeys;
 			return this;
-		} else {
-			return this._config.closeKeys;
 		}
+		return this._config.closeKeys;
 		
 	},
 	freeze: function(freeze, config) {
@@ -689,18 +768,14 @@ jPopup.prototype = {
 			}
 			
 			return this;
-		} else {
-			return this._config.freeze;
 		}
+		return this._config.freeze;
 	},
 	_freeze: function() {
 		var top = $(window).scrollTop();
 		var left = $(window).scrollLeft();
 		if(window.innerWidth > document.documentElement.clientWidth) {
 			$("html").css("overflow-y", "scroll");
-		}
-		if(window.innerHeight > document.documentElement.clientHeight) {
-			$("html").css("overflow-x", "scroll");
 		}
 		$("html").css({"width": "100%", "height": "100%", "position": "fixed", "top": -top, "left": -left});
 	},
@@ -800,9 +875,8 @@ jPopup.prototype = {
 			}
 			
 			return this;
-		} else {
-			return this._config.position;
 		}
+		return this._config.position;
 	},
 	offset: function(offset) {
 		if(arguments.length) {
@@ -861,9 +935,8 @@ jPopup.prototype = {
 			}
 			
 			return this;
-		} else {
-			return this._config.offset;
 		}
+		return this._config.offset;
 	},
 	clone: function() {
 		return new jPopup(this._config);
