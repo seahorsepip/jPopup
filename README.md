@@ -1,8 +1,10 @@
 # jPopup
-Popup function in jQuery
-
-Supports all browsers including IE6+
-
-Popups can be positioned, support offsets, can be dragged, have a toggleable overlay and more!
-
-Documentation and website are WIP.
+##### Advanced jQuery plugin to show popups.
+<br>
+#### [Demo](http://jpopup.seapip.com/)&nbsp;&nbsp;&nbsp;&nbsp;[Documentation](http://jpopup.seapip.com/)
+<br>
+###Features
+- Supports all browsers including IE6 and above.
+- Small footprint with a filesize of just 3KB.
+- No CSS dependencies.
+- Responsive.
