@@ -449,7 +449,6 @@ jPopup.prototype = {
 		this._config.animations.open[this._config.position].call(this);
 		
 		//Button click
-		var r = $.Deferred();
 		this.elements.popup.on("click", "button", function(e) {
 			if($.contains(self.elements.buttons[0], this)) {
 				e.preventDefault();
@@ -464,6 +463,11 @@ jPopup.prototype = {
 					method.call(self, button.value());
 				}
 			}
+		});
+		
+		//Prevent form submission
+		this.elements.popup.on("submit", function(e) {
+			e.preventDefault();
 		});
 		
 		//Close button click
@@ -531,6 +535,9 @@ jPopup.prototype = {
 		setTimeout(function() {
 			//Trigger animationend in case the wrapper might be removed too soon for custom animations to trigger animationend
 			self.elements.popup.trigger("animationend");
+			
+			//Remove form submission event
+			self.elements.popup.off("submit");
 			
 			//Remove overlay and wrapper from document body
 			self.elements.overlay.remove();
@@ -772,8 +779,8 @@ jPopup.prototype = {
 		return this._config.freeze;
 	},
 	_freeze: function() {
-		var top = $(window).scrollTop();
-		var left = $(window).scrollLeft();
+		var top = $(document).scrollTop();
+		var left = $(document).scrollLeft();
 		if(window.innerWidth > document.documentElement.clientWidth) {
 			$("html").css("overflow-y", "scroll");
 		}
