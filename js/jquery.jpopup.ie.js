@@ -66,7 +66,7 @@ jPopup.plugins.ie = {
 		},
 		_freeze: function() {
 			//IE6
-			if(this._vars.version() <= 6) {
+			if(this._vars.version() <= 8) {
 				if(!("scrollBarWidth" in this._vars)) {
 					this._vars.scrollBarWidth = $("html").width() - $(window).width();
 				}
@@ -78,7 +78,7 @@ jPopup.plugins.ie = {
 		},
 		_unfreeze: function() {
 			//IE6
-			if(this._vars.version() <= 6) {
+			if(this._vars.version() <= 8) {
 				$("html").css({"overflow": "", "padding-right": ""});
 				this._vars.fakeScrollbar.remove();
 			} else {
