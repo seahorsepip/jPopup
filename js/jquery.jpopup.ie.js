@@ -1,7 +1,7 @@
 /**
  * @license
  *
- * jPopup v2.0.0
+ * jPopup v2.0.2
  * http://jpopup.seapip.com
  
  * Copyright Thomas Gladdines

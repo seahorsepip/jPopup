@@ -1,7 +1,7 @@
 /**
  * @license
  *
- * jPopup v2.0.0
+ * jPopup v2.0.2
  * http://jpopup.seapip.com
  
  * Copyright Thomas Gladdines
@@ -21,7 +21,7 @@ function jPopup(config) {
 	
 	//Function overrides
 	function overrides(overrideK, protoK, selfK, name, proto, self, key) {
-		if (typeof overrideK === "function") {
+		if(typeof overrideK === "function") {
 			$.each(proto, function(k, v) {
 				if(proto != jPopup.prototype && k != key && !name & !self.hasOwnProperty(k)) {
 					self[k] = function() {
@@ -40,11 +40,6 @@ function jPopup(config) {
 				};
 				
 				if(name) {
-					//Public methods
-					if("methods" in jPopup.plugins[name]) {
-						this._methods = jPopup.plugins[name].methods;
-					}
-					
 					//Public variables
 					if("vars" in jPopup.plugins[name]) {
 						this._vars = jPopup.plugins[name].vars;
@@ -52,7 +47,7 @@ function jPopup(config) {
 					
 					//Private variables
 					if(!(name in this.___vars)) {
-						this.___vars[name] = {test: 123};
+						this.___vars[name] = {};
 					}
 					this.__vars = this.___vars[name];
 				}
@@ -72,7 +67,6 @@ function jPopup(config) {
 	}
 	
 	//Apply plugins
-	var self = this;
 	if(!jPopup.loaded) {
 		jPopup.loaded = true;
 		for(name in jPopup.plugins) {
@@ -81,12 +75,24 @@ function jPopup(config) {
 		}
 	}
 	
+	//Plugin methods
+	function methods(array, array2, key, key2, context) {;
+		if(typeof array2[key2] === "function") {
+			array[key] = array2[key2].bind(context);
+		} else {
+			for(key3 in array2[key2]){
+				if(!array.hasOwnProperty(key)) {
+					array[key] = {};
+				}
+				methods(array[key], array2[key2], key3, key3, context);
+			}
+		}
+	}
+	
 	//Add plugin methods
 	this.plugins = {};
 	for(name in jPopup.plugins) {
-		if(jPopup.plugins[name].methods) {
-			//this.plugins[name] = jPopup.plugins[name].methods.bind(this);
-		}
+		methods(this.plugins, jPopup.plugins[name], name, "methods", this);
 	}
 	
 	//Load plugin defaults in config

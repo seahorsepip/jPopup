@@ -1,7 +1,7 @@
 /**
  * @license
  *
- * jPopup v2.0.0
+ * jPopup v2.0.2
  * http://jpopup.seapip.com
  
  * Copyright Thomas Gladdines
@@ -11,7 +11,7 @@ jPopup.plugins.draggable = {
 	defaults: false,
 	overrides: {
 		open: function() {
-			this._methods.call(this, this._config.plugins.draggable);
+			this.plugins.draggable.call(this, this._config.plugins.draggable);
 			return jPopup._super(this);
 		},
 		close: function() {
