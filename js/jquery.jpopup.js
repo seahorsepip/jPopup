@@ -75,6 +75,9 @@ function jPopup(config) {
 		}
 	}
 	
+	//Bind polyfill
+	Function.prototype.bind||(Function.prototype.bind=function(c){if("function"!==typeof this)throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");var d=Array.prototype.slice.call(arguments,1),e=this,a=function(){},b=function(){return e.apply(this instanceof a?this:c,d.concat(Array.prototype.slice.call(arguments)))};this.prototype&&(a.prototype=this.prototype);b.prototype=new a;return b});
+	
 	//Plugin methods
 	function methods(array, array2, key, key2, context) {;
 		if(typeof array2[key2] === "function") {
