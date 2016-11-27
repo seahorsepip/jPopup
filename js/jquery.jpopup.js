@@ -85,7 +85,7 @@ function jPopup(config) {
 	this.plugins = {};
 	for(name in jPopup.plugins) {
 		if(jPopup.plugins[name].methods) {
-			this.plugins[name] = jPopup.plugins[name].methods.bind(this);
+			//this.plugins[name] = jPopup.plugins[name].methods.bind(this);
 		}
 	}
 	
