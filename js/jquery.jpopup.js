@@ -75,9 +75,6 @@ function jPopup(config) {
 		}
 	}
 	
-	//Bind polyfill
-	Function.prototype.bind||(Function.prototype.bind=function(c){if("function"!==typeof this)throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");var d=Array.prototype.slice.call(arguments,1),e=this,a=function(){},b=function(){return e.apply(this instanceof a?this:c,d.concat(Array.prototype.slice.call(arguments)))};this.prototype&&(a.prototype=this.prototype);b.prototype=new a;return b});
-	
 	//Plugin methods
 	function methods(array, array2, key, key2, context) {;
 		if(typeof array2[key2] === "function") {
@@ -1044,3 +1041,32 @@ jPopup.prototype = {
 		});
 	}
 };
+
+//Bind polyfill
+if (!Function.prototype.bind) {
+  Function.prototype.bind = function(oThis) {
+    if (typeof this !== 'function') {
+      // closest thing possible to the ECMAScript 5
+      // internal IsCallable function
+      throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+    }
+
+    var aArgs   = Array.prototype.slice.call(arguments, 1),
+        fToBind = this,
+        fNOP    = function() {},
+        fBound  = function() {
+          return fToBind.apply(this instanceof fNOP
+                 ? this
+                 : oThis,
+                 aArgs.concat(Array.prototype.slice.call(arguments)));
+        };
+
+    if (this.prototype) {
+      // Function.prototype doesn't have a prototype property
+      fNOP.prototype = this.prototype; 
+    }
+    fBound.prototype = new fNOP();
+
+    return fBound;
+  };
+}
