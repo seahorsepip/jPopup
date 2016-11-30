@@ -116,7 +116,6 @@ function jPopup(config) {
 	this.elements.content = this.elements.popup.children(".jp_content");
 	this.elements.buttons = this.elements.popup.children(".jp_buttons");
 	this.elements.close = this.elements.popup.children(".jp_close");
-	this.elements.resize = this.elements.popup.children(".jp_resize");
 	
 	//Call create function
 	this._create();
