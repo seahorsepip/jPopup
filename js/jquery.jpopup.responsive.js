@@ -11,7 +11,7 @@ jPopup.plugins.responsive = {
 	defaults: false,
 	overrides: {
 		open: function() {
-			this._methods.call(this, this._config.plugins.responsive);
+			this.plugins.responsive.call(this, this._config.plugins.responsive);
 			return jPopup._super(this);
 		},
 		close: function() {
