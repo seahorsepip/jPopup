@@ -107,7 +107,7 @@ function jPopup(config) {
 	overrides(this._config.overrides, jPopup.prototype, this);
 	
 	//Generate html elements
-	var elements = $("<div><div class=\"jp_overlay\" style=\"position:fixed;top:0;left:0;bottom:0;right:0;display:none;\"></div><div class=\"jp_wrapper\" style=\"position:fixed;top:-9999px;left:-9999px;\"><form class=\"jp_popup\" style=\"position:absolute;float:left;\" tabindex=\"0\"><header class=\"jp_title\"></header><section class=\"jp_content\"></section><footer class=\"jp_buttons\"></footer><button class=\"jp_close\" style=\"position:absolute;top:0;right:0;width:20px;height:20px;\"></button><div class=\"jp_resize\" style=\"display:none;\"><div style=\"position:absolute;top:0;left:0;right:0;height:6px;cursor:n-resize;\"></div><div style=\"position:absolute;top:0;left:0;bottom:0;width:6px;cursor:w-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;right:0;height:6px;cursor:s-resize;\"></div><div style=\"position:absolute;top:0;bottom:0;right:0;width:6px;cursor:e-resize;\"></div><div style=\"position:absolute;top:0;left:0;width:6px;height:6px;cursor:nw-resize;\"></div><div style=\"position:absolute;top:0;right:0;width:6px;height:6px;cursor:ne-resize;\"></div><div style=\"position:absolute;left:0;bottom:0;width:6px;height:6px;cursor:sw-resize;\"></div><div style=\"position:absolute;bottom:0;right:0;width:6px;height:6px;cursor:se-resize;\"></div></div></form></div></div>");
+	var elements = $("<div><div class=\"jp_overlay\" style=\"position:fixed;top:0;left:0;bottom:0;right:0;display:none;\"></div><div class=\"jp_wrapper\" style=\"position:fixed;top:-9999px;left:-9999px;\"><form class=\"jp_popup\" style=\"position:absolute;float:left;\" tabindex=\"0\"><header class=\"jp_title\"></header><section class=\"jp_content\"></section><footer class=\"jp_buttons\"></footer><button class=\"jp_close\" style=\"position:absolute;top:0;right:0;width:20px;height:20px;\"></button></form></div></div>");
 	this.elements = {};
 	this.elements.overlay = elements.children(".jp_overlay");
 	this.elements.wrapper = elements.children(".jp_wrapper");
@@ -1043,6 +1043,7 @@ jPopup.prototype = {
 };
 
 //Bind polyfill
+//Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
 if (!Function.prototype.bind) {
   Function.prototype.bind = function(oThis) {
     if (typeof this !== 'function') {
