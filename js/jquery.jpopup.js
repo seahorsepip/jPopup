@@ -950,6 +950,14 @@ jPopup.prototype = {
 		}
 		return this._config.offset;
 	},
+	speed: function(speed) {
+		if(arguments.length) {
+			//Apply new speed to config
+			this._config.speed = speed;
+			return this;
+		}
+		return this._config.speed;
+	},
 	clone: function() {
 		return new jPopup(this._config);
 	},
@@ -992,8 +1000,25 @@ jPopup.prototype = {
 	},
 	_zIndex: function() {
 		//Set z-index
-		this.elements.overlay.css("z-index", jPopup.zIndex);
-		this.elements.wrapper.css("z-index", jPopup.zIndex);
+		var zIndex = jPopup.zIndex;
+		for(id in jPopup.instances) {
+			var z = parseInt(jPopup.instances[id].elements.overlay.css("z-index"));
+			if(z > parseInt(this.elements.wrapper.css("z-index"))) {
+				jPopup.instances[id].elements.overlay.css("z-index", z - 1);
+				jPopup.instances[id].elements.wrapper.css("z-index", z - 1);
+			}
+			if(z > zIndex) {
+				zIndex = z;
+			}
+		}
+		if(!this.elements.wrapper.is(":last-child")) {
+			zIndex++;
+		}
+		if(this.elements.wrapper.is(":last-child") && parseInt(this.elements.wrapper.css("z-index")) == zIndex - 1) {
+			zIndex--;
+		}
+		this.elements.overlay.css("z-index", zIndex);
+		this.elements.wrapper.css("z-index", zIndex);
 	},
 	_animations: {
 		zoomIn: function() {

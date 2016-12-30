@@ -43,9 +43,8 @@ jPopup.plugins.draggable = {
 					});
 				});
 				this.elements.popup.on("mousedown touchstart", function(e) {
-					if(!self.elements.wrapper.is(":last-child") && $(e.target).parent()[0] != self.elements.buttons[0] && e.target != self.elements.close[0]) {
-						$("body").append(self.elements.overlay);
-						$("body").append(self.elements.wrapper);
+					if($(e.target).parent()[0] != self.elements.buttons[0] && e.target != self.elements.close[0]) {
+						self._zIndex();
 					}
 				});
 				$(document).on("mousemove.jp_draggable"+this.id+" touchmove.jp_draggable"+this.id, function(e) {

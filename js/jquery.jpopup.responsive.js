@@ -19,12 +19,13 @@ jPopup.plugins.responsive = {
 			return jPopup._super(this);
 		}
 	},
-	vars: { 
+	vars: {
 		breakpoint: function() {
 			var responsive = this._config.plugins.responsive;
 			var width = 0;
+			var windowWidth = window.innerWidth ? window.innerWidth > $(window).width() ? window.innerWidth : $(window).width() : $(window).width();
 			for(breakpoint in responsive) {
-				if($(window).width() < breakpoint) {
+				if(windowWidth < breakpoint) {
 					break;
 				}
 				width = breakpoint;
